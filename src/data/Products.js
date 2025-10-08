@@ -1,7 +1,7 @@
 const products = [
   {
     id: 1,
-    name: 'Blue aqua',
+    name: 'Producto 1',
     description: 'Perfume blue 100ml.',
     price: 10000,
     image: '../src/assets/img/blue.webp' 
