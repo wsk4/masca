@@ -4,7 +4,7 @@ const products = [
     name: 'Bleu',
     description: 'Un perfume para el hombre que siempre apunta a los más alto, y que sabe que con coraje y determinación puede lograr lo imposible. Fragancia duradera de alta concentración desafiante como el mar. De la familia herbal aromática',
     price: 40000,
-    image: './blue.webp' 
+    image: './img/blue.webp' 
   },
   {
     id: 2,
