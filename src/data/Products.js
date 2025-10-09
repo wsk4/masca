@@ -1,62 +1,62 @@
 const products = [
   {
     id: 1,
-    name: 'Producto 1',
-    description: 'Perfume blue 100ml.',
+    name: 'Bleu acqua',
+    description: 'Notas del perfume: toronja/grapefruit, limon, menta, pimienta, rosa en apertura. Fresco, masculino, muy versatil',
     price: 10000,
     image: '../src/assets/img/blue.webp' 
   },
   {
     id: 2,
-    name: 'Producto 2',
-    description: 'Perfume ciro 100ml, lo tiene el coleccionista.',
+    name: 'Ciro 12',
+    description: 'Perfume ciro , lo tiene el coleccionista, versatil, citrico y fresco',
     price: 10000,
     image: '../src/assets/img/ciro.webp'
   },
   {
     id: 3,
-    name: 'Producto 3',
-    description: 'Perfume devocion 100ml.',
+    name: 'Devocion',
+    description: 'Perfume dulce con buena proyeccion y duradero.',
     price: 10000,
         image: '../src/assets/img/devocion.webp'
 
   },
     {
     id: 4,
-    name: 'Producto 4',
-    description: 'Perfume versace eros 100ml.',
+    name: 'Versace eros',
+    description: 'Perfume para uso diario, ideal para climas calidos.',
     price: 10000,
         image: '../src/assets/img/eros.webp'
 
   },
     {
     id: 5,
-    name: 'Producto 5',
-    description: 'Perfume paco rabane one million 100ml.',
+    name: 'One million',
+    description: 'Perfume ideal para citas.',
     price: 10000,
         image: '../src/assets/img/onemill.webp'
 
   },
     {
     id: 6,
-    name: 'Producto 6',
-    description: 'Perfume Stronger with you de armani, 100ml.',
+    name: 'Stronger with you intensly',
+    description: 'Perfume dulce con toques de canela, ideal para noches frescas y citas nocturnas.',
     price: 10000,
         image: '../src/assets/img/perfume.webp'
 
   },
     {
     id: 7,
-    name: 'Producto 7',
-    description: 'Perfume phantome 100ml.',
+    name: 'Phantome',
+    description: 'Perfume versatil y duradero, especial para uso diario.',
     price: 10000,
         image: '../src/assets/img/phantome_11zon.webp'
 
   },
     {
     id: 8,
-    name: 'Producto 8',
-    description: 'Perfume valentin botn in roma, 100ml.',
+    name: 'Valentino born in roma',
+    description: 'Perfume baja panty, ideal para citas.',
     price: 10000,
         image: '../src/assets/img/valentino.webp'
 
