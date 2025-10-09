@@ -1,73 +1,22 @@
-import React, { useState } from 'react';
-import { Container } from 'react-bootstrap';
-import Text from '../components/atoms/Text.jsx';
-import DynamicForm from '../components/molecules/DynamicForm.jsx';
-import Button from '../components/atoms/Button.jsx'; // Importar tu componente Button
+import React from 'react';
+import { Container, Row } from 'react-bootstrap';
+import ProductCard from "../components/organisms/ProductCard";
 
-function Contact() {
-    // Estado inicial basado en los IDs de los inputs
-    const initialFormData = {
-        name: '',
-        email: '',
-        mensaje: '',
-    };
 
-    const [formData, setFormData] = useState(initialFormData);
-
-    const formInputs = [
-        {
-            id: 'name',
-            type: 'text',
-            label: 'Nombre',
-            placeholder: 'Ingresa tu nombre',
-            value: formData.name,
-            onChange: (e) => setFormData({ ...formData, name: e.target.value }),
-        },
-        {
-            id: 'email',
-            type: 'email',
-            label: 'Correo',
-            placeholder: 'Ingresa tu correo',
-            value: formData.email,
-            onChange: (e) => setFormData({ ...formData, email: e.target.value }),
-        },
-        {
-            id: 'mensaje',
-            type: 'textarea',
-            label: 'Mensaje',
-            placeholder: 'Ingrese el mensaje',
-            rows: 3,
-            value: formData.mensaje,
-            onChange: (e) => setFormData({ ...formData, mensaje: e.target.value }),
-        },
-    ];
-
-    // Manejar el envío del formulario
-    const handleSubmit = () => {
-        const message = `Nombre: ${formData.name}\nCorreo: ${formData.email}\nMensaje: ${formData.mensaje}`;
-        alert(message);
-    };
-
-    // Manejar la limpieza del formulario
-    const handleClear = () => {
-        setFormData(initialFormData);
-    };
-
+function Blogs() {
     return (
         <Container className="my-5">
-            <Text variant="h1">Contacto</Text>
-            <Text variant="p">Llena el formulario para poder contactarte</Text>
-            <DynamicForm inputs={formInputs} />
-            <div className="mt-3">
-                <Button variant="primary" onClick={handleSubmit} className="me-2">
-                    Enviar
-                </Button>
-                <Button variant="secondary" onClick={handleClear}>
-                    Limpiar
-                </Button>
-            </div>
+            <h1>Blogs</h1>
+            <p>
+                Nuestra historia comenzó con una simple amistad entre tres amigos unidos por una misma pasión: los buenos aromas.
+                Lo que en un principio era solo una afición por descubrir y compartir perfumes, con el tiempo se transformó en un sueño:
+                crear un espacio donde cada persona pudiera encontrar la fragancia ideal para expresar su esencia. Con esfuerzo, dedicación y muchas ganas,
+                pasamos de pequeñas ventas entre conocidos a formar un proyecto que hoy busca llegar a más personas. Para nosotros, cada perfume no es solo un aroma, 
+                sino un recuerdo, una emoción y una forma de dejar huella en el mundo. Seguimos siendo esos tres amigos de siempre, pero ahora con la ilusión de ofrecerte 
+                calidad, confianza y una experiencia única en cada frasco.
+            </p>
         </Container>
     );
 }
 
-export default Contact;
+export default Blogs;
