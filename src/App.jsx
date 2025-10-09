@@ -18,9 +18,25 @@ function App() {
           <Route path="/contact" element={<Contact />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+
+         <Card style={{ width: '18rem' }} className="m-2">
+      <Image src={product.image} alt={product.name} className="card-img-top" />
+      <Card.Body>
+        <CardBody
+          title={product.name}
+          description={product.description}
+          price={product.price}
+        />
+        <Button variant="primary" onClick={() => navigate(`/products/${product.id}`)}>
+          Ver detalles
+        </Button>
+      </Card.Body>
+    </Card>
     </>
+    
   );
+  
 }
 
+
 export default App;
- 

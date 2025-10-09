@@ -4,8 +4,8 @@ import { Container } from 'react-bootstrap';
 function Home() {
   return (
     <Container className="my-5">
-      <h1>Página de Inicio</h1>
-      <p>Bienvenidos a nuestro sitio web.</p>
+      <h1>Mascapitos Store</h1>
+      <p>Bienvenidos a Mascapitso Store.</p>
     </Container>
   );
 }
