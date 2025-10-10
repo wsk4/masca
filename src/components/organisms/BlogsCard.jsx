@@ -27,6 +27,7 @@ function BlogCard({ blog }) {
               variant="primary"
               onClick={() => navigate(`/blogs/${blog.id}`)}
               style={{
+                background: "linear-gradient(gray, black)",
                 border: "2px solid black",
               }}
             >
