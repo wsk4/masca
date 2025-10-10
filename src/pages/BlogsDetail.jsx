@@ -6,7 +6,7 @@ import Button from "../components/atoms/Button";
 import Image from "../components/atoms/Image";
 import Text from "../components/atoms/Text";
 import blogs from "../data/Blogs";
-import  "../styles/blogs.css";
+import  "../styles/Blogs.css";
 
 
 function BlogDetail() {
