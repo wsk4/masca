@@ -33,6 +33,7 @@ function BlogDetail() {
       <Card
         className="text-light mt-3"
         style={{
+          background: "linear-gradient(Black)",
           border: "none",
           borderRadius: "10px",
           padding: "1.5rem",

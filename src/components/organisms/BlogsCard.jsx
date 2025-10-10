@@ -12,6 +12,7 @@ function BlogCard({ blog }) {
       <Card
         className="text-light"
         style={{
+          background: "linear-gradient(Black)",
           border: "none",
           borderRadius: "10px",
           padding: "1.5rem",

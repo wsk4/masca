@@ -1,4 +1,5 @@
 .blog-card {
+  background: linear-gradient(black);
   border: none;
   border-radius: 10px;
   padding: 1.5rem;
@@ -11,6 +12,7 @@
 }
 
 .ver-caso-btn {
+  background: linear-gradient(black);
   border: 2px solid black;
   color: white;
   transition: 0.3s;
