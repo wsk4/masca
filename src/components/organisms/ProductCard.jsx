@@ -5,6 +5,7 @@ import Button from '../atoms/Button';
 import CardBody from '../molecules/CardBody';
 import { useNavigate } from 'react-router-dom';
 
+
 function ProductCard({ product }) {
   const navigate = useNavigate();
 
