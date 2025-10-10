@@ -12,7 +12,6 @@ function BlogCard({ blog }) {
       <Card
         className="text-light"
         style={{
-          background: "linear-gradient(135deg, #a200ff, #0072ff)",
           border: "none",
           borderRadius: "10px",
           padding: "1.5rem",
@@ -27,7 +26,6 @@ function BlogCard({ blog }) {
               variant="primary"
               onClick={() => navigate(`/blogs/${blog.id}`)}
               style={{
-                background: "linear-gradient(135deg, #a200ff, #0072ff)",
                 border: "2px solid black",
               }}
             >

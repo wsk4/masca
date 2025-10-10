@@ -1,5 +1,4 @@
 .blog-card {
-  background: linear-gradient(135deg, #a200ff, #0072ff);
   border: none;
   border-radius: 10px;
   padding: 1.5rem;
@@ -12,7 +11,6 @@
 }
 
 .ver-caso-btn {
-  background: linear-gradient(135deg, #a200ff, #0072ff);
   border: 2px solid black;
   color: white;
   transition: 0.3s;
