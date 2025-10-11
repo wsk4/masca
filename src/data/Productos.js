@@ -4,7 +4,7 @@ const productos = [
         nombre: "Phantom",
         marca: "Paco Rabanne",
         precio: 72000,
-        imagen: "phantome_11zon.webp", // ✅ solo el nombre del archivo
+        imagen: "phantome_11zon.webp", 
     },
     {
         id: 2,
