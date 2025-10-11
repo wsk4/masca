@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Row, Col, Button as BsButton } from "react-bootstrap";
 import products from "../data/Productos";
-import ProductCard from "../components/ProductHomeCard";
+import ProductCard from "../components/organisms/productHomeCard";
 
 function Home() {
   return (
