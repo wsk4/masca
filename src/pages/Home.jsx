@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Row, Col, Button as BsButton } from "react-bootstrap";
-import products from "../data/Productos";
-import ProductCard from "../components/organisms/productHomeCard";
+import productos from "../data/Productos";
+import ProductCard from "../components/organisms/productHomeCard"; 
 
 function Home() {
   return (
@@ -31,8 +31,8 @@ function Home() {
 
       {/* Sección de productos */}
       <Row className="gy-4">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+        {productos.map((producto) => (
+          <ProductCard key={producto.id} producto={producto} />
         ))}
       </Row>
 

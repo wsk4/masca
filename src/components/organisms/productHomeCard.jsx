@@ -20,7 +20,7 @@ function ProductCard({ producto }) {
             {/* Imagen del producto desde /public/img */}
             <Card.Img
             variant="top"
-            src={`/img/${producto.imagen}`}
+            src={`/img/${producto.image}`}
             alt={producto.nombre}
             style={{
                 borderTopLeftRadius: "12px",
