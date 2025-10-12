@@ -22,7 +22,7 @@ function ProductHomeCard({ productos }) {
             boxShadow: "0 4px 12px rgba(0, 0, 0, 1)",
             }}
         >
-            <Image src={productos.imagen} alt={productos.nombre} className="card-img-top" />
+            <Image src={productos.image} alt={productos.nombre} className="card-img-top" />
             <Card.Body>
             <CardBody
                 title={productos.nombre}
