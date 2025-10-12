@@ -8,7 +8,7 @@ import CardBody from '../molecules/CardBody';
 
 
 
-function ProductHomeCard({ producto }) {
+function ProductHomeCard({ productos }) {
     const navigate = useNavigate();
 
     return (
@@ -22,14 +22,14 @@ function ProductHomeCard({ producto }) {
             boxShadow: "0 4px 12px rgba(0, 0, 0, 1)",
             }}
         >
-            <Image src={producto.imagen} alt={producto.nombre} className="card-img-top" />
+            <Image src={productos.imagen} alt={productos.nombre} className="card-img-top" />
             <Card.Body>
             <CardBody
-                title={producto.nombre}
-                description={producto.marca}
-                price={producto.precio}
+                title={productos.nombre}
+                description={productos.marca}
+                price={productos.precio}
         />
-        <Button variant="primary" onClick={() => navigate(`/productos/${producto.id}`)}>
+        <Button variant="primary" onClick={() => navigate(`/productos/${productos.id}`)}>
             Ver detalles
         </Button>
             </Card.Body>
