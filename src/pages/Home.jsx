@@ -2,8 +2,8 @@ import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import productos from "../data/Productos";
 import ProductHomeCard from "../components/organisms/productHomeCard"; 
-import Button from "../components/atoms/Button";
-import { useNavigate } from "react-router-dom";
+
+
 
 function Home() {
   return (
@@ -16,9 +16,6 @@ function Home() {
             Nuestra tienda online ofrece productos seleccionados de todas las regiones. 
             Encuentra lo que necesitas al mejor precio.
           </p>
-          <Button variant="primary" onClick={() => navigate(`/products`)}>
-            Ver más
-          </Button>
         </Col>
 
         <Col md={6} className="text-center">
