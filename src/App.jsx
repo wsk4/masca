@@ -9,6 +9,8 @@ import Contact from './pages/Contact';
 import Blogs from './pages/Blogs';
 import Nosotros from './pages/Nosotros';
 import BlogDetail from './pages/BlogsDetail';
+import Login from './pages/Login';
+import CrearUsuario from './pages/Crearusario';
 
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
         <Route path="/blogs" element={<Blogs />} />
         <Route path="/blogs/:id" element={<BlogDetail />} /> 
         <Route path="/nosotros" element={<Nosotros />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/CrearUsuario" element={<CrearUsuario />} />
         <Route path="*" element={<NotFound />} />
 
       </Routes>
