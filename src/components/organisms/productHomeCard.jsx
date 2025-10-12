@@ -21,18 +21,7 @@ function ProductHomeCard({ producto }) {
             boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
             }}
         >
-            <Card.Img
-            variant="top"
-            src={producto.Image}
-            alt={producto.nombre}
-            style={{
-                borderTopLeftRadius: "12px",
-                borderTopRightRadius: "12px",
-                height: "260px",
-                objectFit: "cover",
-            }}
-            />
-
+            <Image src={producto.image} alt={producto.nombre} className="card-img-top" />
             <Card.Body>
             <Card.Title className="fw-bold">{producto.nombre}</Card.Title>
             <Card.Text className="text-muted">{producto.marca}</Card.Text>
@@ -40,15 +29,8 @@ function ProductHomeCard({ producto }) {
                 ${producto.precio.toLocaleString("es-CL")}
             </Card.Text>
 
-            <Button
-                variant="primary"
-                onClick={() => navigate(`/productos/${producto.id}`)}
-                style={{
-                background: "linear-gradient(gray, black)",
-                border: "2px solid black",
-                }}
-            >
-                Ver producto
+            <Button variant="primary" onClick={() => navigate(`/products/${producto.id}`)}>
+                Ver detalles
             </Button>
             </Card.Body>
         </Card>
