@@ -22,8 +22,8 @@ const productos = [
     },
     {
         id: 4,
-        nombre: "Egeo Dolce",
-        marca: "O Boticário",
+        nombre: "Stronger with you",
+        marca: "Emporio Armani",
         precio: 67000,
             imagen: "./img/perfume.webp",
     }
