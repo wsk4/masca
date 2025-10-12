@@ -19,7 +19,7 @@ function ProductHomeCard({ producto }) {
             background: "linear-gradient(to bottom, #212529, #343a40)",
             border: "none",
             borderRadius: "12px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 1)",
             }}
         >
             <Image src={producto.imagen} alt={producto.nombre} className="card-img-top" />
@@ -29,11 +29,8 @@ function ProductHomeCard({ producto }) {
                 description={producto.marca}
                 price={producto.precio}
         />
-
         <Button variant="primary" onClick={() => navigate(`/products/${producto.id}`)}>
-
             Ver detalles
-            
         </Button>
             </Card.Body>
         </Card>
