@@ -3,6 +3,7 @@ import { Col, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import Image from '../atoms/Image';
+import CardBody from '../molecules/CardBody';
 
 
 
