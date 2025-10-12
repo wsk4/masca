@@ -10,7 +10,7 @@ import Blogs from './pages/Blogs';
 import Nosotros from './pages/Nosotros';
 import BlogDetail from './pages/BlogsDetail';
 import Login from './pages/Login';
-import CrearUsuario from './pages/Crearusario';
+import CrearUsuario from './pages/CrearUsario';
 
 
 function App() {
