@@ -3,6 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import productos from "../data/Productos";
 import ProductHomeCard from "../components/organisms/productHomeCard"; 
 import Button from "../components/atoms/Button";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
   return (
