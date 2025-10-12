@@ -3,7 +3,7 @@ import { Col, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Button from "../atoms/Button"; 
 
-function ProductCard({ producto }) {
+function ProductHomeCard({ producto }) {
     const navigate = useNavigate();
 
     return (
@@ -53,4 +53,4 @@ function ProductCard({ producto }) {
     );
 }
 
-export default ProductCard;
+export default ProductHomeCard;
