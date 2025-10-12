@@ -29,8 +29,11 @@ function ProductHomeCard({ producto }) {
                 description={producto.marca}
                 price={producto.precio}
         />
-        <Button variant="primary" onClick={() => navigate(`/products/${product.id}`)}>
+
+        <Button variant="primary" onClick={() => navigate(`/products/${producto.id}`)}>
+
             Ver detalles
+            
         </Button>
             </Card.Body>
         </Card>
