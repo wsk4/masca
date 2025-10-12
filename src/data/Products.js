@@ -4,7 +4,7 @@ const products = [
     name: 'Phantome',
     description: 'Las manzanas son una fruta deliciosa y versátil, apreciada en todo el mundo por su sabor refrescante y sus numerosos beneficios para la salud.',
     price: 120000,
-    image: './img/phantome_11zon.webp'
+    image: '/img/phantome_11zon.webp'
   },
   {
     id: 2,
