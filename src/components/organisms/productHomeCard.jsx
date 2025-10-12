@@ -2,6 +2,7 @@ import React from "react";
 import { Col, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
+import Image from '../atoms/Image';
 
 
 
@@ -20,10 +21,9 @@ function ProductHomeCard({ producto }) {
             boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
             }}
         >
-            {/* Imagen del producto desde /public/img */}
             <Card.Img
             variant="top"
-            src={producto.imagen}
+            src={producto.Image}
             alt={producto.nombre}
             style={{
                 borderTopLeftRadius: "12px",
