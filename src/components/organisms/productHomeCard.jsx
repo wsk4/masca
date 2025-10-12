@@ -23,7 +23,7 @@ function ProductHomeCard({ producto }) {
             {/* Imagen del producto desde /public/img */}
             <Card.Img
             variant="top"
-            src={`/img/${producto.imagen}`}
+            src={producto.imagen}
             alt={producto.nombre}
             style={{
                 borderTopLeftRadius: "12px",
