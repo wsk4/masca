@@ -10,7 +10,7 @@ function Productos() {
         <h1>Productos</h1>
         <Row>
             {productos.map((productos) => (
-            <ProductHomeCard key={productos.id} product={productos} />
+            <ProductHomeCard key={productos.id} productos={productos} />
             ))}
         </Row>
         </Container>
