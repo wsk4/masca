@@ -8,7 +8,6 @@ import ProductHomeCard from "../components/organisms/productHomeCard";
 function Home() {
   return (
     <Container className="my-5">
-      {/* Hero Section */}
       <Row className="align-items-center mb-5">
         <Col md={6}>
           <h1 className="fw-bold mb-3">Mascapitos Store</h1>
@@ -33,14 +32,12 @@ function Home() {
         </Col>
       </Row>
 
-      {/* Sección de productos */}
       <Row className="gy-4">
         {productos.map((producto) => (
           <ProductHomeCard key={producto.id} producto={producto} />
         ))}
       </Row>
 
-      {/* Footer */}
       <footer className="text-center mt-5 border-top pt-3">
         <img
           src="/img/logo.webp"
