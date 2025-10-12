@@ -23,15 +23,14 @@ function ProductHomeCard({ producto }) {
         >
             <Image src={producto.imagen} alt={producto.nombre} className="card-img-top" />
             <Card.Body>
-            <Card.Title className="fw-bold">{producto.nombre}</Card.Title>
-            <Card.Text className="text-muted">{producto.marca}</Card.Text>
-            <Card.Text className="fw-bold text-light">
-                ${producto.precio.toLocaleString("es-CL")}
-            </Card.Text>
-
-            <Button variant="primary" onClick={() => navigate(`/products/${producto.id}`)}>
-                Ver detalles
-            </Button>
+            <CardBody
+                title={producto.nombre}
+                description={producto.marca}
+                price={producto.precio}
+        />
+        <Button variant="primary" onClick={() => navigate(`/products/${product.id}`)}>
+            Ver detalles
+        </Button>
             </Card.Body>
         </Card>
         </Col>

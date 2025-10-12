@@ -32,7 +32,6 @@ function ProductDetail() {
           <Text variant="p">{product.description}</Text>
           <Text variant="h4">${product.price}</Text>
         </Card.Body>
-        
       </Card>
     </Container>
   );
