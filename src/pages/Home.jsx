@@ -1,7 +1,8 @@
 import React from "react";
-import { Container, Row, Col, Button as BsButton } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import productos from "../data/Productos";
-import ProductCard from "../components/organisms/productHomeCard"; 
+import ProductHomeCard from "../components/organisms/productHomeCard"; 
+import Button from '../atoms/Button';
 
 function Home() {
   return (
@@ -14,9 +15,9 @@ function Home() {
             Nuestra tienda online ofrece productos seleccionados de todas las regiones. 
             Encuentra lo que necesitas al mejor precio.
           </p>
-          <BsButton variant="dark" size="lg">
+          <Button variant="primary" onClick={() => navigate(`/products`)}>
             Ver más
-          </BsButton>
+          </Button>
         </Col>
 
         <Col md={6} className="text-center">
@@ -28,11 +29,16 @@ function Home() {
           />
         </Col>
       </Row>
+      <Row>
+        <Col className="text-center">
+          <h2 className="fw-bold mb-4">Productos Destacados</h2>
+        </Col>
+      </Row>
 
       {/* Sección de productos */}
       <Row className="gy-4">
         {productos.map((producto) => (
-          <ProductCard key={producto.id} producto={producto} />
+          <ProductHomeCard key={producto.id} producto={producto} />
         ))}
       </Row>
 

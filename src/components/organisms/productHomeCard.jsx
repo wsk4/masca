@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import Button from "../atoms/Button"; // tu botón personalizado
+import Button from "../atoms/Button"; 
 
 function ProductCard({ producto }) {
     const navigate = useNavigate();

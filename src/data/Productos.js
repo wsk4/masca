@@ -4,28 +4,28 @@ const productos = [
         nombre: "Phantom",
         marca: "Paco Rabanne",
         precio: 72000,
-        imagen: "phantome_11zon.webp", 
+        imagen: "./img/phantome_11zon.webp", 
     },
     {
         id: 2,
         nombre: "Valentino",
         marca: "Valentino",
         precio: 85000,
-        imagen: "valentino.webp",
+        imagen: "./img/valentino.webp",
     },
     {
         id: 3,
         nombre: "Devoción",
         marca: "Antonio Banderas",
         precio: 49000,
-        imagen: "devocion.webp",
+        imagen: "./img/devocion.webp",
     },
     {
         id: 4,
         nombre: "Egeo Dolce",
         marca: "O Boticário",
         precio: 67000,
-        imagen: "perfume.webp",
+        imagen: "./img/perfume.webp",
     },
 ];
 
