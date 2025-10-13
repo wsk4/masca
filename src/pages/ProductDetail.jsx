@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Container, Card } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import products from '../data/Products.js';
@@ -10,42 +10,25 @@ import { useCart } from '../context/CartContext.jsx';
 function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToCart } = useCart();
   
-  // Estado para dar feedback al usuario al agregar un producto
-  const [isAdded, setIsAdded] = useState(false);
+  // Obtenemos la función directamente del contexto
+  const { addToCart } = useCart();
 
-  // Encontrar el producto. Es más seguro hacerlo dentro del componente.
+  // Buscamos el producto
   const product = products.find((p) => p.id === parseInt(id));
 
-  // Manejador para el evento de agregar al carrito
-  const handleAddToCart = () => {
-    // 1. Llama a la función del contexto para agregar el producto
-    addToCart(product);
-    
-    // 2. Activa el estado de "agregado" para dar feedback visual
-    setIsAdded(true);
-
-    // 3. Después de 2 segundos, revierte el estado para que el botón vuelva a la normalidad
-    setTimeout(() => {
-      setIsAdded(false);
-    }, 2000);
-  };
-
-  // Si el producto no se encuentra, muestra un mensaje y termina la ejecución
+  // Manejo de producto no encontrado
   if (!product) {
     return (
       <Container className="my-5 text-center">
         <Text variant="h2">Producto no encontrado</Text>
-        <Text variant="p" className="my-3">El producto que buscas no existe o fue removido.</Text>
-        <Button variant="primary" onClick={() => navigate('/products')}>
+        <Button variant="primary" onClick={() => navigate('/products')} className="mt-3">
           Volver al catálogo
         </Button>
       </Container>
     );
   }
 
-  // Renderizado del componente si el producto existe
   return (
     <Container className="my-5">
       <Button variant="secondary" onClick={() => navigate(`/products`)} className="mb-3">
@@ -60,15 +43,20 @@ function ProductDetail() {
             {product.price.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}
           </Text>
 
+          {/* --- LÍNEA CLAVE CORREGIDA --- */}
+          {/*
+            El onClick ahora llama directamente a addToCart, pasándole el objeto 'product'.
+            Esto garantiza que la función del contexto se ejecute correctamente.
+          */}
           <Button 
-            variant={isAdded ? "outline-success" : "success"}
-            onClick={handleAddToCart}
-            disabled={isAdded}
+            variant="success"
+            onClick={() => addToCart(product)}
             size="lg"
             className="w-100"
           >
-            {isAdded ? '✅ ¡Agregado!' : 'Agregar al carrito'}
+            Agregar al carrito
           </Button>
+          {/* --------------------------- */}
 
         </Card.Body>
       </Card>
