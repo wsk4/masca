@@ -35,7 +35,7 @@ function Login() {
 
     
     const handleSubmit = () => {
-        const message = `Correo: ${formData.email}\nContraseña: ${formData.password}`;
+        const message = `bienveindo`;
         alert(message);
     };
 
