@@ -8,18 +8,12 @@ import Image from '../components/atoms/Image.jsx';
 import Text from '../components/atoms/Text.jsx';
 import Button from '../components/atoms/Button.jsx';
 import '../styles/CardBody.css'; 
-
-// ASEGÚRATE DE QUE ESTA RUTA SEA 100% CORRECTA
 import { useCart } from '../context/CartContext.jsx';
 
 function ProductDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
-    
-    // Si la importación de arriba es incorrecta, 'useCart()' no funcionará
-    // y 'addToCart' será undefined, por eso el botón no hace nada.
     const { addToCart } = useCart();
-    
     const product = products.find((p) => p.id === parseInt(id));
 
     if (!product) {
@@ -31,11 +25,10 @@ function ProductDetail() {
     }
 
     const handleAddToCart = () => {
-        // console.log para verificar que la función existe antes de llamarla
         console.log('Llamando a addToCart con:', product);
         if (typeof addToCart === 'function') {
             addToCart(product);
-            alert('¡Producto agregado!'); // Feedback inmediato
+            alert('¡Producto agregado!');
         } else {
             alert('ERROR: ¡La función addToCart no se encontró! Revisa la importación del contexto.');
         }

@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-/* ====== GLOBAL ====== */
+
 body {
   background: linear-gradient(180deg, #141414, #1b1b1b);
   color: #fff;
@@ -9,7 +9,7 @@ body {
   padding: 0;
 }
 
-/* ====== CONTENEDOR ====== */
+
 .container {
   max-width: 800px;
   margin-top: 4rem;
@@ -21,7 +21,7 @@ body {
   position: relative;
 }
 
-/* ====== TITULO ====== */
+
 h1 {
   font-size: 2.2rem;
   font-weight: 700;
@@ -39,7 +39,7 @@ h1::after {
   border-radius: 3px;
 }
 
-/* ====== PARRAFO ====== */
+
 p {
   line-height: 1.8;
   font-size: 1.05rem;

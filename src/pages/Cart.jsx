@@ -11,7 +11,7 @@ function Cart() {
 
     return (
         <Container className="my-5">
-        <Text variant="h2" className="mb-4">🛒 Carrito de Compras</Text>
+        <Text variant="h2" className="mb-4">Carrito de Compras</Text>
 
         {cart.length === 0 ? (
             <>

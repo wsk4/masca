@@ -7,12 +7,10 @@ function NavBar() {
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container>
-        {/* 2. Cambia href por 'to' y usa 'as={Link}' */}
         <Navbar.Brand as={Link} to="/">Mascapitos Store</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            {/* 3. Aplica el mismo cambio a todos los enlaces */}
             <Nav.Link as={Link} to="/">Home</Nav.Link>
             <Nav.Link as={Link} to="/products">Productos</Nav.Link>
             <Nav.Link as={Link} to="/contact">Contacto</Nav.Link>

@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-/* ====== GLOBAL ====== */
+
 body {
   background: linear-gradient(180deg, #121212, #1a1a1a);
   color: #fff;
@@ -9,7 +9,6 @@ body {
   padding: 0;
 }
 
-/* ====== CONTENEDOR PRINCIPAL ====== */
 .container {
   max-width: 600px;
   margin-top: 4rem;
@@ -20,7 +19,6 @@ body {
   box-shadow: 0 8px 28px rgba(255, 255, 255, 0.05);
 }
 
-/* ====== TÍTULOS Y TEXTOS ====== */
 h1 {
   font-size: 2.2rem;
   font-weight: 700;
@@ -36,7 +34,7 @@ p {
   margin-bottom: 2rem;
 }
 
-/* ====== FORMULARIO ====== */
+
 form {
   width: 100%;
 }
@@ -68,7 +66,7 @@ textarea:focus {
   background: #333;
 }
 
-/* ====== BOTONES ====== */
+
 button,
 .btn-primary,
 .btn-secondary {
@@ -100,7 +98,7 @@ button,
   transform: translateY(-2px);
 }
 
-/* ====== DIFUMINADO DE FONDO ====== */
+
 .container::before {
   content: "";
   position: absolute;
@@ -125,7 +123,7 @@ button,
   filter: blur(35px);
 }
 
-/* ====== RESPONSIVE ====== */
+
 @media (max-width: 768px) {
   .container {
     padding: 2rem 1.2rem;

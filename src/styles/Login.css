@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-/* ====== GLOBAL ====== */
+
 body {
   background: linear-gradient(180deg, #1a1a1a, #0f0f0f);
   color: #fff;
@@ -9,7 +9,7 @@ body {
   padding: 0;
 }
 
-/* ====== CONTENEDOR ====== */
+
 .container {
   max-width: 420px;
   margin-top: 6rem;
@@ -20,7 +20,7 @@ body {
   text-align: center;
 }
 
-/* ====== TEXTOS ====== */
+
 h1 {
   font-size: 2rem;
   font-weight: 700;
@@ -32,7 +32,7 @@ p {
   margin-bottom: 2rem;
 }
 
-/* ====== FORMULARIO ====== */
+
 label {
   font-weight: 600;
   color: #fff;
@@ -57,7 +57,7 @@ input:focus {
   box-shadow: 0 0 6px rgba(255, 255, 255, 0.1);
 }
 
-/* ====== BOTONES ====== */
+
 .btn-primary, .btn-secondary {
   border-radius: 10px;
   padding: 0.6rem 1.2rem;
@@ -85,7 +85,6 @@ input:focus {
   background: #2a2a2a;
 }
 
-/* ====== ESPACIADO ====== */
 .mt-3 {
   margin-top: 1rem;
 }

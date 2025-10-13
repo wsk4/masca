@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { Container } from 'react-bootstrap';
 import Text from '../components/atoms/Text.jsx';
 import DynamicForm from '../components/molecules/DynamicForm.jsx';
-import Button from '../components/atoms/Button.jsx'; // Importar tu componente Button
+import Button from '../components/atoms/Button.jsx'; 
 
 function Contact() {
-    // Estado inicial basado en los IDs de los inputs
     const initialFormData = {
         name: '',
         email: '',
@@ -42,13 +41,10 @@ function Contact() {
         },
     ];
 
-    // Manejar el envío del formulario
     const handleSubmit = () => {
         const message = `Nombre: ${formData.name}\nCorreo: ${formData.email}\nMensaje: ${formData.mensaje}`;
         alert(message);
     };
-
-    // Manejar la limpieza del formulario
     const handleClear = () => {
         setFormData(initialFormData);
     };
