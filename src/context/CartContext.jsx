@@ -1,66 +1,56 @@
-// src/context/CartContext.jsx
+// RUTA: src/context/CartContext.jsx
 
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext } from 'react';
 
-// 1. Creamos el contexto
+// Se crea el contexto. Piensa en esto como la "línea telefónica".
 const CartContext = createContext();
 
-// 2. Creamos un Hook personalizado para usar el contexto más fácilmente
+// Esta es la función que tus componentes usarán para "conectarse" a la línea.
 export const useCart = () => useContext(CartContext);
 
-// 3. Creamos el proveedor del contexto
+// Este es el proveedor que tiene el estado y las funciones (la "central telefónica").
 export const CartProvider = ({ children }) => {
-    // El estado del carrito
     const [cart, setCart] = useState([]);
 
-    // --- DETECTIVE #1: Vigila cualquier cambio en el carrito ---
-    // Este useEffect se ejecuta CADA VEZ que el estado 'cart' cambia.
-    useEffect(() => {
-        console.log('🛒 ESTADO DEL CARRITO ACTUALIZADO:', cart);
-    }, [cart]);
-    // -----------------------------------------------------------
-
     const addToCart = (product) => {
-        console.log('▶️ addToCart: Se recibió el producto:', product);
-
+        // Valida que el producto sea correcto antes de hacer nada.
         if (!product || typeof product.id === 'undefined') {
-            console.error('❌ ERROR: Se intentó agregar un producto inválido.', product);
+            console.error("Se intentó agregar un producto inválido:", product);
             return;
         }
 
         setCart((prevCart) => {
-            console.log('   🔄 Estado ANTERIOR:', prevCart);
-            const exists = prevCart.find((item) => item.id === product.id);
+            const existingItem = prevCart.find((item) => item.id === product.id);
 
-            if (exists) {
-                // Si el item ya existe, aumenta la cantidad
-                const newCart = prevCart.map((item) =>
-                    item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+            if (existingItem) {
+                // Si ya existe, aumenta la cantidad.
+                return prevCart.map((item) =>
+                    item.id === product.id
+                        ? { ...item, quantity: item.quantity + 1 }
+                        : item
                 );
-                console.log('   ✅ Estado NUEVO (cantidad aumentada):', newCart);
-                return newCart;
             } else {
-                // Si es un item nuevo, lo agrega al array
-                const newCart = [...prevCart, { ...product, quantity: 1 }];
-                console.log('   ✅ Estado NUEVO (producto agregado):', newCart);
-                return newCart;
+                // Si es nuevo, lo agrega con cantidad 1.
+                return [...prevCart, { ...product, quantity: 1 }];
             }
         });
     };
 
     const removeFromCart = (id) => {
-        setCart((prev) => prev.filter((item) => item.id !== id));
+        setCart((prevCart) => prevCart.filter((item) => item.id !== id));
     };
 
     const clearCart = () => {
         setCart([]);
     };
 
-    // Calculamos el total cada vez que el componente se renderiza
     const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
+    // Aquí se ponen a disposición el estado y las funciones para toda la app.
+    const value = { cart, addToCart, removeFromCart, clearCart, total };
+
     return (
-        <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, total }}>
+        <CartContext.Provider value={value}>
             {children}
         </CartContext.Provider>
     );
