@@ -16,6 +16,7 @@ function NavBar() {
             <Nav.Link href="/nosotros">Nosotros</Nav.Link>
             <Nav.Link href="/login">Inicio sesion</Nav.Link>
             <Nav.Link href="/crearUsuario">Registro</Nav.Link>
+            <Nav.Link href="/cart">Carrito</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
