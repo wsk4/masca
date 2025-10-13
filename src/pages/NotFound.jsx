@@ -3,7 +3,7 @@ import { Container } from 'react-bootstrap';
 import Image from '../components/atoms/Image';
 
 const image = {
-    src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnLMSjfk8BbBLwEAf2T3zSpK8hhg8bMkHPww&s',
+    src: '/img/momoerror.webp',
     alt: 'Not Found Image',
 }
 
