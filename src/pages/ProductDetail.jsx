@@ -11,6 +11,7 @@ import { useCart } from '../context/CartContext.jsx';
 function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { addToCart } = useCart();
   const product = products.find((p) => p.id === parseInt(id));
 
   if (!product) {
@@ -32,13 +33,7 @@ function ProductDetail() {
           <Text variant="h2">{product.name}</Text>
           <Text variant="p">{product.description}</Text>
           <Text variant="h4">${product.price}</Text>
-          <Button
-            variant="primary"
-            className="mt-3"
-            onClick={() => addToCart(product)}
-          >
-            Agregar al carrito
-          </Button>
+          <button onClick={() => addToCart(product)}>Agregar al carrito</button>
         </Card.Body>
       </Card>
     </Container>
