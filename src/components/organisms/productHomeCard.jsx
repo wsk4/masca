@@ -14,13 +14,8 @@ function ProductHomeCard({ producto }) {
     return (
         <Col md={3} sm={6} xs={12} className="mb-4">
         <Card
-            className="text-center text-light"
-            style={{
-            background: "linear-gradient(to bottom, #212529, #343a40)",
-            border: "none",
-            borderRadius: "12px",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-            }}
+            className="text-center text-light fondo"
+           
         >
             <Image src={producto.image} alt={producto.nombre} className="card-img-top" />
             <Card.Body>

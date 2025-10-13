@@ -1,34 +1,71 @@
+/* === BLOGS PAGE STYLING === */
+
+body {
+  background-color: #111;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  color: #fff;
+}
+
+.container {
+  color: #fff;
+}
+
+/* === BLOG CARD STYLING (Match Home Cards) === */
 .blog-card {
-  background: linear-gradient(black);
+  background: linear-gradient(to bottom, #212529, #343a40);
   border: none;
-  border-radius: 10px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+  color: #fff;
 }
 
 .blog-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
 }
 
-.ver-caso-btn {
-  background: linear-gradient(black);
-  border: 2px solid black;
-  color: white;
-  transition: 0.3s;
+.blog-card img {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  object-fit: cover;
+  width: 100%;
+  height: 220px;
 }
 
-.ver-caso-btn:hover {
-  opacity: 0.9;
+/* Text inside cards */
+.blog-card .card-body {
+  background-color: transparent;
   color: #fff;
 }
-.blog-detail-image {
-  width: 290px;          /* ancho pequeño */
-  height: 175px;        /* alto pequeño */
-  border-radius: 80px;  /* bordes redondeados */
-  object-fit: cover;    /* mantiene proporción */
-  display: block;       /* centra mejor si se usa con margin */
-  margin: 0 auto;       /* centra la imagen horizontalmente */
+
+.blog-card .card-title {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
 
+.blog-card .card-text {
+  color: #ccc;
+  font-size: 0.95rem;
+}
 
+/* Buttons (gray gradient, same as Home) */
+.blog-card .btn {
+  background: linear-gradient(145deg, #b3b3b3, #6c757d);
+  border: none;
+  border-radius: 8px;
+  color: #111;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.blog-card .btn:hover {
+  background: linear-gradient(145deg, #d1d1d1, #7a7a7a);
+  color: #000;
+  transform: scale(1.05);
+}
