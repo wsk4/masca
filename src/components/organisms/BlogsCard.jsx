@@ -2,7 +2,7 @@ import React from "react";
 import { Col, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Button from "../atoms/Button";
-import "../../styles/blogs.css"; 
+import "../../styles/Blogs.css"; 
 
 function BlogCard({ blog }) {
   const navigate = useNavigate();
