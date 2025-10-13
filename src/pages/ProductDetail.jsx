@@ -7,6 +7,7 @@ import products from '../data/Products.js';
 import Image from '../components/atoms/Image.jsx';
 import Text from '../components/atoms/Text.jsx';
 import Button from '../components/atoms/Button.jsx';
+import '../styles/CardBody.css'; 
 
 // ASEGÚRATE DE QUE ESTA RUTA SEA 100% CORRECTA
 import { useCart } from '../context/CartContext.jsx';
@@ -48,9 +49,9 @@ function ProductDetail() {
             <Card>
                 <Image src={product.image} alt={product.name} className="card-img-top" />
                 <Card.Body>
-                    <Text variant="h2">{product.name}</Text>
-                    <Text variant="p">{product.description}</Text>
-                    <Text variant="h3" className="my-3">
+                    <Text variant="h2" className="card-price">{product.name}</Text>
+                    <Text variant="p" className="card-price">{product.description}</Text>
+                    <Text variant="h3" className="my-3 card-price">
                         {product.price.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}
                     </Text>
 
