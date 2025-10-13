@@ -11,6 +11,7 @@ import Nosotros from './pages/Nosotros';
 import BlogDetail from './pages/BlogsDetail';
 import Login from './pages/Login';
 import CrearUsuario from './pages/CrearUsuario';
+import Cart from './pages/Cart';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/nosotros" element={<Nosotros />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/CrearUsuario" element={<CrearUsuario />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="*" element={<NotFound />} />
 
       </Routes>

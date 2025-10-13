@@ -6,6 +6,7 @@ import Image from '../components/atoms/Image.jsx';
 import Text from '../components/atoms/Text.jsx';
 import Button from '../components/atoms/Button.jsx';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext.jsx';
 
 function ProductDetail() {
   const { id } = useParams();
@@ -31,6 +32,13 @@ function ProductDetail() {
           <Text variant="h2">{product.name}</Text>
           <Text variant="p">{product.description}</Text>
           <Text variant="h4">${product.price}</Text>
+          <Button
+            variant="primary"
+            className="mt-3"
+            onClick={() => addToCart(product)}
+          >
+            Agregar al carrito
+          </Button>
         </Card.Body>
       </Card>
     </Container>
