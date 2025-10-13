@@ -2,6 +2,7 @@ import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import productos from "../data/Productos";
 import ProductHomeCard from "../components/organisms/productHomeCard"; 
+import '../styles/CardBody.css';
 
 
 
@@ -45,7 +46,7 @@ function Home() {
           className="img-fluid mb-3"
           style={{ maxHeight: "120px" }}
         />
-        <p className="text-muted">
+        <p className="text-muted card-price">
           © {new Date().getFullYear()} Mascapitos Store — Todos los derechos reservados.
         </p>
       </footer>
