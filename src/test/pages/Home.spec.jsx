@@ -1,10 +1,10 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom"; // ✅ Necesario para useNavigate()
+import { MemoryRouter } from "react-router-dom"; 
 import Home from "../../pages/Home";
 
 describe("Home Page", () => {
-  // Función helper para no repetir el wrapper
+
   const renderHome = () =>
     render(
       <MemoryRouter>

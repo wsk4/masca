@@ -34,7 +34,7 @@ describe('ProductDetail Page', () => {
     });
 
     it('muestra mensaje de producto no encontrado', () => {
-        renderWithProviders({ route: `/products/999999` }); // id inexistente
+        renderWithProviders({ route: `/products/999999` }); 
 
         expect(screen.getByText('Producto no encontrado')).toBeTruthy();
     });
@@ -46,7 +46,6 @@ describe('ProductDetail Page', () => {
         const addButton = screen.getByRole('button', { name: /agregar al carrito/i });
         fireEvent.click(addButton);
 
-        // Verifica que el alert haya aparecido (simula window.alert)
         const originalAlert = window.alert;
         window.alert = jasmine.createSpy('alert');
 
