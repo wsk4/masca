@@ -1,5 +1,3 @@
-// RUTA: src/pages/ProductDetail.jsx
-
 import React from 'react';
 import { Container, Card } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
