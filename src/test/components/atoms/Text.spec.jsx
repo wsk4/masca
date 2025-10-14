@@ -6,7 +6,7 @@ describe('Text Component', () => {
   it('renderiza el texto correctamente', () => {
     render(<Text>Hola Mundo</Text>);
     const textElement = screen.getByText('Hola Mundo');
-    expect(textElement).toBeTruthy(); // ✅ Verifica que se renderiza
+    expect(textElement).toBeTruthy();
   });
 
   it('usa la etiqueta <p> por defecto', () => {

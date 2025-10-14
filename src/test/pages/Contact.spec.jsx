@@ -20,7 +20,6 @@ describe('Contact Component', () => {
   it('should update form fields when user types', () => {
     render(<Contact />);
 
-    // Buscamos por placeholder
     const nameInput = screen.getByPlaceholderText('Ingresa tu nombre');
     const emailInput = screen.getByPlaceholderText('Ingresa tu correo');
     const messageInput = screen.getByPlaceholderText('Ingrese el mensaje');
