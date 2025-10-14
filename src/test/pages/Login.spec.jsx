@@ -59,6 +59,6 @@ describe('Login Component', () => {
     fireEvent.click(submitButton);
     
 
-    expect(window.alert).toHaveBeenCalledWith('bienveindo');
+    expect(window.alert).toHaveBeenCalledWith('bienvenido');
   });
 });
