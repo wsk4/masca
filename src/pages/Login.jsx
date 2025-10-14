@@ -35,7 +35,7 @@ function Login() {
 
     
     const handleSubmit = () => {
-        const message = `bienveindo`;
+        const message = `bienvenido`;
         alert(message);
     };
 
