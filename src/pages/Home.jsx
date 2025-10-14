@@ -45,7 +45,7 @@ function Home() {
           className="img-fluid mb-3"
           style={{ maxHeight: "120px" }}
         />
-        <p className="text-muted">
+        <p>
           © {new Date().getFullYear()} Mascapitos Store — Todos los derechos reservados.
         </p>
       </footer>
