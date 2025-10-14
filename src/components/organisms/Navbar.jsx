@@ -1,5 +1,4 @@
 import React from 'react';
-// 1. Importa 'Link' desde React Router
 import { Link } from 'react-router-dom';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 
