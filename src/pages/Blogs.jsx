@@ -6,8 +6,8 @@ import blogs from "../data/Blogs";
 function Blogs() {
   return (
     <Container className="my-5">
-      <h1 className="text-dark fw-bold text-center">Casos curiosos</h1>
-      <p className="text-center mb-4 text-dark">
+      <h1 className="fw-bold text-center">Casos curiosos</h1>
+      <p className="text-center mb-4 ">
         En esta sección encontrarás algunas experiencias divertidas y reales de
         nuestros clientes. ¡Porque en Mascapitos Store cada aroma tiene una
         historia!
