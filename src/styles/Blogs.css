@@ -1,22 +1,11 @@
-
-
 body {
   background-color: #111;
   color: #fff;
   font-family: "Poppins", sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6, p {
-  color: #fff;
-}
-
-.container {
-  color: #fff;
-}
-
 .blog-card {
   background: linear-gradient(to bottom, #212529, #343a40);
-  border: none;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -38,8 +27,8 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 .blog-card .card-body {
-  background-color: transparent;
   color: #fff;
+  padding: 1rem;
 }
 
 .blog-card .card-title {
