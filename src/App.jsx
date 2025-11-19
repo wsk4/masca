@@ -1,39 +1,45 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import NavBar from './components/organisms/Navbar';
-import Home from './pages/Home';
-import Products from './pages/Products';
-import ProductDetail from './pages/ProductDetail';
-import NotFound from './pages/NotFound';
-import Contact from './pages/Contact';
-import Blogs from './pages/Blogs';
-import Nosotros from './pages/Nosotros';
-import BlogDetail from './pages/BlogsDetail';
-import Login from './pages/Login';
-import CrearUsuario from './pages/CrearUsuario';
-import Cart from './pages/Cart';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { Suspense } from 'react';
+import { publicLinks } from './data/navbarPublicLinks';
+import { adminLinks } from './data/navbarAdminLinks';
+import Navbar from './components/organisms/Navbar';
+import { appRoutes } from './routes/config';
 
+function Layout() {
+  const location = useLocation();
 
-function App() {
+  const isAdminRoute = location.pathname.startsWith('/admin');
+  const currentRoute = appRoutes.find(route => route.path === location.pathname);
+  const showNavbar = isAdminRoute || currentRoute?.showNavbar;
+
+  const navbarLinks = isAdminRoute ? adminLinks : publicLinks;
+  const navbarTitle = isAdminRoute ? 'Admin Naves Front' : 'Naves Front';
+
   return (
     <>
-      <NavBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/products/:id" element={<ProductDetail />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/blogs" element={<Blogs />} />
-        <Route path="/blogs/:id" element={<BlogDetail />} /> 
-        <Route path="/nosotros" element={<Nosotros />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/CrearUsuario" element={<CrearUsuario />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="*" element={<NotFound />} />
+      {showNavbar && <Navbar links={navbarLinks} title={navbarTitle} />}
 
-      </Routes>
+      <main>
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center min-h-screen">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-blue-600"></div>
+            </div>
+          }
+        >
+          <Routes>
+            {appRoutes.map(({ path, element }) => (
+              <Route key={path} path={path} element={element} />
+            ))}
+          </Routes>
+        </Suspense>
+      </main>
     </>
   );
+}
+
+function App() {
+  return <Layout />;
 }
 
 export default App;
