@@ -4,11 +4,11 @@ import Button from '../atoms/Button';
 import InputFile from '../atoms/InputFile';
 import { uploadToImgBB } from '../../utils/uploadImage';
 
-function CreateModal({ isOpen, onClose, onSubmit, inputsConfig = [], title = "Crear nuevo perfume", submitText = "Guardar", loading = false, initialData = {},}) {
+function CreateModal({ isOpen, onClose, onSubmit, inputsConfig = [], title = "Crear nuevo", submitText = "Guardar", loading = false, initialData = {},}) {
     const [formData, setFormData] = useState(initialData);
     const [imagePreview, setImagePreview] = useState(null);
     const [uploadingImage, setUploadingImage] = useState(false);
-     useEffect(() => {
+    useEffect(() => {
         if (isOpen) {
             const initial = initialData && Object.keys(initialData).length > 0 ? { ...initialData } : {};
 
