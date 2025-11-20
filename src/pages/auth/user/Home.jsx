@@ -38,5 +38,3 @@ const PerfumesList = () => {
     </div>);
 }
 export default PerfumesList;
-
-//HOLA TONTO CTM
