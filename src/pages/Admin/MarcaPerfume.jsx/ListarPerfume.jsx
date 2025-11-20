@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Table, Button as BsButton } from 'react-bootstrap';
-import Text from '../../components/atoms/Text'; 
-import { generarMensaje } from '../../utils/GenerarMensaje'; // Asumimos esta utilidad existe
+import Text from '../../../components/atoms/Text'; 
+import { generarMensaje } from '../../../utils/GenerarMensaje'; // Asumimos esta utilidad existe
 
 // --- 🔑 DATOS SIMULADOS (Para fines de la lista) 🔑 ---
 const marcasData = [
