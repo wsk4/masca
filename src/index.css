@@ -1,10 +1,44 @@
-/*@tailwind base;
+/*
+
+@tailwind base;
 @tailwind components;
-@tailwind utilities;*/
+<<<<<<< HEAD
+@tailwind utilities;
 @import "tailwindcss";
 
 :root {
-  /* 1. Definición de la Paleta de Colores como CSS Variables (dentro de :root) */
+  --color-theme-main: #000000;
+  --color-theme-card: #121212;
+  --color-theme-border: #27272a;
+  --color-theme-text: #ffffff;
+  --color-theme-muted: #a1a1aa;
+  --color-theme-accent: #ffffff;
+  --color-theme-hover: #e4e4e7;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-theme-main);
+    color: var(--color-theme-text);
+  }
+  
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--color-theme-main); }
+  ::-webkit-scrollbar-thumb { 
+    background: var(--color-theme-border); 
+    border-radius: 9999px; 
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-theme-muted); }
+}
+=======
+@tailwind utilities;
+>>>>>>> 4a7e1f5b2aa99a370ee0d61b6f4ef181b65ba975
+
+*/
+@import "tailwindcss";
+
+/* 1. Definición de la Paleta de Colores (Dark Mode Minimalista) */
+@theme {
   --color-theme-main: #000000;       /* Fondo principal (Negro puro) */
   --color-theme-card: #121212;       /* Fondo de tarjetas/modales (Gris carbón) */
   --color-theme-border: #27272a;     /* Bordes y separadores sutiles */
@@ -17,7 +51,6 @@
 /* 2. Estilos Base y Scrollbar */
 @layer base {
   body {
-    /* Usamos las variables CSS aquí */
     background-color: var(--color-theme-main);
     color: var(--color-theme-text);
   }
