@@ -1,9 +1,9 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { Suspense } from 'react';
-import { publicLinks } from './data/navbarPublicLinks.js';
-import { adminLinks } from './data/navbarAdminLinks.js';
+import { publicLinks } from './data/navbarPublicLinks.jsx';
+import { adminLinks } from './data/navbarAdminLinks.jsx';
 import Navbar from './components/organisms/Navbar.jsx';
-import { appRoutes } from './routes/config.js';
+import { appRoutes } from './routes/config.jsx';
 
 function Layout() {
   const location = useLocation();
