@@ -1,40 +1,15 @@
-import { useEffect, useState } from "react"
-import { Link } from 'react-router-dom';
-import PerfumesService from '../../pages/user/PerfumesService';
+import React from "react";
+import Section from "../../components/templates/Section";
 
-const PerfumesList = () => {
-    const [Perfumes, setPerfumes] = useState([]);
+const homeContent = [
+    { type: "text", text: [{ content: "Bienvenido al eCommerce de Perfumes", variant: "h1", className: "text-center text-4xl font-bold mb-10 text-indigo-800" }] }
+];
 
-    useEffect(() => {
-        fetchPerfumes();
-    }, []);
-
-    const fetchPerfumes = () => {
-        PerfumesService.getAllPerfumes().then(response => {
-            setPerfumes(response.data);
-        }).catch(error => {
-            console.log('Error fetching perfumes:', error);
-        });
-    };
+function Home() {
     return (
-        <div>
-            <h2>Perfumes List</h2>
-            <div className="bg-blue-500 text-white p-10 text-center font-bold text-2xl">
-                Perfumes
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nombre perfume</th>
-                </tr>
-            </thead>
-            <tbody>{Perfumes.map(Perfumes => (
-                <tr key={Perfumes.id}>
-                    <td>{Perfumes.nombre}</td>
-                    </tr>
-            ))}
-            </tbody>
-        </table>
-    </div>);
+        <main className="max-w-3xl mx-auto p-8">
+            <Section content={homeContent} />
+        </main>
+    );
 }
-export default PerfumesList;
+export default Home;

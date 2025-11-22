@@ -1,8 +1,12 @@
 export const adminLinks = [
-  { to: "/admin/dashboard", label: "Dashboard" },
-  { to: "/admin/users", label: "Usuarios" },
+  { to: "/admin", label: "Dashboard" },
+  { to: "/admin/usuarios", label: "Usuarios" },
   { to: "/admin/marcas", label: "Marcas" },
-  { to: "/", label: "Salir", onClick: () => handleLogout() }, // opcional
+  { to: "/admin/perfumes", label: "Perfumes" },
+  { to: "/admin/categorias", label: "Categorías" },
+  { to: "/admin/ubicaciones", label: "Ubicaciones" },
+  { to: "/admin/compras", label: "Compras" },
+  { to: "/admin/estados", label: "Estados" },
 ];
 
 export default adminLinks;
