@@ -24,7 +24,7 @@ const CrearEditarMarca = lazy(() => import('../pages/Admin/marcas/CrearEditarMar
 const ListarCategorias = lazy(() => import('../pages/Admin/categorias/ListarCategorias.jsx'));
 const CrearEditarCategoria = lazy(() => import('../pages/Admin/categorias/CrearEditarCategoria.jsx'));
 const ListarUbicaciones = lazy(() => import('../pages/Admin/ubicaciones/ListarUbicaciones.jsx'));
-const CrearEditarUbicacion = lazy(() => import('../pages/Admin/ubicaciones/CrearEditarUbicacion.jsx'));
+const CrearEditarUbicacion = lazy(() => import('../pages/admin/ubicaciones/CrearEditarUbicacion.jsx'));
 const ListarCompras = lazy(() => import('../pages/Admin/compras/ListarCompras.jsx'));
 const DetalleCompra = lazy(() => import('../pages/Admin/compras/DetalleCompra.jsx'));
 const ListarEstados = lazy(() => import('../pages/Admin/estados/ListarEstados.jsx'));
