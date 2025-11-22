@@ -1,24 +1,31 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { Suspense } from 'react';
-import { publicLinks } from './data/navbarPublicLinks';
-import { adminLinks } from './data/navbarAdminLinks';
-import Navbar from './components/organisms/Navbar';
-import { appRoutes } from './routes/config';
+import { publicLinks } from './data/navbarPublicLinks.js';
+import { adminLinks } from './data/navbarAdminLinks.js';
+import Navbar from './components/organisms/Navbar.jsx';
+import { appRoutes } from './routes/config.js';
 
 function Layout() {
   const location = useLocation();
 
+  // Detecta rutas admin
   const isAdminRoute = location.pathname.startsWith('/admin');
-  const currentRoute = appRoutes.find(route => route.path === location.pathname);
+
+  // Encuentra la ruta actual en appRoutes
+  const currentRoute = appRoutes.find(route =>
+    route.path === location.pathname ||
+    (route.path.includes(':') && location.pathname.startsWith(route.path.split('/:')[0]))
+  );
+  // navbar sólo en rutas públicas con showNavbar true o rutas admin
   const showNavbar = isAdminRoute || currentRoute?.showNavbar;
 
+  // Links y título del navbar
   const navbarLinks = isAdminRoute ? adminLinks : publicLinks;
   const navbarTitle = isAdminRoute ? 'Admin Naves Front' : 'Naves Front';
 
   return (
     <>
       {showNavbar && <Navbar links={navbarLinks} title={navbarTitle} />}
-
       <main>
         <Suspense
           fallback={
