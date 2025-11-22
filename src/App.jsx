@@ -21,7 +21,7 @@ function Layout() {
 
   // Links y título del navbar
   const navbarLinks = isAdminRoute ? adminLinks : publicLinks;
-  const navbarTitle = isAdminRoute ? 'Admin Naves Front' : 'Naves Front';
+  const navbarTitle = isAdminRoute ? 'Admin Mascapitos' : 'Usuario Mascapitos';
 
   return (
     <>

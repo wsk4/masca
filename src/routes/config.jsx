@@ -80,7 +80,7 @@ const adminRoutes = [
 // Ruta 404
 const notFoundRoute = {
   path: '*',
-  element: <div className="text-center py-10 text-2xl">404 - Página no encontrada u.u</div>,
+  element: <div className="text-center py-10 text-2xl">404 - Página no encontrada</div>,
   showNavbar: false,
 };
 
