@@ -16,19 +16,19 @@ const CreateUser = lazy(() => import('../pages/auth/create-user.jsx'));
 // Lazy loading para páginas de admin (rutas corregidas con "admin" en minúscula)
 const HomeAdmin = lazy(() => import('../pages/Admin/HomeAdmin.jsx'));
 const ListarUsuarios = lazy(() => import('../pages/Admin/usuarios/ListarUsuarios.jsx'));
-const CrearEditarUsuario = lazy(() => import('../pages/admin/usuarios/CrearEditarUsuario.jsx'));
+const CrearEditarUsuario = lazy(() => import('../pages/Admin/usuarios/CrearEditarUsuario.jsx'));
 const ListarPerfumes = lazy(() => import('../pages/Admin/perfumes/ListarPerfumes.jsx'));
-const CrearEditarPerfume = lazy(() => import('../pages/admin/perfumes/CrearEditarPerfume.jsx'));
+const CrearEditarPerfume = lazy(() => import('../pages/Admin/perfumes/CrearEditarPerfume.jsx'));
 const ListarMarcas = lazy(() => import('../pages/Admin/marcas/ListarMarcas.jsx'));
-const CrearEditarMarca = lazy(() => import('../pages/admin/marcas/CrearEditarMarca.jsx'));
+const CrearEditarMarca = lazy(() => import('../pages/Admin/marcas/CrearEditarMarca.jsx'));
 const ListarCategorias = lazy(() => import('../pages/Admin/categorias/ListarCategorias.jsx'));
-const CrearEditarCategoria = lazy(() => import('../pages/admin/categorias/CrearEditarCategoria.jsx'));
+const CrearEditarCategoria = lazy(() => import('../pages/Admin/categorias/CrearEditarCategoria.jsx'));
 const ListarUbicaciones = lazy(() => import('../pages/Admin/ubicaciones/ListarUbicaciones.jsx'));
 const CrearEditarUbicacion = lazy(() => import('../pages/Admin/ubicaciones/CrearEditarUbicacion.jsx'));
 const ListarCompras = lazy(() => import('../pages/Admin/compras/ListarCompras.jsx'));
-const DetalleCompra = lazy(() => import('../pages/admin/compras/DetalleCompra.jsx'));
+const DetalleCompra = lazy(() => import('../pages/Admin/compras/DetalleCompra.jsx'));
 const ListarEstados = lazy(() => import('../pages/Admin/estados/ListarEstados.jsx'));
-const CrearEditarEstado = lazy(() => import('../pages/admin/estados/CrearEditarEstado.jsx'));
+const CrearEditarEstado = lazy(() => import('../pages/Admin/estados/CrearEditarEstado.jsx'));
 
 
 // Rutas públicas (usuario final)
