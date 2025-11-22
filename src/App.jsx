@@ -1,7 +1,7 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { Suspense } from 'react';
-import { publicLinks } from './data/navbarPublicLinks.jsx';
-import { adminLinks } from './data/navbarAdminLinks.jsx';
+import { publicLinks } from './data/navbarPublicLinks';
+import { adminLinks } from './data/navbarAdminLinks.js';
 import Navbar from './components/organisms/Navbar.jsx';
 import { appRoutes } from './routes/config.jsx';
 
