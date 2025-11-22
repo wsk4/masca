@@ -6,14 +6,24 @@ function CrearEditarUsuario({ isOpen, onClose, onSubmit, initialData, loading })
     const [direcciones, setDirecciones] = useState([]);
 
     useEffect(() => {
-        // Trae todas las direcciones de la API para el select
-        DireccionService.getAll().then(setDirecciones);
+        const fetchDirecciones = async () => {
+            try {
+                const data = await DireccionService.getAll();
+                setDirecciones(data);
+            } catch (err) {
+                console.error("Error al cargar direcciones:", err);
+            }
+        };
+        fetchDirecciones();
     }, []);
 
-    const direccionOptions = direcciones.map(d => ({
-        value: d.id,
-        label: `${d.calle} ${d.numero} (${d.comuna?.nombre ?? ""})`
-    }));
+    const direccionOptions = [
+        { value: "", label: "Seleccione una dirección" },
+        ...direcciones.map(d => ({
+            value: d.id,
+            label: `${d.calle} ${d.numero} (${d.comuna?.nombre ?? ""})`
+        }))
+    ];
 
     return (
         <CreateModal
@@ -40,4 +50,5 @@ function CrearEditarUsuario({ isOpen, onClose, onSubmit, initialData, loading })
         />
     );
 }
+
 export default CrearEditarUsuario;

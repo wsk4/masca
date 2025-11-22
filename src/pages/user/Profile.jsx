@@ -10,21 +10,31 @@ function Profile() {
     const [openModal, setOpenModal] = useState(false);
 
     useEffect(() => {
-        if (user) UsuarioService.getById(user.id).then(setDatos);
+        if (user) {
+            UsuarioService.getById(user.id)
+                .then(res => setDatos(res.data))
+                .catch(err => console.error("Error al obtener usuario:", err));
+        }
     }, [user]);
 
     const handleSubmit = async (data) => {
         try {
-            await UsuarioService.update(user.id, data);
+            const res = await UsuarioService.update(user.id, data);
             generarMensaje("Perfil actualizado", "success");
             setOpenModal(false);
-            setDatos(data);
+            setDatos(res.data); // refresca con lo que devuelve el backend
         } catch {
             generarMensaje("Error al actualizar", "error");
         }
     };
 
-    if (!user) return <div className="text-center mt-8 text-red-700">Acceso restringido.</div>;
+    if (!user) {
+        return (
+            <div className="text-center mt-8 text-red-700">
+                Acceso restringido.
+            </div>
+        );
+    }
 
     return (
         <main className="max-w-lg mx-auto p-8">
@@ -32,7 +42,12 @@ function Profile() {
                 <div><strong>ID:</strong> {datos.id}</div>
                 <div><strong>Nombre:</strong> {datos.nombre}</div>
                 <div><strong>Correo:</strong> {datos.correo}</div>
-                <button className="mt-3 px-3 py-2 bg-indigo-600 text-white rounded" onClick={() => setOpenModal(true)}>Editar datos</button>
+                <button
+                    className="mt-3 px-3 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
+                    onClick={() => setOpenModal(true)}
+                >
+                    Editar datos
+                </button>
             </div>
             <CreateModal
                 isOpen={openModal}
@@ -49,4 +64,5 @@ function Profile() {
         </main>
     );
 }
+
 export default Profile;
