@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'https://tu-backend.com/api/marcas';
+const BASE_URL = 'https://masca-back.onrender.com/api/marca';
 
 class MarcaService {
   async getAll() {
@@ -24,6 +24,10 @@ class MarcaService {
   }
   async delete(id) {
     try { await axios.delete(`${BASE_URL}/${id}`); return true; }
+    catch (err) { console.error('Error al eliminar marca:', err); throw err; }
+  }
+  async deleteByMarcaId(MarcaId) {
+    try { await axios.delete(`${BASE_URL}/${MarcaId}`); return true; }
     catch (err) { console.error('Error al eliminar marca:', err); throw err; }
   }
 }

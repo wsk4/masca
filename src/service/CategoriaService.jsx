@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'https://tu-backend.com/api/categorias';
+const BASE_URL = 'https://masca-back.onrender.com/api/categorias';
 
 class CategoriaService {
   async getAll() {
