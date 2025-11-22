@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import DynamicTable from "../../components/molecules/DynamicTable";
-import CompraService from "../../service/CompraService";
+import DynamicTable from "../../../components/molecules/DynamicTable";
+import CompraService from "../../../service/CompraService";
 import DetalleCompra from "./DetalleCompra";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext";
 
 function ListarCompras() {
     const { user } = useAuth();

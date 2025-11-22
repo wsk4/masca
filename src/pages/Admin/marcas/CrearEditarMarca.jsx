@@ -1,5 +1,5 @@
 import React from "react";
-import CreateModal from "../../components/organisms/CreateModal";
+import CreateModal from "../../../components/organisms/CreateModal";
 
 function CrearEditarMarca({ isOpen, onClose, onSubmit, initialData, loading }) {
     return (

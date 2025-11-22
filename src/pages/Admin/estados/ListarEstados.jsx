@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import DynamicTable from "../../components/molecules/DynamicTable";
-import EstadoCompraService from "../../service/EstadoCompraService";
+import DynamicTable from "../../../components/molecules/DynamicTable";
+import EstadoCompraService from "../../../service/EstadoCompraService";
 import CrearEditarEstado from "./CrearEditarEstado";
-import { generarMensaje } from "../../utils/GenerarMensaje";
+import { generarMensaje } from "../../../utils/GenerarMensaje";
 
 function ListarEstados() {
     const [estados, setEstados] = useState([]);

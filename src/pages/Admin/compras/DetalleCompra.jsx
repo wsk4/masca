@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import CompraService from "../../service/CompraService";
+import CompraService from "../../../service/CompraService";
 
 function DetalleCompra({ id, onClose }) {
     const [compra, setCompra] = useState(null);

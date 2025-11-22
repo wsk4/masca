@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import DynamicTable from "../../components/molecules/DynamicTable";
-import PerfumeService from "../../service/PerfumeService";
+import DynamicTable from "../../../components/molecules/DynamicTable";
+import PerfumeService from "../../../service/PerfumeService";
 import CrearEditarPerfume from "./CrearEditarPerfume";
-import { useAuth } from "../../context/AuthContext";
-import { generarMensaje } from "../../utils/GenerarMensaje";
+import { useAuth } from "../../../context/AuthContext";
+import { generarMensaje } from "../../../utils/GenerarMensaje";
 
 function ListarPerfumes() {
     const { user } = useAuth();

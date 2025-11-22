@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import DynamicTable from "../../components/molecules/DynamicTable";
-import { useAuth } from "../../context/AuthContext";
-import DireccionService from "../../service/DireccionService";
-import CrearEditarUbicacion from "./CrearEditarUbicacion";
-import { generarMensaje } from "../../utils/GenerarMensaje";
+import DynamicTable from "../../../components/molecules/DynamicTable";
+import { useAuth } from "../../../context/AuthContext";
+import DireccionService from "../../../service/DireccionService";
+import CrearEditarUbicacion from "./CrearEditarUbicaciones";
+import { generarMensaje } from "../../../utils/GenerarMensaje";
 
 function ListarUbicaciones() {
     const { user } = useAuth();

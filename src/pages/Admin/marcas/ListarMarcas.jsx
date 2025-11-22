@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import DynamicTable from "../../components/molecules/DynamicTable";
-import { useAuth } from "../../context/AuthContext";
-import MarcaService from "../../service/MarcaService";
+import DynamicTable from "../../../components/molecules/DynamicTable";
+import { useAuth } from "../../../context/AuthContext";
+import MarcaService from "../../../service/MarcaService";
 import CrearEditarMarca from "./CrearEditarMarca";
-import { generarMensaje } from "../../utils/GenerarMensaje";
+import { generarMensaje } from "../../../utils/GenerarMensaje";
 
 function ListarMarcas() {
     const { user } = useAuth();

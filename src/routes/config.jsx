@@ -9,8 +9,7 @@ const Orders = lazy(() => import('../pages/user/Orders.jsx'));
 const OrderDetail = lazy(() => import('../pages/user/OrderDetail.jsx'));
 const ProductDetail = lazy(() => import('../pages/user/ProductDetail.jsx'));
 const Profile = lazy(() => import('../pages/user/Profile.jsx'));
-const AddressBook = lazy(() => import('../pages/user/AddressBook.jsx'));
-
+const AddressBook = lazy(() => import('../../src/pages/user/AdderssBook.jsx'));
 const Login = lazy(() => import('../pages/auth/login.jsx'));
 const CreateUser = lazy(() => import('../pages/auth/create-user.jsx'));
 
@@ -25,7 +24,7 @@ const CrearEditarMarca = lazy(() => import('../pages/admin/marcas/CrearEditarMar
 const ListarCategorias = lazy(() => import('../pages/admin/categorias/ListarCategorias.jsx'));
 const CrearEditarCategoria = lazy(() => import('../pages/admin/categorias/CrearEditarCategoria.jsx'));
 const ListarUbicaciones = lazy(() => import('../pages/admin/ubicaciones/ListarUbicaciones.jsx'));
-const CrearEditarUbicacion = lazy(() => import('../pages/admin/ubicaciones/CrearEditarUbicacion.js'));
+const CrearEditarUbicacion = lazy(() => import('../pages/admin/ubicaciones/CrearEditarUbicaciones.jsx'));
 const ListarCompras = lazy(() => import('../pages/admin/compras/ListarCompras.jsx'));
 const DetalleCompra = lazy(() => import('../pages/admin/compras/DetalleCompra.jsx'));
 const ListarEstados = lazy(() => import('../pages/admin/estados/ListarEstados.jsx'));

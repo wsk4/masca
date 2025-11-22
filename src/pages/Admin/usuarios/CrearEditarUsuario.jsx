@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import CreateModal from "../../components/organisms/CreateModal";
-import DireccionService from "../../service/DireccionService";
+import CreateModal from "../../../components/organisms/CreateModal";
+import DireccionService from "../../../service/DireccionService";
 
 function CrearEditarUsuario({ isOpen, onClose, onSubmit, initialData, loading }) {
     const [direcciones, setDirecciones] = useState([]);

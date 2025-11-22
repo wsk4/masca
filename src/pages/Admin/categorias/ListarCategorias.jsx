@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import DynamicTable from "../../components/molecules/DynamicTable";
-import { useAuth } from "../../context/AuthContext";
-import CategoriaService from "../../service/CategoriaService";
+import DynamicTable from "../../../components/molecules/DynamicTable";
+import { useAuth } from "../../../context/AuthContext";
+import CategoriaService from "../../../service/CategoriaService";
 import CrearEditarCategoria from "./CrearEditarCategoria";
-import { generarMensaje } from "../../utils/GenerarMensaje";
+import { generarMensaje } from "../../../utils/GenerarMensaje";
 
 function ListarCategorias() {
     const { user } = useAuth();

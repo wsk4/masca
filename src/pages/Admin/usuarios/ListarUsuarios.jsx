@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import DynamicTable from "../../components/molecules/DynamicTable";
-import UsuarioService from "../../service/UsuarioService";
+import DynamicTable from "../../../components/molecules/DynamicTable";
+import UsuarioService from "../../../service/UsuarioService";
 import CrearEditarUsuario from "./CrearEditarUsuario";
-import { useAuth } from "../../context/AuthContext";
-import { generarMensaje } from "../../utils/GenerarMensaje";
+import { useAuth } from "../../../context/AuthContext";
+import { generarMensaje } from "../../../utils/GenerarMensaje";
 
 function ListarUsuarios() {
     const { user } = useAuth();
