@@ -1,114 +1,76 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PerfumeService from "../../service/PerfumeService";
-// Asumimos que estos módulos existen en la estructura de tu proyecto:
-import { useCart } from "../../context/CartContext"; 
-import { generarMensaje } from "../../utils/GenerarMensaje"; 
-import Image from "../../components/atoms/Image"; 
+import Button from "../../components/atoms/Button"; // Aseguramos que Button está disponible
 
 function ProductDetail() {
   const { id } = useParams();
   const [perfume, setPerfume] = useState(null);
-  // Inicialización del contexto del carrito para la funcionalidad
-  const { addToCart } = useCart(); 
 
   useEffect(() => {
+    // Asegúrate de que PerfumeService use la URL real: https://masca-back.onrender.com
     PerfumeService.getById(id).then(setPerfume);
   }, [id]);
 
-  const handleAddToCart = () => {
-    if (perfume && perfume.stock > 0) {
-        addToCart(perfume); 
-        generarMensaje(`${perfume.nombre} agregado al carrito.`, "success");
-    } else {
-        generarMensaje("Producto sin stock.", "warning");
-    }
-  };
-
-  // 1. Estilo para el estado de carga (Modo Oscuro)
+  // Contenedor de carga con estilos temáticos
   if (!perfume) return (
-      <div className="flex items-center justify-center min-h-screen p-8 bg-black text-white">
-          Cargando detalle del perfume...
-      </div>
+    <main className="min-h-screen p-8 flex items-start justify-center bg-theme-main">
+        <div className="p-8 text-theme-muted bg-theme-card rounded-xl border border-theme-border">Cargando detalle...</div>
+    </main>
   );
 
-  // 2. Desestructuración de todos los campos del modelo Java Perfume
-  const { nombre, descripcion, precio, stock, url, marca } = perfume;
-  const isOutOfStock = stock <= 0;
-  
-  // Helper para formato de moneda
-  const formatPrice = (price) => `$${price?.toFixed(2) ?? '0.00'}`;
-
   return (
-    // 3. Contenedor principal: Fondo negro, texto blanco (Modo Oscuro)
-    <main className="max-w-4xl mx-auto p-8 bg-black text-white min-h-screen">
-        {/* Contenedor de tarjeta de detalle: Fondo gris oscuro, borde sutil */}
-        <div className="flex flex-col md:flex-row gap-8 bg-gray-900 border border-gray-700 p-6 rounded-xl shadow-xl">
-            
-            {/* Columna Izquierda: Imagen (url) */}
-            <div className="md:w-1/3 flex justify-center items-center bg-gray-800 p-6 rounded-lg shadow-inner">
-                {url && (
-                    <Image 
-                        src={url} 
-                        alt={nombre} 
-                        className="max-h-80 w-auto object-contain rounded-lg"
-                    />
-                )}
-            </div>
-
-            {/* Columna Derecha: Detalles del Producto y Acciones */}
-            <div className="md:w-2/3 space-y-4">
-                
-                {/* Nombre y Marca */}
-                <h1 className="text-4xl font-extrabold text-white">
-                    {nombre}
-                </h1>
-                <p className="text-xl text-gray-400 border-b border-gray-700 pb-2">
-                    <strong className="text-white">Marca:</strong> {marca?.nombre}
-                </p>
-
-                {/* Descripción */}
-                <div className="pt-2">
-                    <strong className="text-gray-500 block mb-1">Descripción:</strong> 
-                    <p className="text-gray-300">{descripcion}</p>
-                </div>
-                
-                {/* Información clave (ID, Precio, Stock) */}
-                <div className="space-y-2 pt-3">
-                    <p>
-                        <strong className="text-gray-500">ID del Producto:</strong> 
-                        <span className="text-gray-400 ml-2">{perfume.id}</span>
-                    </p>
-                    
-                    {/* Precio: Resaltado */}
-                    <p className="text-4xl font-black text-white">
-                        {formatPrice(precio)}
-                    </p>
-                    
-                    {/* Stock: Indicador visual */}
-                    <p className="text-lg">
-                        <strong className="text-gray-400">Estado:</strong> 
-                        <span className={`font-extrabold ml-2 ${isOutOfStock ? 'text-red-500' : 'text-green-500'}`}>
-                            {isOutOfStock ? 'AGOTADO' : `${stock} UNIDADES`}
-                        </span>
-                    </p>
-                </div>
-                
-                {/* Botón de Agregar al Carrito (funcional) */}
-                <button
-                    onClick={handleAddToCart}
-                    disabled={isOutOfStock}
-                    className={`mt-6 w-full py-3 px-4 rounded-lg font-bold text-lg transition-all duration-200
-                                ${isOutOfStock 
-                                    ? 'bg-gray-700 text-gray-500 cursor-not-allowed opacity-70' 
-                                    : 'bg-white text-black hover:bg-gray-200 active:scale-[0.98] shadow-[0_0_20px_rgba(255,255,255,0.2)]'
-                                }
-                    `}
-                >
-                    {isOutOfStock ? 'SIN STOCK' : 'AGREGAR AL CARRITO'}
-                </button>
-            </div>
+    // Contenedor principal con fondo negro
+    <main className="min-h-screen p-8 flex items-start justify-center bg-theme-main">
+      
+      {/* Tarjeta de Detalle del Producto (bg-theme-card) */}
+      <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 bg-theme-card border border-theme-border rounded-xl shadow-2xl p-6 md:p-8">
+        
+        {/* Columna Izquierda: Imagen */}
+        <div className="flex items-center justify-center p-8 bg-theme-main rounded-lg border border-theme-border">
+            {/* Usamos el URL que viene del backend o un placeholder */}
+            <img src={perfume.url || "/img/perfume.webp"} alt={perfume.nombre} className="max-h-96 object-contain drop-shadow-lg" />
         </div>
+        
+        {/* Columna Derecha: Información */}
+        <div className="space-y-6">
+            
+            <h1 className="text-4xl font-black text-white">{perfume.nombre}</h1>
+            
+            {/* Precio destacado */}
+            <p className="text-3xl font-bold text-white border-b border-theme-border pb-4">
+                {/* Formato de moneda, si tu backend lo envía sin formato */}
+                ${(perfume.precio || 0).toLocaleString('es-CL') || 'Precio no disponible'}
+            </p>
+
+            {/* Detalles del producto */}
+            <div className="space-y-3 text-base">
+                <div className="text-white"><strong className="text-theme-muted">Marca:</strong> {perfume.marca?.nombre || 'N/A'}</div>
+                <div className="text-white"><strong className="text-theme-muted">Categoría:</strong> {perfume.categoria?.nombre || 'N/A'}</div>
+                {/* Lógica de Stock */}
+                <div className="text-white">
+                    <strong className="text-theme-muted">Stock:</strong> 
+                    {(perfume.stock > 0 || 1) // Usamos 1 si no hay dato para mostrar "Disponible"
+                        ? <span className="text-green-400 font-bold ml-1">Disponible</span> 
+                        : <span className="text-red-400 font-bold ml-1">Agotado</span>
+                    }
+                </div>
+            </div>
+
+            {/* Descripción */}
+            <p className="text-theme-muted pt-4 border-t border-theme-border text-sm">
+                {perfume.descripcion || "Descripción detallada de la fragancia, notas de salida, corazón y fondo. Una mezcla perfecta de elegancia y durabilidad."}
+            </p>
+
+            {/* Botón de acción (Botón Blanco/Negro) */}
+            <Button
+                text="Agregar al Carrito"
+                // Usando bg-white y appearance-none para evitar conflictos de estilo
+                className="w-full py-3 mt-8 bg-white text-black font-bold appearance-none border-none"
+                disabled={perfume.stock === 0}
+            />
+        </div>
+      </div>
     </main>
   );
 }
