@@ -23,7 +23,7 @@ const loginData = [
             {
                 type: "password",
                 placeholder: "Contraseña",
-                name: "contra", // CORREGIDO: Coincide con el modelo Usuario.java
+                name: "contra", 
                 required: true,
                 autoComplete: "current-password",
                 className: "",
