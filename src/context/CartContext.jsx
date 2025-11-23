@@ -1,76 +1,78 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { generarMensaje } from '../utils/GenerarMensaje'; 
 
 const CartContext = createContext();
 
-// Hook personalizado para usar el contexto fácilmente
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
-    // 1. Estado del carrito: Inicializa leyendo desde localStorage
-    const [cart, setCart] = useState(() => {
-        const localCart = localStorage.getItem('cart');
-        return localCart ? JSON.parse(localCart) : [];
-    });
-
-    // 2. Estado para el total
+    const [cart, setCart] = useState([]);
     const [total, setTotal] = useState(0);
 
     useEffect(() => {
-        // Recalcular el total cada vez que el carrito cambia
-        const newTotal = cart.reduce(
-            // Asume que cada item tiene un 'price' y 'quantity'
-            (sum, item) => sum + (item.precio * item.quantity), 
-            0
-        );
+        const newTotal = cart.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 0), 0);
         setTotal(newTotal);
-
-        // Persistir el carrito en localStorage para que persista entre sesiones
-        localStorage.setItem('cart', JSON.stringify(cart));
     }, [cart]);
 
-    // 3. Función para agregar productos
-    const addToCart = useCallback((product) => {
-        setCart(prevCart => {
-            const existingItem = prevCart.find(item => item.id === product.id);
+    const updateQuantity = (id, newQuantity) => {
+        if (newQuantity <= 0) {
+            removeFromCart(id);
+            return;
+        }
+        setCart(cart.map(item =>
+            item.id === id ? { ...item, quantity: Math.min(newQuantity, item.stock) } : item
+        ));
+    };
 
-            if (existingItem) {
-                // Si existe, incrementa la cantidad
-                return prevCart.map(item =>
-                    item.id === product.id
-                        ? { ...item, quantity: item.quantity + 1 }
-                        : item
-                );
-            } else {
-                // Si es nuevo, agrégalo con cantidad 1
-                return [...prevCart, { ...product, quantity: 1 }];
-            }
-        });
-    }, []);
-
-    // 4. Función para remover productos
-    const removeFromCart = useCallback((id) => {
-        setCart(prevCart => prevCart.filter(item => item.id !== id));
-    }, []);
+    const increaseQuantity = (id) => {
+        const item = cart.find(i => i.id === id);
+        if (item && item.quantity < item.stock) {
+            updateQuantity(id, item.quantity + 1);
+        } else if (item) {
+            generarMensaje(`Stock máximo alcanzado para ${item.name}.`, 'warning');
+        }
+    };
     
-    // 5. Función para limpiar todo el carrito
-    const clearCart = useCallback(() => {
-        setCart([]);
-    }, []);
+    const decreaseQuantity = (id) => {
+        const item = cart.find(i => i.id === id);
+        if (item && item.quantity > 1) {
+            updateQuantity(id, item.quantity - 1);
+        } else if (item) {
+            removeFromCart(id);
+        }
+    };
 
-    // 6. Valor del contexto
-    const contextValue = {
-        cart,
-        total,
-        addToCart,
-        removeFromCart,
-        clearCart,
+    const addToCart = (product, quantity = 1) => {
+        // ... (misma lógica de adición de producto) ...
+        const existingItem = cart.find(item => item.id === product.id);
+        const itemToSave = { id: product.id, name: product.nombre, price: product.precio, stock: product.stock, image: product.url };
+
+        if (existingItem) {
+            if (existingItem.quantity + quantity <= existingItem.stock) {
+                setCart(cart.map(item =>
+                    item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
+                ));
+            } else {
+                generarMensaje(`Solo quedan ${existingItem.stock - existingItem.quantity} unidades más.`, 'warning');
+            }
+        } else {
+            setCart([...cart, { ...itemToSave, quantity: Math.min(quantity, itemToSave.stock || 99) }]);
+        }
+        generarMensaje('¡Producto agregado!', 'success');
+    };
+
+    const removeFromCart = (id) => {
+        setCart(cart.filter(item => item.id !== id));
+        generarMensaje('Producto eliminado', 'info');
+    };
+    
+    const clearCart = () => {
+        setCart([]);
     };
 
     return (
-        <CartContext.Provider value={contextValue}>
+        <CartContext.Provider value={{ cart, total, addToCart, removeFromCart, clearCart, increaseQuantity, decreaseQuantity }}>
             {children}
         </CartContext.Provider>
     );
 };
-
-export default CartContext;

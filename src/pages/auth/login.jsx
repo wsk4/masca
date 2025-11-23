@@ -7,7 +7,7 @@ import { useAuth } from "../../context/AuthContext";
 import loginData from "./data/loginData";
 
 const Login = () => {
-    // CORREGIDO: Estado inicial usa 'contra'
+    // Estado inicial usa 'contra'
     const [form, setForm] = useState({ correo: "", contra: "" });
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -17,7 +17,7 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // CORREGIDO: Validación usa 'contra'
+        // Validación usa 'contra'
         if (!form.correo || !form.contra) {
             generarMensaje('Completa todos los campos', 'warning');
             return;
@@ -25,8 +25,10 @@ const Login = () => {
         setLoading(true);
         try {
             const response = await UsuarioService.login(form);
-            const usuario = response.data;
-            // Guardar usuario (asegúrate de no guardar info sensible como la contraseña)
+            // El backend responde con { data: { id, nombre, rol } }
+            const usuario = response; 
+            
+            // Guardar usuario
             const userToSave = { id: usuario.id, nombre: usuario.nombre, rol: usuario.rol };
             localStorage.setItem('user', JSON.stringify(userToSave));
             login(userToSave);
@@ -34,7 +36,7 @@ const Login = () => {
             generarMensaje(`¡Bienvenido ${usuario.nombre}!`, 'success');
             
             setTimeout(() => {
-                // Redirección basada en rol (ajusta los IDs según tu BD)
+                // Redirección basada en rol
                 if (usuario.rol?.id === 1 || usuario.rol?.id === 2) navigate('/admin');
                 else navigate('/');
             }, 1200);
@@ -43,7 +45,7 @@ const Login = () => {
             generarMensaje('Credenciales inválidas o error de servidor', 'error');
         } finally {
             setLoading(false);
-            // CORREGIDO: Limpiar formulario
+            // Limpiar formulario
             setForm({ correo: "", contra: "" });
         }
     };
@@ -54,7 +56,8 @@ const Login = () => {
                 ...item,
                 inputs: item.inputs.map(input => ({
                     ...input,
-                    value: form[input.name] || "",
+                    // Asegurar que el input de contraseña use 'contra' del estado
+                    value: form[input.name] || "", 
                     onChange: handleChange,
                 }))
             };

@@ -13,24 +13,25 @@ const CreateUser = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Validación usando 'contra'
     if (!form.nombre || !form.correo || !form.contra) {
       generarMensaje('Completa todos los campos', 'warning');
       return;
     }
     setLoading(true);
     try {
+      // Usar 'form' en la llamada a la API
       await UsuarioService.createUser(form);
       generarMensaje('Usuario creado correctamente', 'success');
       setTimeout(() => navigate('/login'), 1000);
     } catch (error) {
       console.error(error);
-      generarMensaje('Error al crear usuario', 'error');
+      generarMensaje('Error al crear usuario. El correo ya podría estar registrado.', 'error');
     } finally {
       setLoading(false);
     }
   };
 
+  // <<<<<<<<<<<<<< ESTO DEBE ESTAR DEFINIDO AQUÍ DENTRO >>>>>>>>>>>>>
   const formConfig = [
     {
       type: "text",
@@ -45,9 +46,9 @@ const CreateUser = () => {
     {
       type: "inputs",
       inputs: [
+        // Usar form.nombre, form.correo, form.contra
         { type: "text", placeholder: "Nombre completo", name: "nombre", value: form.nombre, onChange: handleChange, required: true },
         { type: "email", placeholder: "Correo electrónico", name: "correo", value: form.correo, onChange: handleChange, required: true },
-        // Input name es 'contra' para coincidir con backend
         { type: "password", placeholder: "Contraseña", name: "contra", value: form.contra, onChange: handleChange, required: true },
       ],
       className: "space-y-4"
@@ -57,7 +58,8 @@ const CreateUser = () => {
         text: loading ? "Creando..." : "Crear usuario", 
         onClick: handleSubmit, 
         disabled: loading,
-        className: "w-full mt-6 bg-theme-accent text-black hover:bg-theme-hover font-bold"
+        // Estilo blanco sobre negro
+        className: "w-full mt-6 bg-white text-black font-bold rounded-lg py-3 hover:bg-theme-hover appearance-none border-none"
     },
     {
         type: "text",
@@ -78,10 +80,10 @@ const CreateUser = () => {
         ],
     },
   ];
+  // <<<<<<<<<<<<<< FIN DE LA DEFINICIÓN >>>>>>>>>>>>>
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-theme-main p-4">
-      {/* Fondo de tarjeta oscuro */}
       <form onSubmit={handleSubmit} className="w-full max-w-md space-y-10 rounded-2xl bg-theme-card border border-theme-border p-10 shadow-2xl">
         <Forms content={formConfig} />
       </form>
