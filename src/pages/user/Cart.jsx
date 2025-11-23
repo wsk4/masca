@@ -7,13 +7,13 @@ import { useAuth } from "../../context/AuthContext";
 import CompraService from "../../service/CompraService";
 import { useNavigate } from "react-router-dom";
 
+
 function Cart() {
     const { cart, total, removeFromCart, clearCart, increaseQuantity, decreaseQuantity } = useCart(); 
     const { user } = useAuth();
     const navigate = useNavigate();
 
-    // ... (handleRemove, handleClearCart, formatCurrency - Lógica anterior) ...
-
+    // ... (Lógica de handleRemove, handleClearCart, formatCurrency) ...
     const handleRemove = (id) => {
         removeFromCart(id);
         generarMensaje("Producto eliminado", "info");
@@ -27,6 +27,8 @@ function Cart() {
     const formatCurrency = (amount) => {
         return `$${(amount || 0).toLocaleString('es-CL')}`;
     }
+    // ... (Fin de la lógica anterior) ...
+
 
     const handleCheckout = async () => {
         if (!user) {
@@ -34,7 +36,6 @@ function Cart() {
             navigate('/login');
             return;
         }
-
         if (cart.length === 0) {
             generarMensaje("El carrito está vacío.", "warning");
             return;
@@ -43,26 +44,23 @@ function Cart() {
         generarMensaje("Procesando compra...", "info");
         
         try {
-            // ESTRUCTURA DE DATOS QUE COINCIDE CON EL MODELO JPA
+            // ESTRUCTURA DE DATOS REQUERIDA POR TU BACKEND DE SPRING BOOT
             const orderData = {
-                // 1. Campos obligatorios con IDs anidados como objetos { id: X }
+                // Relaciones ManyToOne: Enviadas como objetos { id: X }
                 usuario: { id: user.id }, 
-                estadoCompra: { id: 1 },  // ID inicial 1 para el estado (ej. Pendiente)
-                estadoEnvio: { id: 1 },   // ID inicial 1 para el estado de envío
+                estadoCompra: { id: 1 },   // Asumido: Debe existir en la tabla EstadoCompra
+                estadoEnvio: { id: 1 },    // Asumido: Debe existir en la tabla EstadoEnvio
                 
-                // 2. Campo obligatorio FALTANTE en intentos anteriores
+                // Campo obligatorio de Compra.java
                 fechaCompra: new Date().toISOString(), 
                 
-                // 3. Mapeo de DetalleCompra
+                // DetalleCompra: Array anidado con los productos
                 detalleCompras: cart.map(item => ({
-                    // Mapeamos el producto con su ID anidado (producto_id)
+                    // DetalleCompra requiere el objeto Producto anidado
                     producto: { id: item.id }, 
                     cantidad: item.quantity,
                     precioUnitario: item.price
                 })),
-                
-                // NOTA: La dirección se espera a través del objeto Usuario,
-                // si falla, debes asegurar que el usuario logueado tenga una dirección asignada en la BD.
             };
 
             await CompraService.create(orderData);
@@ -72,10 +70,11 @@ function Cart() {
             
         } catch (error) {
             generarMensaje("Error al procesar la compra. Verifica IDs y stock.", "error");
-            console.error("Checkout Error:", error);
+            console.error("Error completo del servidor:", error);
         }
     };
-    
+
+    // ... (Resto del componente Cart.jsx) ...
     if (!cart || cart.length === 0) return (
         <main className="min-h-screen flex items-start justify-center p-8 bg-theme-main">
             <div className="p-12 text-center text-xl text-theme-muted bg-theme-card rounded-xl border border-theme-border shadow-lg">
