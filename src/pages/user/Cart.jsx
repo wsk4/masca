@@ -2,28 +2,18 @@ import React from "react";
 import DynamicTable from "../../components/molecules/DynamicTable";
 import Button from "../../components/atoms/Button"; 
 import { generarMensaje } from "../../utils/GenerarMensaje";
-// NOTA: ASUMIMOS QUE ESTOS HOOKS EXISTEN Y ESTÁN CORRECTAMENTE IMPLEMENTADOS:
-// import { useCart } from "../../context/CartContext"; 
-// import { useAuth } from "../../context/AuthContext";
-
-// --- REEMPLAZAR CON TU HOOK REAL ---
-// Usando simulación de datos para que el código compile y muestre la estructura.
-const useCart = () => ({
-    cart: [ 
-        { id: 1, name: 'Perfume Versace Eros', price: 75000, quantity: 1, total: 75000 }, 
-        { id: 2, name: 'Paco Rabanne One Million', price: 68000, quantity: 2, total: 136000 }
-    ],
-    total: 211000,
-    removeFromCart: (id) => { console.log(`Remover producto: ${id}`); },
-    clearCart: () => { console.log("Vaciar carrito"); }
-});
-const useAuth = () => ({ user: { id: 1, nombre: 'Test User' } });
-// -----------------------------------
+import { useNavigate } from "react-router-dom"; 
+// IMPORTAR HOOKS Y SERVICIOS REALES
+import { useCart } from "../../context/CartContext"; 
+import { useAuth } from "../../context/AuthContext";
+import CompraService from "../../service/CompraService";
 
 
 function Cart() {
+    // 1. OBTENER DATOS REALES DEL CONTEXTO
     const { cart, total, removeFromCart, clearCart } = useCart(); 
-    const { user } = useAuth(); // Se puede usar para verificar si el usuario está logueado antes de checkout
+    const { user } = useAuth();
+    const navigate = useNavigate();
 
     const handleRemove = (id) => {
         removeFromCart(id);
@@ -35,22 +25,51 @@ function Cart() {
         generarMensaje("Carrito vaciado", "warning");
     };
 
-    const handleCheckout = () => {
+    // 2. FUNCIÓN DE CHECKOUT (CONEXIÓN A LA API)
+    const handleCheckout = async () => {
         if (!user) {
             generarMensaje("Debes iniciar sesión para finalizar la compra.", "warning");
-            // Aquí deberías navegar a /login
+            navigate('/login');
             return;
         }
-        // Lógica de finalización: enviar datos a CompraService
+
+        if (cart.length === 0) {
+            generarMensaje("El carrito está vacío.", "warning");
+            return;
+        }
+
         generarMensaje("Procesando compra...", "info");
-        // Ejemplo: CompraService.create({ items: cart, userId: user.id });
+        
+        try {
+            // Estructura de datos que tu API CompraService.create espera
+            const orderData = {
+                usuarioId: user.id, // ID del usuario autenticado
+                total: total,
+                // Mapear los ítems del carrito al formato de detalle de compra de la API
+                detalleCompras: cart.map(item => ({
+                    productoId: item.id,
+                    cantidad: item.quantity,
+                    precioUnitario: item.price
+                })),
+                // Aquí deberías añadir campos como direccionId, estadoId si son obligatorios en tu API
+            };
+
+            await CompraService.create(orderData); // Llama al servicio que usa axios
+            clearCart(); // Limpiar carrito local tras éxito
+            generarMensaje("¡Compra realizada con éxito!", "success");
+            navigate('/compras'); // Redirigir a "Mis Compras"
+            
+        } catch (error) {
+            generarMensaje("Error al procesar la compra. Verifica tu conexión o sesión.", "error");
+            console.error("Checkout Error:", error);
+        }
     };
 
     const formatCurrency = (amount) => {
         return `$${(amount || 0).toLocaleString('es-CL')}`;
     }
 
-    // Estilo temático para el mensaje de carrito vacío
+    // Mensaje de carrito vacío
     if (!cart || cart.length === 0) return (
         <main className="min-h-screen flex items-start justify-center p-8 bg-theme-main">
             <div className="p-12 text-center text-xl text-theme-muted bg-theme-card rounded-xl border border-theme-border shadow-lg">
@@ -63,7 +82,6 @@ function Cart() {
         <main className="max-w-4xl mx-auto p-8 min-h-screen">
             <h1 className="text-3xl font-bold mb-6 text-white border-l-4 border-white pl-4">Tu Carrito de Compras</h1>
 
-            {/* Tabla de Productos */}
             <DynamicTable
                 columns={["ID", "Nombre", "Precio Unitario", "Cantidad", "Subtotal", "Acciones"]}
                 data={cart.map(item => [

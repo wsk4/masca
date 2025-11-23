@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PerfumeService from "../../service/PerfumeService";
-import Button from "../../components/atoms/Button"; // Aseguramos que Button está disponible
+import Button from "../../components/atoms/Button"; 
+import { useCart } from "../../context/CartContext"; // <<<<<< IMPORTAR useCart
 
 function ProductDetail() {
   const { id } = useParams();
   const [perfume, setPerfume] = useState(null);
+  const { addToCart } = useCart(); // <<<<<< OBTENER LA FUNCIÓN addToCart
 
   useEffect(() => {
     // Asegúrate de que PerfumeService use la URL real: https://masca-back.onrender.com
@@ -28,7 +30,6 @@ function ProductDetail() {
         
         {/* Columna Izquierda: Imagen */}
         <div className="flex items-center justify-center p-8 bg-theme-main rounded-lg border border-theme-border">
-            {/* Usamos el URL que viene del backend o un placeholder */}
             <img src={perfume.url || "/img/perfume.webp"} alt={perfume.nombre} className="max-h-96 object-contain drop-shadow-lg" />
         </div>
         
@@ -50,7 +51,7 @@ function ProductDetail() {
                 {/* Lógica de Stock */}
                 <div className="text-white">
                     <strong className="text-theme-muted">Stock:</strong> 
-                    {(perfume.stock > 0 || 1) // Usamos 1 si no hay dato para mostrar "Disponible"
+                    {(perfume.stock > 0 || 1) 
                         ? <span className="text-green-400 font-bold ml-1">Disponible</span> 
                         : <span className="text-red-400 font-bold ml-1">Agotado</span>
                     }
@@ -65,7 +66,9 @@ function ProductDetail() {
             {/* Botón de acción (Botón Blanco/Negro) */}
             <Button
                 text="Agregar al Carrito"
-                // Usando bg-white y appearance-none para evitar conflictos de estilo
+                // <<<<<< CONEXIÓN FUNCIONAL AL CONTEXTO >>>>>>
+                onClick={() => addToCart(perfume, 1)} 
+                // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                 className="w-full py-3 mt-8 bg-white text-black font-bold appearance-none border-none"
                 disabled={perfume.stock === 0}
             />
