@@ -3,26 +3,32 @@ import DynamicTable from "../../components/molecules/DynamicTable";
 import Button from "../../components/atoms/Button"; 
 import { generarMensaje } from "../../utils/GenerarMensaje";
 import { useCart } from "../../context/CartContext"; 
-import { useNavigate } from "react-router-dom";
-import CompraService from "../../service/CompraService";
 import { useAuth } from "../../context/AuthContext";
+import CompraService from "../../service/CompraService";
+import { useNavigate } from "react-router-dom";
 
 function Cart() {
-    // Usamos las nuevas funciones de cantidad del contexto
     const { cart, total, removeFromCart, clearCart, increaseQuantity, decreaseQuantity } = useCart(); 
     const { user } = useAuth();
     const navigate = useNavigate();
 
+    // ... (handleRemove, handleClearCart, formatCurrency - Lógica anterior) ...
+
     const handleRemove = (id) => {
         removeFromCart(id);
+        generarMensaje("Producto eliminado", "info");
     };
     
     const handleClearCart = () => {
         clearCart();
+        generarMensaje("Carrito vaciado", "warning");
     };
 
+    const formatCurrency = (amount) => {
+        return `$${(amount || 0).toLocaleString('es-CL')}`;
+    }
+
     const handleCheckout = async () => {
-        // ... (Lógica de Checkout del paso anterior, que utiliza CompraService)
         if (!user) {
             generarMensaje("Debes iniciar sesión para finalizar la compra.", "warning");
             navigate('/login');
@@ -37,14 +43,26 @@ function Cart() {
         generarMensaje("Procesando compra...", "info");
         
         try {
+            // ESTRUCTURA DE DATOS QUE COINCIDE CON EL MODELO JPA
             const orderData = {
-                usuarioId: user.id,
-                total: total,
+                // 1. Campos obligatorios con IDs anidados como objetos { id: X }
+                usuario: { id: user.id }, 
+                estadoCompra: { id: 1 },  // ID inicial 1 para el estado (ej. Pendiente)
+                estadoEnvio: { id: 1 },   // ID inicial 1 para el estado de envío
+                
+                // 2. Campo obligatorio FALTANTE en intentos anteriores
+                fechaCompra: new Date().toISOString(), 
+                
+                // 3. Mapeo de DetalleCompra
                 detalleCompras: cart.map(item => ({
-                    productoId: item.id,
+                    // Mapeamos el producto con su ID anidado (producto_id)
+                    producto: { id: item.id }, 
                     cantidad: item.quantity,
                     precioUnitario: item.price
                 })),
+                
+                // NOTA: La dirección se espera a través del objeto Usuario,
+                // si falla, debes asegurar que el usuario logueado tenga una dirección asignada en la BD.
             };
 
             await CompraService.create(orderData);
@@ -53,15 +71,11 @@ function Cart() {
             navigate('/compras'); 
             
         } catch (error) {
-            generarMensaje("Error al procesar la compra.", "error");
+            generarMensaje("Error al procesar la compra. Verifica IDs y stock.", "error");
             console.error("Checkout Error:", error);
         }
     };
-
-    const formatCurrency = (amount) => {
-        return `$${(amount || 0).toLocaleString('es-CL')}`;
-    }
-
+    
     if (!cart || cart.length === 0) return (
         <main className="min-h-screen flex items-start justify-center p-8 bg-theme-main">
             <div className="p-12 text-center text-xl text-theme-muted bg-theme-card rounded-xl border border-theme-border shadow-lg">
