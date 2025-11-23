@@ -1,6 +1,7 @@
 // src/context/CartContext.jsx
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { generarMensaje } from '../utils/GenerarMensaje'; // Asume esta ruta
+import { generarMensaje } from '../utils/GenerarMensaje'; 
 
 const CartContext = createContext();
 
@@ -12,12 +13,21 @@ export const CartProvider = ({ children }) => {
 
     // Recalcula el total cada vez que el carrito cambia
     useEffect(() => {
-        const newTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        const newTotal = cart.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 0), 0);
         setTotal(newTotal);
     }, [cart]);
 
     const addToCart = (product, quantity = 1) => {
         const existingItem = cart.find(item => item.id === product.id);
+
+        // Mapeo explícito y robusto de las propiedades del backend (perfume)
+        const itemToSave = { 
+            id: product.id,
+            name: product.nombre, // Usamos 'nombre' del backend para guardar como 'name'
+            price: product.precio,
+            image: product.url,
+            stock: product.stock,
+        };
 
         if (existingItem) {
             setCart(cart.map(item =>
@@ -26,7 +36,8 @@ export const CartProvider = ({ children }) => {
                     : item
             ));
         } else {
-            setCart([...cart, { ...product, quantity }]);
+            // Guardamos el objeto mapeado itemToSave
+            setCart([...cart, { ...itemToSave, quantity }]);
         }
         generarMensaje('¡Producto agregado!', 'success');
     };
