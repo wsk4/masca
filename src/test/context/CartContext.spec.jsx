@@ -1,103 +1,142 @@
-import { renderHook, act } from '@testing-library/react';
-
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+// Ajusta la ruta según tu estructura
 import { CartProvider, useCart } from '../../context/CartContext';
 
-const product1 = { id: 1, name: 'Perfume A', price: 100 };
-const product2 = { id: 2, name: 'Perfume B', price: 200 };
+// --- Componente Dummy para probar el consumo del contexto ---
+const TestComponent = () => {
+    const { cart, total, addToCart, removeFromCart, clearCart } = useCart();
 
-describe('useCart Hook (CartContext)', () => {
+    return (
+        <div>
+            <div data-testid="cart-total">{total}</div>
+            <div data-testid="cart-count">{cart.length}</div>
+            
+            <ul>
+                {cart.map(item => (
+                    <li key={item.id} data-testid={`item-${item.id}`}>
+                        {item.name} - Qty: {item.quantity}
+                        <button aria-label={`remove-${item.id}`} onClick={() => removeFromCart(item.id)}>
+                            Eliminar
+                        </button>
+                    </li>
+                ))}
+            </ul>
 
-  it('should have an empty cart and total of 0 initially', () => {
+            <button onClick={() => addToCart({ id: 1, name: 'Perfume A', precio: 100 })}>
+                Agregar A ($100)
+            </button>
+            <button onClick={() => addToCart({ id: 2, name: 'Perfume B', precio: 200 })}>
+                Agregar B ($200)
+            </button>
+            <button onClick={clearCart}>
+                Vaciar Carrito
+            </button>
+        </div>
+    );
+};
 
-    const { result } = renderHook(() => useCart(), { wrapper: CartProvider });
+describe('Contexto CartContext', () => {
 
-
-    expect(result.current.cart.length).toBe(0);
-    expect(result.current.total).toBe(0);
-  });
-
-  it('should add a new product to the cart', () => {
-    const { result } = renderHook(() => useCart(), { wrapper: CartProvider });
-
-
-    act(() => {
-      result.current.addToCart(product1);
+    beforeEach(() => {
+        // Limpiamos el localStorage antes de cada prueba para empezar de cero
+        localStorage.clear();
     });
 
+    it('inicia con el carrito vacío y total en 0', () => {
+        render(
+            <CartProvider>
+                <TestComponent />
+            </CartProvider>
+        );
 
-    expect(result.current.cart.length).toBe(1);
-
-    expect(result.current.cart[0]).toEqual({ ...product1, quantity: 1 });
-
-    expect(result.current.total).toBe(100);
-  });
-
-
-  it('should increase quantity when adding an existing product', () => {
-    const { result } = renderHook(() => useCart(), { wrapper: CartProvider });
-
-
-    act(() => {
-      result.current.addToCart(product1);
-    });
-    act(() => {
-      result.current.addToCart(product1);
+        expect(screen.getByTestId('cart-total').textContent).toBe('0');
+        expect(screen.getByTestId('cart-count').textContent).toBe('0');
     });
 
+    it('agrega un producto nuevo al carrito y actualiza el total', () => {
+        render(
+            <CartProvider>
+                <TestComponent />
+            </CartProvider>
+        );
 
-    expect(result.current.cart.length).toBe(1);
+        const btnAddA = screen.getByText('Agregar A ($100)');
+        fireEvent.click(btnAddA);
 
-    expect(result.current.cart[0].quantity).toBe(2);
-
-    expect(result.current.total).toBe(200);
-  });
-
-
-  it('should remove a product from the cart', () => {
-    const { result } = renderHook(() => useCart(), { wrapper: CartProvider });
-
-
-    act(() => {
-      result.current.addToCart(product1);
-    });
-    act(() => {
-      result.current.addToCart(product2);
+        // Verificamos que hay 1 item
+        expect(screen.getByTestId('cart-count').textContent).toBe('1');
+        // Verificamos el total (100 * 1)
+        expect(screen.getByTestId('cart-total').textContent).toBe('100');
+        // Verificamos que se renderice el item
+        expect(screen.getByTestId('item-1').textContent).toContain('Perfume A');
     });
 
+    it('aumenta la cantidad si se agrega el mismo producto', () => {
+        render(
+            <CartProvider>
+                <TestComponent />
+            </CartProvider>
+        );
 
-    expect(result.current.total).toBe(300);
+        const btnAddA = screen.getByText('Agregar A ($100)');
+        
+        // Click 1 vez
+        fireEvent.click(btnAddA);
+        // Click 2 veces
+        fireEvent.click(btnAddA);
 
-
-    act(() => {
-      result.current.removeFromCart(product1.id);
+        // Sigue siendo 1 item único en el array (pero con quantity 2)
+        expect(screen.getByTestId('cart-count').textContent).toBe('1');
+        
+        // El total debe ser 200
+        expect(screen.getByTestId('cart-total').textContent).toBe('200');
+        
+        // Verificamos texto de cantidad
+        expect(screen.getByTestId('item-1').textContent).toContain('Qty: 2');
     });
 
+    it('elimina un producto del carrito', () => {
+        render(
+            <CartProvider>
+                <TestComponent />
+            </CartProvider>
+        );
 
-    expect(result.current.cart.length).toBe(1);
+        // Agregamos dos productos distintos
+        fireEvent.click(screen.getByText('Agregar A ($100)'));
+        fireEvent.click(screen.getByText('Agregar B ($200)'));
 
-    expect(result.current.cart[0].id).toBe(product2.id);
+        expect(screen.getByTestId('cart-count').textContent).toBe('2');
+        expect(screen.getByTestId('cart-total').textContent).toBe('300'); // 100 + 200
 
-    expect(result.current.total).toBe(200);
-  });
+        // Eliminamos el producto A
+        const btnRemoveA = screen.getByLabelText('remove-1');
+        fireEvent.click(btnRemoveA);
 
-  it('should clear the entire cart', () => {
-    const { result } = renderHook(() => useCart(), { wrapper: CartProvider });
-
-    act(() => {
-      result.current.addToCart(product1);
+        // Ahora debe quedar solo 1
+        expect(screen.getByTestId('cart-count').textContent).toBe('1');
+        // El total debe bajar a 200 (solo queda el B)
+        expect(screen.getByTestId('cart-total').textContent).toBe('200');
+        // A ya no debe estar
+        expect(screen.queryByTestId('item-1')).toBeNull();
     });
-    act(() => {
-      result.current.addToCart(product2);
+
+    it('vacía todo el carrito con clearCart', () => {
+        render(
+            <CartProvider>
+                <TestComponent />
+            </CartProvider>
+        );
+
+        // Llenamos
+        fireEvent.click(screen.getByText('Agregar A ($100)'));
+        fireEvent.click(screen.getByText('Agregar B ($200)'));
+
+        // Vaciamos
+        fireEvent.click(screen.getByText('Vaciar Carrito'));
+
+        expect(screen.getByTestId('cart-count').textContent).toBe('0');
+        expect(screen.getByTestId('cart-total').textContent).toBe('0');
     });
-
-    expect(result.current.cart.length).toBe(2);
-
-
-    act(() => {
-      result.current.clearCart();
-    });
-
-    expect(result.current.cart.length).toBe(0);
-    expect(result.current.total).toBe(0);
-  });
 });

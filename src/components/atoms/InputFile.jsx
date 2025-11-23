@@ -1,4 +1,3 @@
-// src/components/atoms/InputFile.jsx
 import React from 'react';
 
 function InputFile({ onChange, accept = "image/*", className = "", disabled = false, preview = null,}) {
