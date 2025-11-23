@@ -17,46 +17,56 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Validación usa 'contra'
+        
+        // Validación básica
         if (!form.correo || !form.contra) {
             generarMensaje('Completa todos los campos', 'warning');
             return;
         }
+        
         setLoading(true);
         try {
-            const response = await UsuarioService.login(form);
-            // El backend responde con { data: { id, nombre, rol } }
-            const usuario = response; 
+            // Llamada al servicio (ahora usa el login simulado)
+            const usuario = await UsuarioService.login(form);
             
-            // Guardar usuario
-            const userToSave = { id: usuario.id, nombre: usuario.nombre, rol: usuario.rol };
+            // Guardar usuario en localStorage y Contexto
+            // Nota: Nos aseguramos de guardar la estructura correcta que espera el resto de la app
+            const userToSave = { 
+                id: usuario.id, 
+                nombre: usuario.nombre, 
+                rol: usuario.rol 
+            };
+            
             localStorage.setItem('user', JSON.stringify(userToSave));
             login(userToSave);
             
             generarMensaje(`¡Bienvenido ${usuario.nombre}!`, 'success');
             
+            // Redirección basada en rol (Admin vs Usuario)
             setTimeout(() => {
-                // Redirección basada en rol
-                if (usuario.rol?.id === 1 || usuario.rol?.id === 2) navigate('/admin');
-                else navigate('/');
+                if (usuario.rol?.id === 1 || usuario.rol?.id === 2) {
+                    navigate('/admin');
+                } else {
+                    navigate('/');
+                }
             }, 1200);
+
         } catch (error) {
             console.error(error);
-            generarMensaje('Credenciales inválidas o error de servidor', 'error');
+            generarMensaje('Credenciales inválidas (Verifica el correo)', 'error');
         } finally {
             setLoading(false);
-            // Limpiar formulario
             setForm({ correo: "", contra: "" });
         }
     };
 
+    // Mapeo de datos para el componente Forms
     const formDataWithHandlers = loginData.map((item, index) => {
         if (item.type === "inputs") {
             return {
                 ...item,
                 inputs: item.inputs.map(input => ({
                     ...input,
-                    // Asegurar que el input de contraseña use 'contra' del estado
                     value: form[input.name] || "", 
                     onChange: handleChange,
                 }))
