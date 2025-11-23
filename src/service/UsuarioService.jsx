@@ -3,7 +3,25 @@ import axios from 'axios';
 const BASE_URL = 'https://masca-back.onrender.com/api/usuarios';
 
 class UsuarioService {
-  
+
+    async login(credenciales) {
+        try {
+            const response = await axios.get(BASE_URL);
+            const usuarios = response.data;
+            const usuarioEncontrado = usuarios.find(u => 
+                u.correo.toLowerCase() === credenciales.correo.toLowerCase()
+            );
+
+            if (usuarioEncontrado) {
+                return usuarioEncontrado;
+            } else {
+                throw new Error("Usuario no encontrado");
+            }
+        } catch (err) {
+            console.error('Error en login simulado:', err);
+            throw err;
+        }
+    }
 
     async createUser(usuario) {
         try { return (await axios.post(BASE_URL, usuario)).data; }
