@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-=======
-// src/components/atoms/Button.jsx
-
->>>>>>> 336c83a30eadb875909ba85b83e1ccc25c0ea159
 import React from "react";
 
 function Button({ text, onClick, className = "", disabled = false, ...props }) {
