@@ -5,7 +5,6 @@ import UsuarioService from "../../service/UsuarioService";
 import { useNavigate } from "react-router-dom";
 
 const CreateUser = () => {
-  // CORREGIDO: Estado usa 'contra'
   const [form, setForm] = useState({ nombre: "", correo: "", contra: "" });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -14,7 +13,7 @@ const CreateUser = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // CORREGIDO: Validación usa 'contra'
+    // Validación usando 'contra'
     if (!form.nombre || !form.correo || !form.contra) {
       generarMensaje('Completa todos los campos', 'warning');
       return;
@@ -48,7 +47,7 @@ const CreateUser = () => {
       inputs: [
         { type: "text", placeholder: "Nombre completo", name: "nombre", value: form.nombre, onChange: handleChange, required: true },
         { type: "email", placeholder: "Correo electrónico", name: "correo", value: form.correo, onChange: handleChange, required: true },
-        // CORREGIDO: Input name es 'contra'
+        // Input name es 'contra' para coincidir con backend
         { type: "password", placeholder: "Contraseña", name: "contra", value: form.contra, onChange: handleChange, required: true },
       ],
       className: "space-y-4"
@@ -82,6 +81,7 @@ const CreateUser = () => {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-theme-main p-4">
+      {/* Fondo de tarjeta oscuro */}
       <form onSubmit={handleSubmit} className="w-full max-w-md space-y-10 rounded-2xl bg-theme-card border border-theme-border p-10 shadow-2xl">
         <Forms content={formConfig} />
       </form>

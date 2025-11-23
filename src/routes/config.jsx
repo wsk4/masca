@@ -42,8 +42,8 @@ const publicRoutes = [
   { path: '/producto/:id', element: <ProductDetail />, showNavbar: true },
   { path: '/perfil', element: <Profile />, showNavbar: true },
   { path: '/direcciones', element: <AddressBook />, showNavbar: true },
-  { path: '/login', element: <Login />, showNavbar: false },
-  { path: '/registro', element: <CreateUser />, showNavbar: false },
+  { path: '/login', element: <Login />, showNavbar: true },
+  { path: '/registro', element: <CreateUser />, showNavbar: true },
 ];
 
 // Rutas de administración
