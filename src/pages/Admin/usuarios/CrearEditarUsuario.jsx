@@ -34,7 +34,7 @@ function CrearEditarUsuario({ isOpen, onClose, onSubmit, initialData, loading })
                 { name: "nombre", placeholder: "Nombre", value: initialData?.nombre || "" },
                 { name: "correo", placeholder: "Correo", value: initialData?.correo || "" },
                 { name: "telefono", placeholder: "Teléfono", value: initialData?.telefono || "" },
-                { name: "contrasena", placeholder: "Contraseña", type: "password", value: "" },
+                { name: "contra", placeholder: "Contraseña", type: "password", value: "" },
                 {
                     name: "direccion",
                     type: "select",
