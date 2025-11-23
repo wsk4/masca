@@ -13,7 +13,7 @@ function Cart() {
     const { user } = useAuth();
     const navigate = useNavigate();
 
-    // ... (Lógica de handleRemove, handleClearCart, formatCurrency) ...
+    // Lógica para botones de la tabla
     const handleRemove = (id) => {
         removeFromCart(id);
         generarMensaje("Producto eliminado", "info");
@@ -27,9 +27,8 @@ function Cart() {
     const formatCurrency = (amount) => {
         return `$${(amount || 0).toLocaleString('es-CL')}`;
     }
-    // ... (Fin de la lógica anterior) ...
 
-
+    // FUNCIÓN DE CHECKOUT AJUSTADA AL BACKEND
     const handleCheckout = async () => {
         if (!user) {
             generarMensaje("Debes iniciar sesión para finalizar la compra.", "warning");
@@ -44,19 +43,19 @@ function Cart() {
         generarMensaje("Procesando compra...", "info");
         
         try {
-            // ESTRUCTURA DE DATOS REQUERIDA POR TU BACKEND DE SPRING BOOT
+            // ESTRUCTURA DE DATOS QUE COINCIDE CON TU BACKEND DE SPRING BOOT
             const orderData = {
-                // Relaciones ManyToOne: Enviadas como objetos { id: X }
+                // 1. Entidades Compra.java (requieren objetos anidados { id: X } y no pueden ser null)
                 usuario: { id: user.id }, 
-                estadoCompra: { id: 1 },   // Asumido: Debe existir en la tabla EstadoCompra
-                estadoEnvio: { id: 1 },    // Asumido: Debe existir en la tabla EstadoEnvio
+                estadoCompra: { id: 1 },   // Asumido: El ID 1 debe existir en tu tabla EstadoCompra
+                estadoEnvio: { id: 1 },    // Asumido: El ID 1 debe existir en tu tabla EstadoEnvio
                 
-                // Campo obligatorio de Compra.java
+                // 2. Campo obligatorio faltante: fechaCompra (requerido por Compra.java)
                 fechaCompra: new Date().toISOString(), 
                 
-                // DetalleCompra: Array anidado con los productos
+                // 3. DetalleCompra (Lista de Productos)
                 detalleCompras: cart.map(item => ({
-                    // DetalleCompra requiere el objeto Producto anidado
+                    // DetalleCompra requiere el objeto Producto anidado (Perfume.java)
                     producto: { id: item.id }, 
                     cantidad: item.quantity,
                     precioUnitario: item.price
@@ -69,12 +68,11 @@ function Cart() {
             navigate('/compras'); 
             
         } catch (error) {
-            generarMensaje("Error al procesar la compra. Verifica IDs y stock.", "error");
-            console.error("Error completo del servidor:", error);
+            generarMensaje("Error al procesar la compra. Verifica que los IDs 1 (estados) existan en tu BD.", "error");
+            console.error("Checkout Error:", error);
         }
     };
-
-    // ... (Resto del componente Cart.jsx) ...
+    
     if (!cart || cart.length === 0) return (
         <main className="min-h-screen flex items-start justify-center p-8 bg-theme-main">
             <div className="p-12 text-center text-xl text-theme-muted bg-theme-card rounded-xl border border-theme-border shadow-lg">
