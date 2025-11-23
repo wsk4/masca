@@ -3,10 +3,7 @@ import axios from 'axios';
 const BASE_URL = 'https://masca-back.onrender.com/api/usuarios';
 
 class UsuarioService {
-    async login(usuario) {
-        try { return (await axios.post(`${BASE_URL}/login`, usuario)).data; }
-        catch (err) { console.error('Error al iniciar sesión:', err); throw err; }
-    }
+  
 
     async createUser(usuario) {
         try { return (await axios.post(BASE_URL, usuario)).data; }
