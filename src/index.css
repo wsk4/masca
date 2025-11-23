@@ -1,8 +1,7 @@
-@import "tailwindcss";
-@import "tailwindcss";
+@import "tailwindcss"; /* Deja solo uno */
 
 :root {
-  /* 1. Definición de la Paleta de Colores como CSS Variables (dentro de :root) */
+  /* 1. Definición de la Paleta de Colores como CSS Variables */
   --color-theme-main: #000000;       /* Fondo principal (Negro puro) */
   --color-theme-card: #121212;       /* Fondo de tarjetas/modales (Gris carbón) */
   --color-theme-border: #27272a;     /* Bordes y separadores sutiles */
