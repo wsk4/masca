@@ -18,24 +18,28 @@ const loginData = [
                 name: "correo",
                 required: true,
                 autoComplete: "off",
-                className: "mb-6",
+                // Clases que aseguran que el Input.jsx temado se vea bien
+                className: "mb-6 w-full border-b-2 bg-transparent text-lg duration-300 focus-within:border-white",
             },
             {
                 type: "password",
                 placeholder: "Contraseña",
-                name: "contra", // CORREGIDO: Coincide con el modelo Usuario.java
+                name: "contra", // ¡Correcto! Coincide con el estado en login.jsx
                 required: true,
                 autoComplete: "current-password",
-                className: "",
+                className: "w-full border-b-2 bg-transparent text-lg duration-300 focus-within:border-white",
             },
         ],
         className: "space-y-8"
     },
+    // 1. BOTÓN PRINCIPAL: ALTO CONTRASTE (BLANCO/NEGRO)
     {           
         type: "button",
         text: "Iniciar Sesión",
-        className: "w-full mt-8 mb-4 bg-theme-accent text-black hover:bg-theme-hover font-bold",
+        // Clases que fuerzan el botón blanco (theme-accent) y texto negro (text-black)
+        className: "transform w-full mt-8 mb-4 py-2.5 font-bold bg-theme-accent text-black rounded-lg hover:bg-theme-hover active:scale-95 transition-all",
     },
+    // 2. ENLACE SECUNDARIO: VISIBLE (GRIS SUAVE/BLANCO)
     {
         type: "text",
         text: [
@@ -44,7 +48,8 @@ const loginData = [
                     <button
                         type="button"
                         onClick={() => window.location.href = '/registro'} 
-                        className="text-theme-muted hover:text-white underline transition w-full text-center block text-sm mt-4"
+                        // Clases que aseguran que el texto sea visible (muted)
+                        className="text-theme-muted hover:text-white underline transition block w-full text-center text-sm"
                     >
                         Crear usuario
                     </button>
