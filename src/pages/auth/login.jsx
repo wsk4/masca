@@ -17,57 +17,46 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        // Validación básica
+        // Validación usa 'contra'
         if (!form.correo || !form.contra) {
             generarMensaje('Completa todos los campos', 'warning');
             return;
         }
-        
         setLoading(true);
         try {
-            // Llamada al servicio (ahora usa el login simulado)
-            const usuario = await UsuarioService.login(form);
+            const response = await UsuarioService.login(form);
+            const usuario = response; // El servicio ya devuelve directamente el objeto de datos
             
             // Guardar usuario en localStorage y Contexto
-            // Nota: Nos aseguramos de guardar la estructura correcta que espera el resto de la app
-            const userToSave = { 
-                id: usuario.id, 
-                nombre: usuario.nombre, 
-                rol: usuario.rol 
-            };
-            
+            const userToSave = { id: usuario.id, nombre: usuario.nombre, rol: usuario.rol };
             localStorage.setItem('user', JSON.stringify(userToSave));
             login(userToSave);
             
             generarMensaje(`¡Bienvenido ${usuario.nombre}!`, 'success');
             
-            // Redirección basada en rol (Admin vs Usuario)
-            setTimeout(() => {
-                if (usuario.rol?.id === 1 || usuario.rol?.id === 2) {
-                    navigate('/admin');
-                } else {
-                    navigate('/');
-                }
-            }, 1200);
-
+            // CORRECCIÓN CLAVE: Redirección inmediata sin setTimeout
+            if (usuario.rol?.id === 1 || usuario.rol?.id === 2) {
+                navigate('/admin'); // Redirección inmediata al panel
+            } else {
+                navigate('/'); // Redirección inmediata a la página pública
+            }
+            
         } catch (error) {
             console.error(error);
-            generarMensaje('Credenciales inválidas (Verifica el correo)', 'error');
+            generarMensaje('Credenciales inválidas o error de servidor', 'error');
         } finally {
             setLoading(false);
-            setForm({ correo: "", contra: "" });
+            setForm({ correo: "", contra: "" }); 
         }
     };
 
-    // Mapeo de datos para el componente Forms
     const formDataWithHandlers = loginData.map((item, index) => {
         if (item.type === "inputs") {
             return {
                 ...item,
                 inputs: item.inputs.map(input => ({
                     ...input,
-                    value: form[input.name] || "", 
+                    value: form[input.name] || "",
                     onChange: handleChange,
                 }))
             };
@@ -86,6 +75,7 @@ const Login = () => {
 
     return (
         <main className="flex min-h-screen items-center justify-center bg-theme-main p-4">
+            {/* Contenedor Dark Mode */}
             <form onSubmit={handleSubmit} className="w-full max-w-md space-y-10 rounded-2xl bg-theme-card border border-theme-border p-10 shadow-2xl">
                 <Forms content={formDataWithHandlers} />
             </form>
