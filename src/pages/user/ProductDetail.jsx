@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PerfumeService from "../../service/PerfumeService";
 // Asumimos que estos módulos existen en la estructura de tu proyecto:
-import { useCart } from "../../context/CartContext"; 
+import { useCart } from "../../context/AuthContext"; 
 import { generarMensaje } from "../../utils/GenerarMensaje"; 
 import Image from "../../components/atoms/Image"; 
 
