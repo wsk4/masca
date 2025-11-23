@@ -7,7 +7,7 @@ import { generarMensaje } from "../../utils/GenerarMensaje";
 import { FaUserCircle, FaEnvelope, FaIdBadge, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
 
 function Profile() {
-    const { user, login } = useAuth(); // Importamos login para actualizar el contexto global
+    const { user, login } = useAuth();
     const [datos, setDatos] = useState({});
     const [openModal, setOpenModal] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -17,6 +17,7 @@ function Profile() {
         if (user?.id) {
             UsuarioService.getById(user.id)
                 .then(res => {
+                    // UsuarioService.getById ya devuelve res.data en tu servicio
                     setDatos(res); 
                 })
                 .catch(err => {
@@ -30,14 +31,13 @@ function Profile() {
     const handleSubmit = async (formData) => {
         setSaving(true);
         try {
-            // 1. Actualizar en backend
-            const res = await UsuarioService.update(user.id, formData);
+            // CORRECCIÓN IMPORTANTE: Usamos .patch en lugar de .update
+            // Esto evita borrar la contraseña u otros datos no incluidos en el formulario
+            const res = await UsuarioService.patch(user.id, formData);
             
-            // 2. Actualizar estado local
-            setDatos(res); 
+            setDatos(res); // Actualizamos la vista con los datos nuevos
             
-            // 3. Actualizar el contexto global (para que el Navbar refleje el cambio de nombre inmediatamente)
-            // Mantenemos el rol y el token, solo actualizamos los datos editables
+            // Actualizamos el contexto global para que el Navbar refleje el cambio de nombre
             const updatedUserContext = { ...user, ...res };
             login(updatedUserContext); 
 
@@ -74,7 +74,7 @@ function Profile() {
         <main className="min-h-screen p-4 md:p-8 bg-theme-main flex justify-center items-start pt-12">
             <div className="w-full max-w-3xl bg-theme-card border border-theme-border rounded-2xl shadow-2xl overflow-hidden">
                 
-                {/* Header del Perfil */}
+                {/* Encabezado del Perfil */}
                 <div className="bg-gradient-to-r from-zinc-900 to-black p-8 border-b border-theme-border flex flex-col md:flex-row items-center gap-6">
                     <div className="relative">
                         <div className="w-24 h-24 rounded-full bg-theme-border flex items-center justify-center text-theme-muted border-4 border-theme-main shadow-xl">
@@ -154,7 +154,7 @@ function Profile() {
                 </div>
             </div>
 
-            {/* Modal de Edición Reutilizable */}
+            {/* Modal de Edición */}
             <CreateModal
                 isOpen={openModal}
                 onClose={() => setOpenModal(false)}
