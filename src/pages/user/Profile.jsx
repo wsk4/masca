@@ -17,7 +17,6 @@ function Profile() {
         if (user?.id) {
             UsuarioService.getById(user.id)
                 .then(res => {
-                    // UsuarioService.getById ya devuelve res.data en tu servicio
                     setDatos(res); 
                 })
                 .catch(err => {
@@ -31,13 +30,20 @@ function Profile() {
     const handleSubmit = async (formData) => {
         setSaving(true);
         try {
-            // CORRECCIÓN IMPORTANTE: Usamos .patch en lugar de .update
-            // Esto evita borrar la contraseña u otros datos no incluidos en el formulario
-            const res = await UsuarioService.patch(user.id, formData);
+            // --- CORRECCIÓN CLAVE ---
+            // El backend necesita el ID dentro del objeto para el método partialUpdate.
+            // Creamos un payload que incluye explícitamente el ID del usuario.
+            const payload = { 
+                ...formData, 
+                id: user.id 
+            };
+
+            // Usamos .patch para actualizar solo lo enviado
+            const res = await UsuarioService.patch(user.id, payload);
             
-            setDatos(res); // Actualizamos la vista con los datos nuevos
+            setDatos(res); 
             
-            // Actualizamos el contexto global para que el Navbar refleje el cambio de nombre
+            // Actualizamos el contexto global
             const updatedUserContext = { ...user, ...res };
             login(updatedUserContext); 
 
