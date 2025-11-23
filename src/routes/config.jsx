@@ -81,7 +81,7 @@ const adminRoutes = [
 const notFoundRoute = {
   path: '*',
   element: <div className="text-center py-10 text-2xl">404 - Página no encontrada</div>,
-  showNavbar: false,
+  showNavbar: true,
 };
 
 // Exporta todas juntas
