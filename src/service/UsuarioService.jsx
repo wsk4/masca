@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://masca-back.onrender.com/api/usuario';
+const BASE_URL = 'https://masca-back.onrender.com/api/usuarios';
 
 class UsuarioService {
     async login(usuario) {

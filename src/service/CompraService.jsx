@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'https://masca-back.onrender.com/api/compra';
+const BASE_URL = 'https://masca-back.onrender.com/api/compras';
 
 class CompraService {
   async getAll() {

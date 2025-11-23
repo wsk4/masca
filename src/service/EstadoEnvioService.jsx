@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'https://masca-back.onrender.com/api/estado-envio';
+const BASE_URL = 'https://masca-back.onrender.com/api/estados-envio';
 
 class EstadoEnvioService {
   async getAll() {

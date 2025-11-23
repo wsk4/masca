@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'https://masca-back.onrender.com/api/perfume';
+const BASE_URL = 'https://masca-back.onrender.com/api/perfumes';
 
 class PerfumeService {
   async getAll() {

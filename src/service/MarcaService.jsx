@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'https://masca-back.onrender.com/api/marca';
+const BASE_URL = 'https://masca-back.onrender.com/api/marcas';
 
 class MarcaService {
   async getAll() {

@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'https://masca-back.onrender.com/api/comuna';
+const BASE_URL = 'https://masca-back.onrender.com/api/comunas';
 
 class ComunaService {
   async getAll() {

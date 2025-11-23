@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'https://masca-back.onrender.com/api/regione';
+const BASE_URL = 'https://masca-back.onrender.com/api/regiones';
 
 class RegionService {
   async getAll() {

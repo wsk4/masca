@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'https://masca-back.onrender.com/api/direccion';
+const BASE_URL = 'https://masca-back.onrender.com/api/direcciones';
 
 class DireccionService {
   async getAll() {
