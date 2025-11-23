@@ -1,31 +1,3 @@
-// import React from "react";
-// import Section from "../../components/templates/Section";
-
-// const dashboardContent = [
-//     {
-//         type: "text",
-//         text: [{ content: "Panel de Administrador", variant: "h1", className: "text-3xl text-center font-bold mb-8 text-blue-900" }]
-//     },
-//     {
-//         type: "cards",
-//         cards: [
-//             { title: "Usuarios", description: "Administrar usuarios", href: "/admin/usuarios" },
-//             { title: "Perfumes", description: "Administrar productos", href: "/admin/perfumes" },
-//             { title: "Marcas", description: "Administrar marcas", href: "/admin/marcas" },
-//             { title: "Ventas", description: "Ver ventas", href: "/admin/ventas" }
-//         ]
-//     }
-// ];
-
-// function HomeAdmin() {
-//     return (
-//         <main className="max-w-3xl mx-auto p-8">
-//             <Section content={dashboardContent} />
-//         </main>
-//     );
-// }
-// export default HomeAdmin;
-//---------------------------
 import React from "react";
 import Section from "../../components/templates/Section";
 
@@ -40,13 +12,35 @@ const dashboardContent = [
     {
         type: "cards",
         cards: [
-            // Nota: Aquí faltan los campos 'card' para que CardsDisplay funcione con tu diseño, 
-            // pero el contenedor general mantendrá el fondo oscuro.
-            // Si quieres que parezcan links, usa tu componente Section/CardsDisplay para renderizar:
-            { title: "Usuarios", description: "Administrar usuarios", href: "/admin/usuarios" },
-            { title: "Perfumes", description: "Administrar productos", href: "/admin/perfumes" },
-            { title: "Marcas", description: "Administrar marcas", href: "/admin/marcas" },
-            { title: "Ventas", description: "Ver ventas", href: "/admin/ventas" }
+            // ESTRUCTURA CORREGIDA para que CardsDisplay pueda mapear los elementos:
+            {
+                card: [
+                    { type: "text", content: "Usuarios", variant: "h3", className: "text-2xl font-bold text-white" },
+                    { type: "text", content: "Administrar usuarios", variant: "p", className: "text-theme-muted" },
+                    { type: "text", content: "Ir →", variant: "p", className: "text-blue-400 mt-2" }
+                ]
+            },
+            {
+                card: [
+                    { type: "text", content: "Perfumes", variant: "h3", className: "text-2xl font-bold text-white" },
+                    { type: "text", content: "Administrar productos", variant: "p", className: "text-theme-muted" },
+                    { type: "text", content: "Ir →", variant: "p", className: "text-blue-400 mt-2" }
+                ]
+            },
+            {
+                card: [
+                    { type: "text", content: "Marcas", variant: "h3", className: "text-2xl font-bold text-white" },
+                    { type: "text", content: "Administrar marcas", variant: "p", className: "text-theme-muted" },
+                    { type: "text", content: "Ir →", variant: "p", className: "text-blue-400 mt-2" }
+                ]
+            },
+            {
+                card: [
+                    { type: "text", content: "Ventas", variant: "h3", className: "text-2xl font-bold text-white" },
+                    { type: "text", content: "Ver ventas", variant: "p", className: "text-theme-muted" },
+                    { type: "text", content: "Ir →", variant: "p", className: "text-blue-400 mt-2" }
+                ]
+            }
         ]
     }
 ];
@@ -55,11 +49,9 @@ function HomeAdmin() {
     return (
         <main className="min-h-screen bg-theme-main p-8">
             <div className="max-w-6xl mx-auto">
-                {/* Asegura que el contenido se renderice con el estilo oscuro */}
                 <Section content={dashboardContent} />
             </div>
         </main>
     );
 }
 export default HomeAdmin;
-
