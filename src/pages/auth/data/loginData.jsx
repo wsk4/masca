@@ -24,7 +24,11 @@ const loginData = [
             {
                 type: "password",
                 placeholder: "Contraseña",
+<<<<<<< HEAD
                 name: "contra", // ¡Correcto! Coincide con el estado en login.jsx
+=======
+                name: "contra", 
+>>>>>>> a15f17d0ec3510e43e00713b5286e29484d30448
                 required: true,
                 autoComplete: "current-password",
                 className: "w-full border-b-2 bg-transparent text-lg duration-300 focus-within:border-white",
