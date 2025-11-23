@@ -1,76 +1,58 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importar hook para la navegación
 import DynamicTable from "../../components/molecules/DynamicTable";
 import MarcaService from "../../service/MarcaService";
 import PerfumeService from "../../service/PerfumeService";
+import { useNavigate } from "react-router-dom"; // 1. Importar useNavigate
+import Button from "../../components/atoms/Button"; // 2. Importar Button
 
 function CatalogoPerfumes() {
     const [marcas, setMarcas] = useState([]);
     const [perfumes, setPerfumes] = useState([]);
     const [filtroMarca, setFiltroMarca] = useState("");
-    const navigate = useNavigate(); // Inicializar el hook de navegación
+    const navigate = useNavigate(); // 3. Inicializar useNavigate
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const marcasData = await MarcaService.getAll();
-                setMarcas(marcasData);
-                const perfumesData = await PerfumeService.getAll();
-                setPerfumes(perfumesData);
-            } catch (err) {
-                console.error("Error al cargar catálogo:", err);
-            }
-        };
-        fetchData();
+        // Asegúrate de que los servicios usen la URL correcta: https://masca-back.onrender.com
+        MarcaService.getAll().then(setMarcas);
+        PerfumeService.getAll().then(setPerfumes);
     }, []);
 
     const perfumesFiltrados = filtroMarca
-        ? perfumes.filter(p => p.marca && String(p.marca.id) === String(filtroMarca))
+        ? perfumes.filter(p => p.marca && p.marca.id === filtroMarca)
         : perfumes;
 
     return (
-        // Estilos para modo oscuro
-        <main className="max-w-6xl mx-auto p-8 bg-black text-white min-h-screen">
-            <div className="mb-4">
-                <label className="font-semibold text-white">Filtrar por marca:</label>
-                <select
-                    value={filtroMarca}
-                    onChange={e => setFiltroMarca(e.target.value)}
-                    // Estilos de selección oscuros
-                    className="ml-2 border border-gray-700 bg-gray-800 text-white px-2 py-1 rounded"
+        <main className="max-w-6xl mx-auto p-8 min-h-screen">
+            <h1 className="text-3xl font-bold mb-6 text-white border-l-4 border-white pl-4">Catálogo de Perfumes</h1>
+
+            <div className="mb-8 p-4 bg-theme-card rounded-lg border border-theme-border">
+                <label htmlFor="marca-filter" className="text-theme-muted font-medium mr-3">Filtrar por marca:</label>
+                <select 
+                    id="marca-filter"
+                    value={filtroMarca} 
+                    onChange={e => setFiltroMarca(e.target.value)} 
+                    className="border px-4 py-2 rounded-lg bg-theme-main text-white border-theme-border focus:ring-1 focus:ring-white"
                 >
                     <option value="">Todas</option>
-                    {marcas.map(m => (
-                        <option key={m.id} value={m.id}>
-                            {m.nombre}
-                        </option>
-                    ))}
+                    {marcas.map(m => <option key={m.id} value={m.id}>{m.nombre}</option>)}
                 </select>
             </div>
-
             <DynamicTable
-                // Columnas modificadas: "Imagen" eliminada, "Detalle" añadida
-                columns={["ID", "Nombre", "Marca", "Precio", "Stock", "Detalle"]}
+                columns={["ID", "Nombre", "Marca", "Acciones"]} // 4. AÑADIR columna "Acciones"
                 data={perfumesFiltrados.map(p => [
-                    p.id,
-                    p.nombre,
+                    p.id, 
+                    p.nombre, 
                     p.marca?.nombre ?? "",
-                    `$${p.precio}`,
-                    p.stock,
-                    // Reemplazar URL con botón de navegación
-                    <button 
-                        key={`btn-${p.id}`}
-                        onClick={() => navigate(`/producto/${p.id}`)}
-                        className="px-3 py-1 bg-white text-black rounded hover:bg-gray-200 transition-colors duration-200 font-medium"
-                    >
-                        Ver Detalle
-                    </button>
+                    // 5. AÑADIR el botón de navegación
+                    <Button 
+                        key={p.id}
+                        text="Ver detalle" 
+                        onClick={() => navigate(`/producto/${p.id}`)} // Navega a la ruta /producto/:id
+                        className="bg-white text-black px-3 py-1 text-xs font-medium appearance-none border-none"
+                    />
                 ])}
-                // Clases para asegurar el estilo oscuro de la tabla
-                className="bg-gray-900 text-white rounded shadow-lg"
             />
         </main>
     );
 }
-
 export default CatalogoPerfumes;
