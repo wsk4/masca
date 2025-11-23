@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import UsuarioService from "../../service/UsuarioService";
+import DireccionService from "../../service/DireccionService"; // 1. Importar servicio de direcciones
 import CreateModal from "../../components/organisms/CreateModal";
 import Button from "../../components/atoms/Button";
 import { generarMensaje } from "../../utils/GenerarMensaje";
@@ -9,41 +10,59 @@ import { FaUserCircle, FaEnvelope, FaIdBadge, FaPhone, FaMapMarkerAlt } from "re
 function Profile() {
     const { user, login } = useAuth();
     const [datos, setDatos] = useState({});
+    const [direcciones, setDirecciones] = useState([]); // 2. Estado para las direcciones
     const [openModal, setOpenModal] = useState(false);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         if (user?.id) {
-            UsuarioService.getById(user.id)
-                .then(res => {
-                    setDatos(res); 
-                })
-                .catch(err => {
-                    console.error("Error al obtener usuario:", err);
+            const fetchData = async () => {
+                try {
+                    // Cargar datos del usuario
+                    const userData = await UsuarioService.getById(user.id);
+                    setDatos(userData);
+                    
+                    // 3. Cargar direcciones disponibles para el select
+                    const dirs = await DireccionService.getAll();
+                    setDirecciones(dirs);
+                } catch (err) {
+                    console.error("Error al cargar datos:", err);
                     generarMensaje("No se pudieron cargar los datos", "error");
-                })
-                .finally(() => setLoading(false));
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchData();
         }
     }, [user]);
+
+    // 4. Convertir direcciones al formato que necesita el Select
+    const direccionOptions = [
+        { value: "", label: "Sin dirección principal" },
+        ...direcciones.map(d => ({
+            value: d.id,
+            label: `${d.calle} #${d.numero}, ${d.comuna?.nombre || ''}`
+        }))
+    ];
 
     const handleSubmit = async (formData) => {
         setSaving(true);
         try {
-            // --- CORRECCIÓN CLAVE ---
-            // El backend necesita el ID dentro del objeto para el método partialUpdate.
-            // Creamos un payload que incluye explícitamente el ID del usuario.
+            // 5. Construir el payload correctamente
+            // El backend espera que 'direccion' sea un objeto { id: X }, no un string.
             const payload = { 
                 ...formData, 
-                id: user.id 
+                id: user.id,
+                direccion: formData.direccion ? { id: parseInt(formData.direccion) } : null
             };
 
-            // Usamos .patch para actualizar solo lo enviado
+            // Usar .patch para actualizar parcialmente
             const res = await UsuarioService.patch(user.id, payload);
             
             setDatos(res); 
             
-            // Actualizamos el contexto global
+            // Actualizar contexto global
             const updatedUserContext = { ...user, ...res };
             login(updatedUserContext); 
 
@@ -80,7 +99,7 @@ function Profile() {
         <main className="min-h-screen p-4 md:p-8 bg-theme-main flex justify-center items-start pt-12">
             <div className="w-full max-w-3xl bg-theme-card border border-theme-border rounded-2xl shadow-2xl overflow-hidden">
                 
-                {/* Encabezado del Perfil */}
+                {/* Header del Perfil */}
                 <div className="bg-gradient-to-r from-zinc-900 to-black p-8 border-b border-theme-border flex flex-col md:flex-row items-center gap-6">
                     <div className="relative">
                         <div className="w-24 h-24 rounded-full bg-theme-border flex items-center justify-center text-theme-muted border-4 border-theme-main shadow-xl">
@@ -150,7 +169,7 @@ function Profile() {
                     </div>
                 </div>
 
-                {/* Footer de acciones */}
+                {/* Footer */}
                 <div className="p-8 border-t border-theme-border bg-theme-main/30 flex justify-end">
                     <Button 
                         text="Editar Información" 
@@ -160,7 +179,7 @@ function Profile() {
                 </div>
             </div>
 
-            {/* Modal de Edición */}
+            {/* Modal con Selector de Dirección */}
             <CreateModal
                 isOpen={openModal}
                 onClose={() => setOpenModal(false)}
@@ -171,7 +190,8 @@ function Profile() {
                 initialData={{
                     nombre: datos.nombre,
                     correo: datos.correo,
-                    telefono: datos.telefono
+                    telefono: datos.telefono,
+                    direccion: datos.direccion?.id || "" // Valor inicial para el select
                 }}
                 inputsConfig={[
                     { 
@@ -192,6 +212,13 @@ function Profile() {
                         placeholder: "Teléfono", 
                         value: datos.telefono, 
                         type: "tel" 
+                    },
+                    {
+                        name: "direccion",
+                        type: "select",
+                        placeholder: "Dirección Principal",
+                        options: direccionOptions, // Opciones cargadas dinámicamente
+                        value: datos.direccion?.id || ""
                     }
                 ]}
             />
