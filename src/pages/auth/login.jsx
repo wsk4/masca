@@ -24,17 +24,18 @@ const Login = () => {
         }
         setLoading(true);
         try {
+            // Llama al servicio login, que ya usa la URL de Render y espera 'contra'
             const response = await UsuarioService.login(form);
-            const usuario = response; // El servicio ya devuelve directamente el objeto de datos
+            const usuario = response; 
             
-            // Guardar usuario en localStorage y Contexto
+            // 1. Guardar usuario en Contexto y localStorage
             const userToSave = { id: usuario.id, nombre: usuario.nombre, rol: usuario.rol };
             localStorage.setItem('user', JSON.stringify(userToSave));
             login(userToSave);
             
             generarMensaje(`¡Bienvenido ${usuario.nombre}!`, 'success');
             
-            // CORRECCIÓN CLAVE: Redirección inmediata sin setTimeout
+            // 2. Redirección Inmediata basada en rol
             if (usuario.rol?.id === 1 || usuario.rol?.id === 2) {
                 navigate('/admin'); // Redirección inmediata al panel
             } else {
