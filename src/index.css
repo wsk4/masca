@@ -1,24 +1,26 @@
 @import "tailwindcss";
+@import "tailwindcss";
 
-/* 1. Definición de la Paleta de Colores (Dark Mode Minimalista) /
 :root {
-  --color-theme-main: #000000;       / Fondo principal (Negro puro) /
-  --color-theme-card: #121212;       / Fondo de tarjetas/modales (Gris carbón) /
-  --color-theme-border: #27272a;     / Bordes y separadores sutiles /
-  --color-theme-text: #ffffff;       / Texto principal (Blanco puro) /
-  --color-theme-muted: #a1a1aa;      / Texto secundario (Gris suave) /
-  --color-theme-accent: #ffffff;     / Color de acento (Botones Blancos) /
-  --color-theme-hover: #e4e4e7;      / Hover botones /
+  /* 1. Definición de la Paleta de Colores como CSS Variables (dentro de :root) */
+  --color-theme-main: #000000;       /* Fondo principal (Negro puro) */
+  --color-theme-card: #121212;       /* Fondo de tarjetas/modales (Gris carbón) */
+  --color-theme-border: #27272a;     /* Bordes y separadores sutiles */
+  --color-theme-text: #ffffff;       /* Texto principal (Blanco puro) */
+  --color-theme-muted: #a1a1aa;      /* Texto secundario (Gris suave) */
+  --color-theme-accent: #ffffff;     /* Color de acento (Botones Blancos) */
+  --color-theme-hover: #e4e4e7;      /* Hover botones */
 }
 
-/ 2. Estilos Base y Scrollbar /
+/* 2. Estilos Base y Scrollbar */
 @layer base {
   body {
+    /* Usamos las variables CSS aquí */
     background-color: var(--color-theme-main);
     color: var(--color-theme-text);
   }
-
-  / Scrollbar oscuro elegante para navegadores Webkit */
+  
+  /* Scrollbar oscuro elegante para navegadores Webkit */
   ::-webkit-scrollbar { width: 8px; }
   ::-webkit-scrollbar-track { background: var(--color-theme-main); }
   ::-webkit-scrollbar-thumb { 
@@ -26,3 +28,4 @@
     border-radius: 9999px; 
   }
   ::-webkit-scrollbar-thumb:hover { background: var(--color-theme-muted); }
+}
