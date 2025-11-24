@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // 1. Importar hook de navegación
 import { useAuth } from "../../context/AuthContext";
 import UsuarioService from "../../service/UsuarioService";
-import DireccionService from "../../service/DireccionService"; // 1. Importar servicio de direcciones
+import DireccionService from "../../service/DireccionService"; 
 import CreateModal from "../../components/organisms/CreateModal";
 import Button from "../../components/atoms/Button";
 import { generarMensaje } from "../../utils/GenerarMensaje";
-import { FaUserCircle, FaEnvelope, FaIdBadge, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
+import { FaUserCircle, FaEnvelope, FaIdBadge, FaPhone, FaMapMarkerAlt, FaSignOutAlt } from "react-icons/fa"; // Agregado icono de salida
 
 function Profile() {
-    const { user, login } = useAuth();
+    const { user, login, logout } = useAuth(); // 2. Extraemos logout
+    const navigate = useNavigate(); // Hook para redirigir
+    
     const [datos, setDatos] = useState({});
-    const [direcciones, setDirecciones] = useState([]); // 2. Estado para las direcciones
+    const [direcciones, setDirecciones] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -19,11 +22,9 @@ function Profile() {
         if (user?.id) {
             const fetchData = async () => {
                 try {
-                    // Cargar datos del usuario
                     const userData = await UsuarioService.getById(user.id);
                     setDatos(userData);
                     
-                    // 3. Cargar direcciones disponibles para el select
                     const dirs = await DireccionService.getAll();
                     setDirecciones(dirs);
                 } catch (err) {
@@ -37,7 +38,6 @@ function Profile() {
         }
     }, [user]);
 
-    // 4. Convertir direcciones al formato que necesita el Select
     const direccionOptions = [
         { value: "", label: "Sin dirección principal" },
         ...direcciones.map(d => ({
@@ -46,23 +46,25 @@ function Profile() {
         }))
     ];
 
+    // 3. Función para manejar el cierre de sesión
+    const handleLogout = () => {
+        logout();
+        navigate("/login"); // Redirige al login o al home ("/")
+    };
+
     const handleSubmit = async (formData) => {
         setSaving(true);
         try {
-            // 5. Construir el payload correctamente
-            // El backend espera que 'direccion' sea un objeto { id: X }, no un string.
-            const payload = { 
-                ...formData, 
-                id: user.id,
+            const payload = {
+                nombre: formData.nombre,
+                correo: formData.correo,
+                telefono: formData.telefono,
                 direccion: formData.direccion ? { id: parseInt(formData.direccion) } : null
             };
 
-            // Usar .patch para actualizar parcialmente
             const res = await UsuarioService.patch(user.id, payload);
             
             setDatos(res); 
-            
-            // Actualizar contexto global
             const updatedUserContext = { ...user, ...res };
             login(updatedUserContext); 
 
@@ -99,7 +101,7 @@ function Profile() {
         <main className="min-h-screen p-4 md:p-8 bg-theme-main flex justify-center items-start pt-12">
             <div className="w-full max-w-3xl bg-theme-card border border-theme-border rounded-2xl shadow-2xl overflow-hidden">
                 
-                {/* Header del Perfil */}
+                {/* Encabezado Visual */}
                 <div className="bg-gradient-to-r from-zinc-900 to-black p-8 border-b border-theme-border flex flex-col md:flex-row items-center gap-6">
                     <div className="relative">
                         <div className="w-24 h-24 rounded-full bg-theme-border flex items-center justify-center text-theme-muted border-4 border-theme-main shadow-xl">
@@ -115,12 +117,10 @@ function Profile() {
                     </div>
                 </div>
 
-                {/* Detalles */}
+                {/* Grid de Datos */}
                 <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-                    
-                    {/* Columna 1 */}
                     <div className="space-y-6">
-                        <div className="flex items-center gap-4 p-4 rounded-lg bg-theme-main/50 border border-theme-border/50">
+                        <div className="flex items-center gap-4 p-4 rounded-lg bg-theme-main/50 border border-theme-border/50 hover:border-theme-border transition-colors">
                             <div className="p-3 bg-blue-500/10 rounded-lg text-blue-400">
                                 <FaEnvelope size={20} />
                             </div>
@@ -130,7 +130,7 @@ function Profile() {
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-4 p-4 rounded-lg bg-theme-main/50 border border-theme-border/50">
+                        <div className="flex items-center gap-4 p-4 rounded-lg bg-theme-main/50 border border-theme-border/50 hover:border-theme-border transition-colors">
                             <div className="p-3 bg-purple-500/10 rounded-lg text-purple-400">
                                 <FaIdBadge size={20} />
                             </div>
@@ -141,9 +141,8 @@ function Profile() {
                         </div>
                     </div>
 
-                    {/* Columna 2 */}
                     <div className="space-y-6">
-                        <div className="flex items-center gap-4 p-4 rounded-lg bg-theme-main/50 border border-theme-border/50">
+                        <div className="flex items-center gap-4 p-4 rounded-lg bg-theme-main/50 border border-theme-border/50 hover:border-theme-border transition-colors">
                             <div className="p-3 bg-green-500/10 rounded-lg text-green-400">
                                 <FaPhone size={20} />
                             </div>
@@ -153,7 +152,7 @@ function Profile() {
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-4 p-4 rounded-lg bg-theme-main/50 border border-theme-border/50">
+                        <div className="flex items-center gap-4 p-4 rounded-lg bg-theme-main/50 border border-theme-border/50 hover:border-theme-border transition-colors">
                             <div className="p-3 bg-yellow-500/10 rounded-lg text-yellow-400">
                                 <FaMapMarkerAlt size={20} />
                             </div>
@@ -162,24 +161,32 @@ function Profile() {
                                 <p className="text-white font-medium">
                                     {datos.direccion 
                                         ? `${datos.direccion.calle} #${datos.direccion.numero}` 
-                                        : "Sin dirección principal"}
+                                        : "Sin dirección asignada"}
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Footer */}
-                <div className="p-8 border-t border-theme-border bg-theme-main/30 flex justify-end">
+                {/* Footer con acciones */}
+                <div className="p-8 border-t border-theme-border bg-theme-main/30 flex justify-between items-center">
+                    {/* Botón Cerrar Sesión */}
+                    <Button 
+                        text="Cerrar Sesión" 
+                        onClick={handleLogout}
+                        className="bg-red-600/20 text-red-500 font-bold hover:bg-red-600 hover:text-white border border-red-900/50 transition-all active:scale-95"
+                    />
+
+                    {/* Botón Editar */}
                     <Button 
                         text="Editar Información" 
                         onClick={() => setOpenModal(true)}
-                        className="bg-white text-black font-bold hover:bg-gray-200 border-none"
+                        className="bg-white text-black font-bold hover:bg-gray-200 border-none transition-transform active:scale-95"
                     />
                 </div>
             </div>
 
-            {/* Modal con Selector de Dirección */}
+            {/* Modal Dinámico */}
             <CreateModal
                 isOpen={openModal}
                 onClose={() => setOpenModal(false)}
@@ -191,33 +198,37 @@ function Profile() {
                     nombre: datos.nombre,
                     correo: datos.correo,
                     telefono: datos.telefono,
-                    direccion: datos.direccion?.id || "" // Valor inicial para el select
+                    direccion: datos.direccion?.id || ""
                 }}
                 inputsConfig={[
                     { 
                         name: "nombre", 
-                        placeholder: "Nombre Completo", 
+                        label: "Nombre Completo",
+                        placeholder: "Ej: Matías", 
                         value: datos.nombre, 
                         required: true 
                     },
                     { 
                         name: "correo", 
-                        placeholder: "Correo Electrónico", 
+                        label: "Correo Electrónico",
+                        placeholder: "correo@ejemplo.com", 
                         value: datos.correo, 
                         type: "email", 
                         required: true 
                     },
                     { 
                         name: "telefono", 
-                        placeholder: "Teléfono", 
+                        label: "Teléfono de Contacto",
+                        placeholder: "+56 9 1234 5678", 
                         value: datos.telefono, 
                         type: "tel" 
                     },
                     {
                         name: "direccion",
+                        label: "Dirección de Envío",
                         type: "select",
-                        placeholder: "Dirección Principal",
-                        options: direccionOptions, // Opciones cargadas dinámicamente
+                        placeholder: "Selecciona una dirección...",
+                        options: direccionOptions,
                         value: datos.direccion?.id || ""
                     }
                 ]}
