@@ -1,11 +1,8 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-// Ajusta la ruta si es necesario
 import CreateModal from '../../../components/organisms/CreateModal';
 
-// NOTA: En Karma no usamos jest.mock.
-// Como ya arreglaste 'src/utils/uploadImage.js' para que no falle por la API KEY,
-// no necesitamos hacer nada más aquí.
+
 
 describe('Organismo CreateModal', () => {
 

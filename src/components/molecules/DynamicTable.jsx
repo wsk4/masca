@@ -9,7 +9,7 @@ function DynamicTable({
     striped = true,
     hover = true,
     emptyMessage = 'No hay datos disponibles',
-    actions = [] // acciones dinámicas
+    actions = [] 
 }) {
     if (!data || data.length === 0) {
         return (
@@ -18,7 +18,6 @@ function DynamicTable({
             </div>
         );
     }
-
     const isArrayFormat = data.length > 0 && Array.isArray(data[0]);
     const isImageUrl = (str) => {
         if (!str || typeof str !== 'string') return false;
@@ -28,7 +27,6 @@ function DynamicTable({
             /\.(png|jpg|jpeg|svg|gif|webp)$/i.test(str)
         );
     };
-
     return (
         <div className={`overflow-x-auto rounded-xl border border-theme-border shadow-xl ${className}`}>
             <table className="w-full min-w-max border-collapse text-left">
@@ -44,7 +42,6 @@ function DynamicTable({
                         ))}
                     </tr>
                 </thead>
-
                 <tbody className="divide-y divide-theme-border bg-theme-main">
                     {data.map((row, rowIndex) => {
                         const cells = isArrayFormat
@@ -53,7 +50,6 @@ function DynamicTable({
                                 const key = col.toLowerCase();
                                 return row[col] ?? row[key] ?? '';
                             });
-
                         return (
                             <tr
                                 key={row.id || rowIndex}
@@ -63,7 +59,6 @@ function DynamicTable({
                                 {cells.map((cell, cellIndex) => {
                                     const header = columns[cellIndex];
                                     const headerLower = header.toLowerCase();
-
                                     if (headerLower === 'acciones') {
                                         return (
                                             <td key={cellIndex} className="px-6 py-4 text-sm whitespace-nowrap">
@@ -95,15 +90,12 @@ function DynamicTable({
                                             </td>
                                         );
                                     }
-
                                     const isImageColumn =
                                         headerLower.includes('logo') ||
                                         headerLower.includes('imagen') ||
                                         headerLower.includes('foto') ||
                                         headerLower.includes('avatar');
-
                                     const shouldShowImage = isImageColumn && isImageUrl(cell);
-
                                     return (
                                         <td
                                             key={cellIndex}

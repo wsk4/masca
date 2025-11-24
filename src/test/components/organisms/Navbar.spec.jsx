@@ -37,8 +37,6 @@ describe('Organismo Navbar', () => {
 
         const toggleBtn = screen.getByLabelText('Toggle menu');
         fireEvent.click(toggleBtn);
-        // Si no explota, asumimos que el estado cambió.
-        // En un test de integración visual verificaríamos clases CSS.
         expect(toggleBtn).toBeTruthy();
     });
 
@@ -52,9 +50,7 @@ describe('Organismo Navbar', () => {
             </MemoryRouter>
         );
 
-        // Buscamos el enlace "Salir" (puede haber 2, desktop y mobile)
         const salirLinks = screen.getAllByText('Salir');
-        // Hacemos click en el primero
         fireEvent.click(salirLinks[0]);
 
         expect(localStorage.getItem('token')).toBeNull();

@@ -1,9 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-// Ajusta la ruta según tu estructura
 import { CartProvider, useCart } from '../../context/CartContext';
 
-// --- Componente Dummy para probar el consumo del contexto ---
 const TestComponent = () => {
     const { cart, total, addToCart, removeFromCart, clearCart } = useCart();
 
@@ -39,7 +37,6 @@ const TestComponent = () => {
 describe('Contexto CartContext', () => {
 
     beforeEach(() => {
-        // Limpiamos el localStorage antes de cada prueba para empezar de cero
         localStorage.clear();
     });
 
@@ -64,11 +61,8 @@ describe('Contexto CartContext', () => {
         const btnAddA = screen.getByText('Agregar A ($100)');
         fireEvent.click(btnAddA);
 
-        // Verificamos que hay 1 item
         expect(screen.getByTestId('cart-count').textContent).toBe('1');
-        // Verificamos el total (100 * 1)
         expect(screen.getByTestId('cart-total').textContent).toBe('100');
-        // Verificamos que se renderice el item
         expect(screen.getByTestId('item-1').textContent).toContain('Perfume A');
     });
 
@@ -86,13 +80,10 @@ describe('Contexto CartContext', () => {
         // Click 2 veces
         fireEvent.click(btnAddA);
 
-        // Sigue siendo 1 item único en el array (pero con quantity 2)
         expect(screen.getByTestId('cart-count').textContent).toBe('1');
         
-        // El total debe ser 200
         expect(screen.getByTestId('cart-total').textContent).toBe('200');
         
-        // Verificamos texto de cantidad
         expect(screen.getByTestId('item-1').textContent).toContain('Qty: 2');
     });
 
@@ -103,22 +94,17 @@ describe('Contexto CartContext', () => {
             </CartProvider>
         );
 
-        // Agregamos dos productos distintos
         fireEvent.click(screen.getByText('Agregar A ($100)'));
         fireEvent.click(screen.getByText('Agregar B ($200)'));
 
         expect(screen.getByTestId('cart-count').textContent).toBe('2');
         expect(screen.getByTestId('cart-total').textContent).toBe('300'); // 100 + 200
 
-        // Eliminamos el producto A
         const btnRemoveA = screen.getByLabelText('remove-1');
         fireEvent.click(btnRemoveA);
 
-        // Ahora debe quedar solo 1
         expect(screen.getByTestId('cart-count').textContent).toBe('1');
-        // El total debe bajar a 200 (solo queda el B)
         expect(screen.getByTestId('cart-total').textContent).toBe('200');
-        // A ya no debe estar
         expect(screen.queryByTestId('item-1')).toBeNull();
     });
 
@@ -129,11 +115,9 @@ describe('Contexto CartContext', () => {
             </CartProvider>
         );
 
-        // Llenamos
         fireEvent.click(screen.getByText('Agregar A ($100)'));
         fireEvent.click(screen.getByText('Agregar B ($200)'));
 
-        // Vaciamos
         fireEvent.click(screen.getByText('Vaciar Carrito'));
 
         expect(screen.getByTestId('cart-count').textContent).toBe('0');
