@@ -10,7 +10,6 @@ function DetalleCompra({ id, onClose }) {
 
     if (!compra) return <div className="p-8">Cargando detalle...</div>;
 
-    // Se asume: compra.detalleCompras es un array de DetalleCompra
     const detalles = compra.detalleCompras || [];
 
     return (

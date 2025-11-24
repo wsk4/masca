@@ -19,7 +19,6 @@ const CreateUser = () => {
     }
     setLoading(true);
     try {
-      // Usar 'form' en la llamada a la API
       await UsuarioService.createUser(form);
       generarMensaje('Usuario creado correctamente', 'success');
       setTimeout(() => navigate('/login'), 1000);
@@ -31,7 +30,6 @@ const CreateUser = () => {
     }
   };
 
-  // <<<<<<<<<<<<<< ESTO DEBE ESTAR DEFINIDO AQUÍ DENTRO >>>>>>>>>>>>>
   const formConfig = [
     {
       type: "text",
@@ -46,7 +44,6 @@ const CreateUser = () => {
     {
       type: "inputs",
       inputs: [
-        // Usar form.nombre, form.correo, form.contra
         { type: "text", placeholder: "Nombre completo", name: "nombre", value: form.nombre, onChange: handleChange, required: true },
         { type: "email", placeholder: "Correo electrónico", name: "correo", value: form.correo, onChange: handleChange, required: true },
         { type: "password", placeholder: "Contraseña", name: "contra", value: form.contra, onChange: handleChange, required: true },
@@ -58,7 +55,6 @@ const CreateUser = () => {
         text: loading ? "Creando..." : "Crear usuario", 
         onClick: handleSubmit, 
         disabled: loading,
-        // Estilo blanco sobre negro
         className: "w-full mt-6 bg-white text-black font-bold rounded-lg py-3 hover:bg-theme-hover appearance-none border-none"
     },
     {
@@ -80,7 +76,6 @@ const CreateUser = () => {
         ],
     },
   ];
-  // <<<<<<<<<<<<<< FIN DE LA DEFINICIÓN >>>>>>>>>>>>>
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-theme-main p-4">

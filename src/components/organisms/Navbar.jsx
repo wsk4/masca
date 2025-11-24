@@ -33,14 +33,12 @@ function Navbar({ links, title }) {
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				<div className="flex justify-between items-center h-20">
 
-					{/* Logo / Title */}
 					<div className="flex-shrink-0 flex items-center space-x-2">
 						<span className="text-2xl font-black tracking-tighter text-white border-2 border-white px-2 py-1">
 							{title.toUpperCase()}
 						</span>
 					</div>
 
-					{/* Desktop Links */}
 					<div className="hidden md:flex space-x-6">
 						{links.map((link, i) => (
 							<NavLink
@@ -59,7 +57,6 @@ function Navbar({ links, title }) {
 						))}
 					</div>
 
-					{/* Mobile Toggle */}
 					<div className="md:hidden">
 						<button
 							onClick={() => setIsOpen(!isOpen)}
@@ -72,7 +69,6 @@ function Navbar({ links, title }) {
 				</div>
 			</div>
 
-			{/* Mobile Menu */}
 			<div
 				className={`md:hidden bg-theme-card border-b border-theme-border transition-all duration-500 ease-in-out ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}
 			>

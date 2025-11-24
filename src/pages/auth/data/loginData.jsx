@@ -31,14 +31,11 @@ const loginData = [
         ],
         className: "space-y-8"
     },
-    // 1. BOTÓN PRINCIPAL: ALTO CONTRASTE (BLANCO/NEGRO)
     {           
         type: "button",
         text: "Iniciar Sesión",
-        // CAMBIO CRÍTICO: Usamos bg-white nativo + appearance-none para resetear Bootstrap/navegador
         className: "transform w-full mt-8 mb-4 py-2.5 font-bold bg-white text-black rounded-lg hover:bg-theme-hover active:scale-95 transition-all border-none appearance-none",
     },
-    // 2. ENLACE SECUNDARIO: VISIBLE (GRIS SUAVE/BLANCO)
     {
         type: "text",
         text: [

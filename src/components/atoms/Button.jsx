@@ -13,7 +13,6 @@ function Button({ text, onClick, className = "", disabled = false, ...props }) {
     
     return (
         <button onClick={onClick} disabled={disabled} 
-            // Concatenamos las clases en este orden para que 'className' (con el color) tenga prioridad
             className={`${baseClasses} ${interactionClasses} ${className}`}
             {...props} 
         >

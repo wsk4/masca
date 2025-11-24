@@ -7,7 +7,6 @@ import { useAuth } from "../../context/AuthContext";
 import loginData from "./data/loginData";
 
 const Login = () => {
-    // Estado inicial usa 'contra'
     const [form, setForm] = useState({ correo: "", contra: "" });
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -17,14 +16,12 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Validación usa 'contra'
         if (!form.correo || !form.contra) {
             generarMensaje('Completa todos los campos', 'warning');
             return;
         }
         setLoading(true);
         try {
-            // Llama al servicio login, que ya usa la URL de Render y espera 'contra'
             const response = await UsuarioService.login(form);
             const usuario = response; 
             
@@ -35,11 +32,10 @@ const Login = () => {
             
             generarMensaje(`¡Bienvenido ${usuario.nombre}!`, 'success');
             
-            // 2. Redirección Inmediata basada en rol
             if (usuario.rol?.id === 1 || usuario.rol?.id === 2) {
-                navigate('/admin'); // Redirección inmediata al panel
+                navigate('/admin'); 
             } else {
-                navigate('/'); // Redirección inmediata a la página pública
+                navigate('/'); 
             }
             
         } catch (error) {
@@ -76,7 +72,7 @@ const Login = () => {
 
     return (
         <main className="flex min-h-screen items-center justify-center bg-theme-main p-4">
-            {/* Contenedor Dark Mode */}
+            {}
             <form onSubmit={handleSubmit} className="w-full max-w-md space-y-10 rounded-2xl bg-theme-card border border-theme-border p-10 shadow-2xl">
                 <Forms content={formDataWithHandlers} />
             </form>
