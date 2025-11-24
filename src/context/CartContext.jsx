@@ -43,7 +43,6 @@ export const CartProvider = ({ children }) => {
     };
 
     const addToCart = (product, quantity = 1) => {
-        // ... (misma lógica de adición de producto) ...
         const existingItem = cart.find(item => item.id === product.id);
         const itemToSave = { id: product.id, name: product.nombre, price: product.precio, stock: product.stock, image: product.url };
 
