@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-// Ajusta la ruta si es necesario
 import DynamicTexts from '../../../components/molecules/DynamicTexts';
 
 describe('Molecula DynamicTexts', () => {
