@@ -7,14 +7,21 @@ function CrearEditarUbicacion({ isOpen, onClose, onSubmit, initialData, loading 
             isOpen={isOpen}
             onClose={onClose}
             onSubmit={onSubmit}
-            inputsConfig={[
-                { name: "nombre", placeholder: "Nombre", value: initialData?.nombre || "" }
-            ]}
             title={initialData?.id ? "Editar ubicación" : "Crear ubicación"}
-            submitText="Guardar"
+            submitText={initialData?.id ? "Actualizar" : "Guardar"}
             loading={loading}
             initialData={initialData}
+            inputsConfig={[
+                { 
+                    name: "nombre", 
+                    placeholder: "Nombre de la ubicación", 
+                    label: "Nombre", // Label para mejor accesibilidad
+                    value: initialData?.nombre || "",
+                    required: true // Validación visual
+                }
+            ]}
         />
     );
 }
+
 export default CrearEditarUbicacion;
