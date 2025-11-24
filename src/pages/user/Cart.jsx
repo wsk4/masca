@@ -13,7 +13,7 @@ function Cart() {
     const { user } = useAuth();
     const navigate = useNavigate();
 
-    // Lógica para botones de la tabla
+    // ... (handleRemove, handleClearCart, formatCurrency) ...
     const handleRemove = (id) => {
         removeFromCart(id);
         generarMensaje("Producto eliminado", "info");
@@ -27,8 +27,7 @@ function Cart() {
     const formatCurrency = (amount) => {
         return `$${(amount || 0).toLocaleString('es-CL')}`;
     }
-
-    // FUNCIÓN DE CHECKOUT AJUSTADA AL BACKEND
+    
     const handleCheckout = async () => {
         if (!user) {
             generarMensaje("Debes iniciar sesión para finalizar la compra.", "warning");
@@ -43,19 +42,18 @@ function Cart() {
         generarMensaje("Procesando compra...", "info");
         
         try {
-            // ESTRUCTURA DE DATOS QUE COINCIDE CON TU BACKEND DE SPRING BOOT
+            // ESTRUCTURA DE DATOS FINAL (Asegurando el formato de fecha ISO completo)
             const orderData = {
-                // 1. Entidades Compra.java (requieren objetos anidados { id: X } y no pueden ser null)
+                // Relaciones ManyToOne: Enviadas como objetos { id: X }.
                 usuario: { id: user.id }, 
-                estadoCompra: { id: 1 },   // Asumido: El ID 1 debe existir en tu tabla EstadoCompra
-                estadoEnvio: { id: 1 },    // Asumido: El ID 1 debe existir en tu tabla EstadoEnvio
+                estadoCompra: { id: 1 },   // ID inicial
+                estadoEnvio: { id: 1 },    // ID inicial
                 
-                // 2. Campo obligatorio faltante: fechaCompra (requerido por Compra.java)
-                fechaCompra: new Date().toISOString(), 
+                // CRÍTICO: Usamos new Date().toJSON() para un formato ISO que Spring acepta sin problemas
+                fechaCompra: new Date().toJSON(), 
                 
-                // 3. DetalleCompra (Lista de Productos)
+                // DetalleCompra: Lista de Productos con la estructura { producto: { id: X } }
                 detalleCompras: cart.map(item => ({
-                    // DetalleCompra requiere el objeto Producto anidado (Perfume.java)
                     producto: { id: item.id }, 
                     cantidad: item.quantity,
                     precioUnitario: item.price
@@ -68,7 +66,8 @@ function Cart() {
             navigate('/compras'); 
             
         } catch (error) {
-            generarMensaje("Error al procesar la compra. Verifica que los IDs 1 (estados) existan en tu BD.", "error");
+            // Si esto falla, el error es que los IDs 1 no existen o hay un error de validación de JPA no mapeado.
+            generarMensaje("Error al procesar la compra. Revisa que los IDs 1 (estados) existan en tu BD.", "error");
             console.error("Checkout Error:", error);
         }
     };
