@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import CreateModal from "../../../components/organisms/CreateModal";
-import ComunaService from "../../../service/ComunaService";
+import ComunaService from "../../../service/ComunaService"; 
 import { generarMensaje } from "../../../utils/GenerarMensaje";
 
 function CrearEditarUbicacion({ isOpen, onClose, onSubmit, initialData, loading }) {
     const [comunas, setComunas] = useState([]);
     const [loadingComunas, setLoadingComunas] = useState(false);
-
 
     useEffect(() => {
         if (isOpen) {
@@ -37,7 +36,6 @@ function CrearEditarUbicacion({ isOpen, onClose, onSubmit, initialData, loading 
     const handleLocalSubmit = (formData) => {
         const payload = {
             ...formData,
-
             comuna: formData.comuna ? { id: parseInt(formData.comuna) } : null
         };
         onSubmit(payload);

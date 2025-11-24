@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DynamicTable from "../../../components/molecules/DynamicTable";
 import { useAuth } from "../../../context/AuthContext";
-import DireccionService from "../../../service/DireccionService"; // Usamos el servicio correcto
+import DireccionService from "../../../service/DireccionService"; 
 import CrearEditarUbicacion from "./CrearEditarUbicaciones";
 import { generarMensaje } from "../../../utils/GenerarMensaje";
 import Button from "../../../components/atoms/Button";
@@ -70,7 +70,8 @@ function ListarUbicaciones() {
         }
     };
 
-    if (!user) return null;
+    // Validación de seguridad simple
+    if (!user) return <div className="p-8">Cargando usuario...</div>;
 
     return (
         <main className="p-8 min-h-screen">
@@ -119,4 +120,4 @@ function ListarUbicaciones() {
     );
 }
 
-export default ListarUbic
+export default ListarUbicaciones;
