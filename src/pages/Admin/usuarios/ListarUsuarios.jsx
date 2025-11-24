@@ -73,14 +73,14 @@ function ListarUsuarios() {
     };
     
     if (!user || (user.rol?.id !== 1 && user.rol?.id !== 2)) {
-         return <div className="p-8 text-center text-red-500">Acceso denegado: Se requiere rol de administrador.</div>;
+        return <div className="p-8 text-center text-red-500">Acceso denegado: Se requiere rol de administrador.</div>;
     }
 
     return (
         <main className="p-8 min-h-screen">
             <h1 className="text-3xl font-bold mb-6 text-white border-l-4 border-white pl-4">Gestión de Usuarios</h1>
 
-            {/* BOTÓN CREAR: Estilo sólido blanco */}
+
             <div className="mb-6">
                 <Button
                     onClick={handleCreate}
@@ -98,17 +98,14 @@ function ListarUsuarios() {
                     u.rol?.nombre,
                     u.telefono,
                     u.direccion?.calle ? `${u.direccion.calle} #${u.direccion.numero}` : "Sin dirección",
-                    
-                    // --- ACCIONES CON TU COMPONENTE BUTTON ---
+
                     <div key={u.id} className="flex gap-2">
-                        {/* Botón Editar: Borde Azul, forzamos padding pequeño con !py-1 !px-3 */}
                         <Button
                             text="Editar"
                             onClick={() => handleEdit(u)}
                             className="!py-1 !px-3 bg-transparent border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white"
                         />
-                        
-                        {/* Botón Eliminar: Borde Rojo, forzamos padding pequeño */}
+
                         <Button
                             text="Eliminar"
                             onClick={() => handleDelete(u.id)}

@@ -1,49 +1,122 @@
 import React, { useEffect, useState } from "react";
 import DynamicTable from "../../../components/molecules/DynamicTable";
 import { useAuth } from "../../../context/AuthContext";
-import DireccionService from "../../../service/DireccionService";
+import DireccionService from "../../../service/DireccionService"; // Usamos el servicio correcto
 import CrearEditarUbicacion from "./CrearEditarUbicaciones";
 import { generarMensaje } from "../../../utils/GenerarMensaje";
+import Button from "../../../components/atoms/Button";
 
 function ListarUbicaciones() {
     const { user } = useAuth();
-    const [ubicaciones, setUbicaciones] = useState([]);
+    const [direcciones, setDirecciones] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [modalData, setModalData] = useState({});
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        DireccionService.getAll().then(setUbicaciones);
+        fetchDirecciones();
     }, []);
 
-    const handleCreate = () => { setModalData({}); setOpenModal(true); };
-    const handleEdit = u => { setModalData(u); setOpenModal(true); };
+    const fetchDirecciones = async () => {
+        try {
+            const data = await DireccionService.getAll();
+            setDirecciones(data || []);
+        } catch (error) {
+            console.error(error);
+            generarMensaje("Error al cargar direcciones", "error");
+        }
+    };
 
-    const handleSubmit = async data => {
+    const handleCreate = () => { 
+        setModalData({}); 
+        setOpenModal(true); 
+    };
+
+    const handleEdit = (d) => { 
+        setModalData(d); 
+        setOpenModal(true); 
+    };
+
+    const handleDelete = async (id) => {
+        if (!window.confirm("¿Estás seguro de eliminar esta dirección?")) return;
+
+        try {
+            await DireccionService.delete(id);
+            generarMensaje("Dirección eliminada", "success");
+            fetchDirecciones();
+        } catch (error) {
+            console.error(error);
+            generarMensaje("Error al eliminar la dirección", "error");
+        }
+    };
+
+    const handleSubmit = async (data) => {
         setLoading(true);
         try {
             if (data.id) {
                 await DireccionService.update(data.id, data);
-                generarMensaje("Ubicación actualizada", "success");
+                generarMensaje("Dirección actualizada", "success");
             } else {
                 await DireccionService.create(data);
-                generarMensaje("Ubicación creada", "success");
+                generarMensaje("Dirección creada", "success");
             }
-            setUbicaciones(await DireccionService.getAll());
+            fetchDirecciones();
             setOpenModal(false);
-        } catch { generarMensaje("Error en la operación", "error"); }
-        finally { setLoading(false); }
+        } catch (error) { 
+            console.error(error);
+            generarMensaje("Error en la operación", "error"); 
+        } finally { 
+            setLoading(false); 
+        }
     };
 
+    if (!user) return null;
+
     return (
-        <main className="p-6">
-            <button onClick={handleCreate} className="mb-5 px-4 py-2 bg-blue-600 text-white rounded">Crear ubicación</button>
-            <DynamicTable columns={["ID", "Nombre", "Acciones"]} data={ubicaciones.map(u => [
-                u.id, u.nombre,
-                <button onClick={() => handleEdit(u)} className="px-2 py-1 bg-indigo-500 text-white rounded">Editar</button>
-            ])} />
-            <CrearEditarUbicacion isOpen={openModal} onClose={() => setOpenModal(false)} onSubmit={handleSubmit} initialData={modalData} loading={loading} />
+        <main className="p-8 min-h-screen">
+            <h1 className="text-3xl font-bold mb-6 text-white border-l-4 border-white pl-4">
+                Gestión de Direcciones
+            </h1>
+            
+            <div className="mb-6">
+                <Button 
+                    onClick={handleCreate} 
+                    text="Crear dirección" 
+                    className="bg-white text-black hover:bg-gray-200 border-none"
+                />
+            </div>
+
+            <DynamicTable 
+                columns={["ID", "Calle", "Número", "Comuna", "Acciones"]} 
+                data={direcciones.map(d => [
+                    d.id, 
+                    d.calle,
+                    d.numero || "S/N",
+                    d.comuna?.nombre || "Sin Comuna",
+                    <div key={d.id} className="flex gap-2">
+                        <Button 
+                            onClick={() => handleEdit(d)} 
+                            text="Editar"
+                            className="!py-1 !px-3 bg-transparent border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white"
+                        />
+                        <Button 
+                            onClick={() => handleDelete(d.id)} 
+                            text="Eliminar"
+                            className="!py-1 !px-3 bg-transparent border border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+                        />
+                    </div>
+                ])} 
+            />
+            
+            <CrearEditarUbicacion 
+                isOpen={openModal} 
+                onClose={() => setOpenModal(false)} 
+                onSubmit={handleSubmit} 
+                initialData={modalData} 
+                loading={loading} 
+            />
         </main>
     );
 }
-export default ListarUbicaciones;
+
+export default ListarUbic

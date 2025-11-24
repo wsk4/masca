@@ -7,7 +7,6 @@ function CrearEditarPerfume({ isOpen, onClose, onSubmit, initialData, loading })
     const [marcas, setMarcas] = useState([]);
     const [loadingMarcas, setLoadingMarcas] = useState(false);
 
-    // Cargar marcas al abrir el componente
     useEffect(() => {
         if (isOpen) {
             const fetchMarcas = async () => {
@@ -37,10 +36,8 @@ function CrearEditarPerfume({ isOpen, onClose, onSubmit, initialData, loading })
     const handleSubmit = (formData) => {
         const payload = {
             ...formData,
-            // Conversión de tipos para el Backend (Java espera números, no strings)
             precio: formData.precio ? parseFloat(formData.precio) : 0,
             stock: formData.stock ? parseInt(formData.stock) : 0,
-            // Conversión de ID plano a Objeto Marca
             marca: formData.marca ? { id: parseInt(formData.marca) } : null
         };
         onSubmit(payload);
