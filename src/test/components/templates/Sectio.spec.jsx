@@ -1,13 +1,11 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-// Ajusta la ruta según tu estructura (asumiendo que Section está en templates)
 import Section from '../../../components/templates/Section';
 
 describe('Template Section', () => {
 
     it('renderiza el contenedor con la clase por defecto si no se provee una', () => {
         const { container } = render(<Section />);
-        // El valor por defecto en tu componente es "p-4"
         expect(container.firstChild.className).toContain('p-4');
     });
 
@@ -58,12 +56,9 @@ describe('Template Section', () => {
 
         render(<Section content={mockContent} />);
         
-        // Verificamos que el contenido de la tarjeta se muestre
         expect(screen.getByText('Tarjeta 1')).toBeTruthy();
         
-        // Verificamos que NO se esté renderizando como lista (CardsDisplay por defecto es grid)
-        // Buscamos el wrapper de las cards. Como es difícil acceder por clase exacta sin testid,
-        // confiamos en que el contenido está ahí.
+
     });
 
     it('renderiza contenido de Tabla (DynamicTable) con título opcional', () => {
@@ -79,16 +74,13 @@ describe('Template Section', () => {
 
         render(<Section content={mockContent} />);
         
-        // Verifica el título opcional de la tabla
         expect(screen.getByRole('heading', { name: 'Tabla de Usuarios' })).toBeTruthy();
         
         // Verifica contenido de la tabla (Header y Dato)
         expect(screen.getByText('Nombre')).toBeTruthy();
         expect(screen.getByText('Admin')).toBeTruthy();
         
-        // Verifica que se aplicó la clase al contenedor de la tabla
-        // Buscamos el título y subimos al padre, o buscamos por texto.
-        // Una forma segura en Jasmine puro:
+
         const titulo = screen.getByText('Tabla de Usuarios');
         expect(titulo.parentNode.className).toContain('margin-custom');
     });
