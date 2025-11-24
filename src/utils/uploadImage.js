@@ -1,12 +1,10 @@
 import Resizer from 'react-image-file-resizer';
 
-// CORRECCIÓN: Verificamos si existe el entorno antes de leer la variable.
-// Si estamos en tests (Karma), usamos una clave falsa para que no falle.
+
 const IMGBB_API_KEY = (import.meta && import.meta.env && import.meta.env.VITE_IMGBB_API_KEY) || 'test_key_no_valida';
 
 export const uploadToImgBB = async (file) => {
-    // MODO TEST: Si detectamos que estamos en un test (clave falsa),
-    // devolvemos una respuesta simulada inmediatamente sin contactar a ImgBB.
+
     if (IMGBB_API_KEY === 'test_key_no_valida') {
         return Promise.resolve({
             url: 'https://via.placeholder.com/150',
@@ -17,12 +15,12 @@ export const uploadToImgBB = async (file) => {
     return new Promise((resolve, reject) => {
         Resizer.imageFileResizer(
             file,
-            1024,         // maxWidth (número)
-            1024,         // maxHeight (número)
-            'WEBP',       // format (string)
-            80,           // quality (número)
-            0,            // rotation (número)
-            async (uri) => {  // callback (función)
+            1024,         
+            1024,         
+            'WEBP',       
+            80,           
+            0,            
+            async (uri) => {  
                 try {
                     if (!uri || typeof uri !== 'string') {
                         reject(new Error("Error al procesar imagen"));
@@ -57,7 +55,7 @@ export const uploadToImgBB = async (file) => {
                     reject(err);
                 }
             },
-            'base64'      // outputType (string)
+            'base64'  
         );
     });
 };

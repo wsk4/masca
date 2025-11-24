@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-// Asegúrate que esta ruta apunte correctamente a tu componente
 import InputFile from '../../../components/atoms/InputFile';
 
 describe('Componente InputFile', () => {
