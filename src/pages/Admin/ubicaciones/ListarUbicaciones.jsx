@@ -70,7 +70,6 @@ function ListarUbicaciones() {
         }
     };
 
-    // Validación de seguridad simple
     if (!user) return <div className="p-8">Cargando usuario...</div>;
 
     return (

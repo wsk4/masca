@@ -2,19 +2,18 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { CartProvider, useCart } from '../../context/CartContext';
 
-// --- Componente Dummy para probar el consumo del contexto ---
 const TestComponent = () => {
     const { cart, total, addToCart, removeFromCart, clearCart } = useCart();
 
     return (
         <div>
-            {/* Renderizado explícito de los valores para los tests */}
+
             <div data-testid="cart-total">{total.toString()}</div> 
             <div data-testid="cart-count">{cart.length}</div>
             
             <ul>
                 {cart.map(item => (
-                    // Usamos data-testid para encontrar el nombre y la cantidad fácilmente
+
                     <li key={item.id} data-testid={`item-${item.id}`}>
                         <span data-testid="item-name">{item.name}</span> | Qty: <span data-testid="item-qty">{item.quantity}</span>
                         <button aria-label={`remove-${item.id}`} onClick={() => removeFromCart(item.id)}>
@@ -63,7 +62,7 @@ describe('Contexto CartContext', () => {
         });
     });
 
-    // --- CORRECCIÓN DEL FALLO CRÍTICO (Expected 100 to be 200) ---
+
     it('aumenta la cantidad si se agrega el mismo producto', async () => {
         render(<CartProvider><TestComponent /></CartProvider>);
 
