@@ -11,7 +11,8 @@ function CrearEditarUsuario({ isOpen, onClose, onSubmit, initialData, loading })
         const fetchDirecciones = async () => {
             setLoadingDirecciones(true);
             try {
-                const data = await DireccionService.getAll();
+                // Asegurar que el servicio use la URL de Render correcta
+                const data = await DireccionService.getAll(); 
                 setDirecciones(data);
             } catch (err) {
                 console.error("Error al cargar direcciones:", err);
@@ -20,23 +21,29 @@ function CrearEditarUsuario({ isOpen, onClose, onSubmit, initialData, loading })
                 setLoadingDirecciones(false);
             }
         };
+        // Cargar direcciones solo cuando el modal se abre
         if (isOpen) {
             fetchDirecciones();
         }
     }, [isOpen]);
 
+    // Opciones dinámicas para el select de Dirección
     const direccionOptions = [
         { id: "", label: loadingDirecciones ? "Cargando direcciones..." : "Seleccione una dirección" },
+        // Mapear al formato { id: X, label: Y }
         ...direcciones.map(d => ({
             id: d.id,
             label: `${d.calle} ${d.numero} (${d.comuna?.nombre ?? ""})`
         }))
     ];
-
+    
+    // Opciones para el Rol (IDs 1 y 3, según el flujo típico)
     const rolOptions = [
-        { id: 3, label: "Usuario (3)" },
-        { id: 1, label: "Administrador (1)" }
+        { id: 3, label: "Usuario" }, 
+        { id: 1, label: "Administrador" }
     ];
+
+    // NOTA: Los campos de select envían solo el 'value' (ID), que se mapea a un objeto { id: X } en el submit.
 
     return (
         <CreateModal
@@ -47,19 +54,22 @@ function CrearEditarUsuario({ isOpen, onClose, onSubmit, initialData, loading })
                 { name: "nombre", placeholder: "Nombre", value: initialData?.nombre || "" },
                 { name: "correo", placeholder: "Correo", value: initialData?.correo || "" },
                 { name: "telefono", placeholder: "Teléfono", value: initialData?.telefono || "" },
-                { name: "contra", placeholder: "Contraseña", type: "password", value: "" },
+                // Campo de contraseña usando 'contra' (según el modelo de backend)
+                { name: "contra", placeholder: "Contraseña (dejar vacío para no cambiar)", type: "password", value: "" }, 
                 {
                     name: "rol",
                     type: "select",
                     placeholder: "Rol",
                     options: rolOptions,
-                    value: initialData?.rol?.id || ""
+                    // Valor inicial: usa el ID del rol anidado
+                    value: initialData?.rol?.id || "" 
                 },
                 {
                     name: "direccion",
                     type: "select",
                     placeholder: "Dirección",
                     options: direccionOptions,
+                    // Valor inicial: usa el ID de la dirección anidada
                     value: initialData?.direccion?.id || ""
                 }
             ]}
