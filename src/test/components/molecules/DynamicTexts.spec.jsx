@@ -44,7 +44,6 @@ describe('Molecula DynamicTexts', () => {
 
     it('maneja arrays vacíos sin errores', () => {
         const { container } = render(<DynamicTexts Texts={[]} />);
-        // No debería haber renderizado nada
         expect(container.innerHTML).toBe('');
     });
 });
