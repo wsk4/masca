@@ -18,14 +18,19 @@ function CreateModal({
     const [imagePreview, setImagePreview] = useState(null);
     const [uploadingImage, setUploadingImage] = useState(false);
 
+    // 🔧 useEffect corregido: se ejecuta al abrir modal y cuando cambian initialData/inputsConfig
     useEffect(() => {
         if (isOpen) {
-            const initial = initialData && Object.keys(initialData).length > 0 ? { ...initialData } : {};
+            const initial = initialData && Object.keys(initialData).length > 0 
+                ? { ...initialData } 
+                : {};
+
             if (!initialData || Object.keys(initialData).length === 0) {
                 inputsConfig.forEach((input) => {
                     initial[input.name] = input.value || '';
                 });
             }
+
             setFormData(initial);
             setImagePreview(initialData?.logo || null);
         }
