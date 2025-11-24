@@ -18,7 +18,6 @@ function CreateModal({
     const [imagePreview, setImagePreview] = useState(null);
     const [uploadingImage, setUploadingImage] = useState(false);
 
-    // 🔧 useEffect corregido: se ejecuta al abrir modal y cuando cambian initialData/inputsConfig
     useEffect(() => {
         if (isOpen) {
             const initial = initialData && Object.keys(initialData).length > 0 
