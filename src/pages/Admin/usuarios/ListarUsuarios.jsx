@@ -4,7 +4,7 @@ import UsuarioService from "../../../service/UsuarioService";
 import CrearEditarUsuario from "./CrearEditarUsuario";
 import { useAuth } from "../../../context/AuthContext";
 import { generarMensaje } from "../../../utils/GenerarMensaje";
-import Button from "../../../components/atoms/Button";
+import Button from "../../../components/atoms/Button"; // Importamos tu componente
 
 function ListarUsuarios() {
     const { user } = useAuth();
@@ -33,7 +33,6 @@ function ListarUsuarios() {
     const handleEdit = (u) => { 
         setModalData({}); 
         setOpenModal(false); 
-        // Pequeño hack para asegurar que el modal se refresque si ya estaba abierto o con datos viejos
         setModalData(u);     
         setTimeout(() => setOpenModal(true), 10); 
     };
@@ -44,7 +43,6 @@ function ListarUsuarios() {
         try {
             await UsuarioService.delete(id);
             generarMensaje("Usuario eliminado", "success");
-            // Recargar lista
             const data = await UsuarioService.getAll();
             setUsuarios(data);
         } catch {
@@ -63,7 +61,6 @@ function ListarUsuarios() {
                 generarMensaje("Usuario creado", "success");
             }
             
-            // Recargar lista y cerrar modal
             const updatedData = await UsuarioService.getAll();
             setUsuarios(updatedData);
             setOpenModal(false);
@@ -75,7 +72,6 @@ function ListarUsuarios() {
         }
     };
     
-    // CONTROL DE ACCESO
     if (!user || (user.rol?.id !== 1 && user.rol?.id !== 2)) {
          return <div className="p-8 text-center text-red-500">Acceso denegado: Se requiere rol de administrador.</div>;
     }
@@ -84,12 +80,14 @@ function ListarUsuarios() {
         <main className="p-8 min-h-screen">
             <h1 className="text-3xl font-bold mb-6 text-white border-l-4 border-white pl-4">Gestión de Usuarios</h1>
 
-            {/* Botón Principal de Crear */}
-            <Button
-                onClick={handleCreate}
-                text="Crear usuario"
-                className="mb-6 bg-white text-black font-bold appearance-none border-none hover:bg-gray-200"
-            />
+            {/* BOTÓN CREAR: Estilo sólido blanco */}
+            <div className="mb-6">
+                <Button
+                    onClick={handleCreate}
+                    text="Crear usuario"
+                    className="bg-white text-black hover:bg-gray-200 border-none"
+                />
+            </div>
 
             <DynamicTable
                 columns={["ID", "Nombre", "Correo", "Rol", "Teléfono", "Dirección", "Acciones"]}
@@ -100,20 +98,21 @@ function ListarUsuarios() {
                     u.rol?.nombre,
                     u.telefono,
                     u.direccion?.calle ? `${u.direccion.calle} #${u.direccion.numero}` : "Sin dirección",
-                    // --- COLUMNA DE ACCIONES ---
-                    <div key={u.id} className="flex space-x-2">
-                        {/* Reemplazo de botón nativo por Button Component para EDITAR */}
+                    
+                    // --- ACCIONES CON TU COMPONENTE BUTTON ---
+                    <div key={u.id} className="flex gap-2">
+                        {/* Botón Editar: Borde Azul, forzamos padding pequeño con !py-1 !px-3 */}
                         <Button
                             text="Editar"
                             onClick={() => handleEdit(u)}
-                            className="px-3 py-1 text-sm bg-transparent border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors"
+                            className="!py-1 !px-3 bg-transparent border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white"
                         />
                         
-                        {/* Reemplazo de botón nativo por Button Component para ELIMINAR */}
+                        {/* Botón Eliminar: Borde Rojo, forzamos padding pequeño */}
                         <Button
                             text="Eliminar"
                             onClick={() => handleDelete(u.id)}
-                            className="px-3 py-1 text-sm bg-transparent border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors"
+                            className="!py-1 !px-3 bg-transparent border border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
                         />
                     </div>
                 ])}
