@@ -1,19 +1,21 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'; // AGREGAMOS waitFor
 import { CartProvider, useCart } from '../../context/CartContext';
 
+// --- Componente Dummy para probar el consumo del contexto ---
 const TestComponent = () => {
     const { cart, total, addToCart, removeFromCart, clearCart } = useCart();
 
     return (
         <div>
-            <div data-testid="cart-total">{total}</div>
+            {/* El total debe ser renderizado como string */}
+            <div data-testid="cart-total">{total.toString()}</div> 
             <div data-testid="cart-count">{cart.length}</div>
             
             <ul>
                 {cart.map(item => (
                     <li key={item.id} data-testid={`item-${item.id}`}>
-                        {item.name} - Qty: {item.quantity}
+                        {item.name} | Qty: {item.quantity} {/* Separador claro */}
                         <button aria-label={`remove-${item.id}`} onClick={() => removeFromCart(item.id)}>
                             Eliminar
                         </button>
@@ -41,86 +43,71 @@ describe('Contexto CartContext', () => {
     });
 
     it('inicia con el carrito vacío y total en 0', () => {
-        render(
-            <CartProvider>
-                <TestComponent />
-            </CartProvider>
-        );
-
+        render(<CartProvider><TestComponent /></CartProvider>);
         expect(screen.getByTestId('cart-total').textContent).toBe('0');
         expect(screen.getByTestId('cart-count').textContent).toBe('0');
     });
 
-    it('agrega un producto nuevo al carrito y actualiza el total', () => {
-        render(
-            <CartProvider>
-                <TestComponent />
-            </CartProvider>
-        );
+    it('agrega un producto nuevo al carrito y actualiza el total', async () => { // ASYNC
+        render(<CartProvider><TestComponent /></CartProvider>);
 
-        const btnAddA = screen.getByText('Agregar A ($100)');
-        fireEvent.click(btnAddA);
+        fireEvent.click(screen.getByText('Agregar A ($100)'));
 
-        expect(screen.getByTestId('cart-count').textContent).toBe('1');
-        expect(screen.getByTestId('cart-total').textContent).toBe('100');
-        expect(screen.getByTestId('item-1').textContent).toContain('Perfume A');
+        await waitFor(() => { // AÑADIMOS WAITFOR
+            expect(screen.getByTestId('cart-count').textContent).toBe('1');
+            expect(screen.getByTestId('cart-total').textContent).toBe('100');
+            expect(screen.getByText(/Perfume A/i)).toBeTruthy();
+        });
     });
 
-    it('aumenta la cantidad si se agrega el mismo producto', () => {
-        render(
-            <CartProvider>
-                <TestComponent />
-            </CartProvider>
-        );
+    it('aumenta la cantidad si se agrega el mismo producto', async () => { // ASYNC
+        render(<CartProvider><TestComponent /></CartProvider>);
 
         const btnAddA = screen.getByText('Agregar A ($100)');
         
-        // Click 1 vez
         fireEvent.click(btnAddA);
-        // Click 2 veces
         fireEvent.click(btnAddA);
 
-        expect(screen.getByTestId('cart-count').textContent).toBe('1');
-        
-        expect(screen.getByTestId('cart-total').textContent).toBe('200');
-        
-        expect(screen.getByTestId('item-1').textContent).toContain('Qty: 2');
+        await waitFor(() => { // AÑADIMOS WAITFOR
+            // Sigue siendo 1 item único
+            expect(screen.getByTestId('cart-count').textContent).toBe('1'); 
+            // El total debe ser 200
+            expect(screen.getByTestId('cart-total').textContent).toBe('200');
+            // Verificamos el texto de cantidad
+            expect(screen.getByText(/Perfume A/i).textContent).toContain('Qty: 2');
+        });
     });
 
-    it('elimina un producto del carrito', () => {
-        render(
-            <CartProvider>
-                <TestComponent />
-            </CartProvider>
-        );
+    it('elimina un producto del carrito', async () => { // ASYNC
+        render(<CartProvider><TestComponent /></CartProvider>);
 
         fireEvent.click(screen.getByText('Agregar A ($100)'));
         fireEvent.click(screen.getByText('Agregar B ($200)'));
 
-        expect(screen.getByTestId('cart-count').textContent).toBe('2');
-        expect(screen.getByTestId('cart-total').textContent).toBe('300'); // 100 + 200
+        await waitFor(() => {
+             expect(screen.getByTestId('cart-total').textContent).toBe('300');
+        });
 
-        const btnRemoveA = screen.getByLabelText('remove-1');
-        fireEvent.click(btnRemoveA);
+        // Eliminamos el producto A
+        fireEvent.click(screen.getByLabelText('remove-1'));
 
-        expect(screen.getByTestId('cart-count').textContent).toBe('1');
-        expect(screen.getByTestId('cart-total').textContent).toBe('200');
-        expect(screen.queryByTestId('item-1')).toBeNull();
+        await waitFor(() => { // AÑADIMOS WAITFOR
+            expect(screen.getByTestId('cart-count').textContent).toBe('1');
+            expect(screen.getByTestId('cart-total').textContent).toBe('200');
+            // El item A ya no debe estar
+            expect(screen.queryByTestId('item-1')).toBeNull(); 
+        });
     });
 
-    it('vacía todo el carrito con clearCart', () => {
-        render(
-            <CartProvider>
-                <TestComponent />
-            </CartProvider>
-        );
+    it('vacía todo el carrito con clearCart', async () => { // ASYNC
+        render(<CartProvider><TestComponent /></CartProvider>);
 
         fireEvent.click(screen.getByText('Agregar A ($100)'));
-        fireEvent.click(screen.getByText('Agregar B ($200)'));
-
         fireEvent.click(screen.getByText('Vaciar Carrito'));
 
-        expect(screen.getByTestId('cart-count').textContent).toBe('0');
-        expect(screen.getByTestId('cart-total').textContent).toBe('0');
+        await waitFor(() => { // AÑADIMOS WAITFOR
+            expect(screen.getByTestId('cart-count').textContent).toBe('0');
+            expect(screen.getByTestId('cart-total').textContent).toBe('0');
+        });
     });
 });

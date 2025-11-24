@@ -25,7 +25,6 @@ const Login = () => {
             const response = await UsuarioService.login(form);
             const usuario = response; 
             
-            // 1. Guardar usuario en Contexto y localStorage
             const userToSave = { id: usuario.id, nombre: usuario.nombre, rol: usuario.rol };
             localStorage.setItem('user', JSON.stringify(userToSave));
             login(userToSave);
