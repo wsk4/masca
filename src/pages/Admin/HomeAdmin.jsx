@@ -1,5 +1,7 @@
 import React from "react";
 import Section from "../../components/templates/Section";
+import { useNavigate } from "react-router-dom"; // 1. Importar useNavigate
+import Button from "../../components/atoms/Button"; // 2. Importar Button
 
 const dashboardContent = [
     {
@@ -46,9 +48,26 @@ const dashboardContent = [
 ];
 
 function HomeAdmin() {
+    const navigate = useNavigate(); // 3. Inicializar useNavigate
+    
+    // Función de navegación simple
+    const handleGoToUser = () => {
+        navigate('/');
+    };
+
     return (
         <main className="min-h-screen bg-theme-main p-8">
             <div className="max-w-6xl mx-auto">
+                
+                {/* BOTÓN AÑADIDO: Volver a la vista de usuario */}
+                <div className="flex justify-end mb-6">
+                    <Button 
+                        onClick={handleGoToUser} 
+                        text="← Volver a Vista de Usuario"
+                        className="bg-transparent border border-theme-muted text-theme-muted hover:bg-theme-card hover:text-white"
+                    />
+                </div>
+                
                 <Section content={dashboardContent} />
             </div>
         </main>
