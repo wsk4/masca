@@ -76,7 +76,7 @@ describe('Template Section', () => {
         
         expect(screen.getByRole('heading', { name: 'Tabla de Usuarios' })).toBeTruthy();
         
-        // Verifica contenido de la tabla (Header y Dato)
+
         expect(screen.getByText('Nombre')).toBeTruthy();
         expect(screen.getByText('Admin')).toBeTruthy();
         
