@@ -12,8 +12,6 @@ function Cart() {
     const { cart, total, removeFromCart, clearCart, increaseQuantity, decreaseQuantity } = useCart(); 
     const { user } = useAuth();
     const navigate = useNavigate();
-
-    // ... (handleRemove, handleClearCart, formatCurrency) ...
     const handleRemove = (id) => {
         removeFromCart(id);
         generarMensaje("Producto eliminado", "info");
@@ -42,17 +40,12 @@ function Cart() {
         generarMensaje("Procesando compra...", "info");
         
         try {
-            // ESTRUCTURA DE DATOS FINAL (Asegurando el formato de fecha ISO completo)
             const orderData = {
-                // Relaciones ManyToOne: Enviadas como objetos { id: X }.
                 usuario: { id: user.id }, 
-                estadoCompra: { id: 1 },   // ID inicial
-                estadoEnvio: { id: 1 },    // ID inicial
-                
-                // CRÍTICO: Usamos new Date().toJSON() para un formato ISO que Spring acepta sin problemas
+                estadoCompra: { id: 1 },   
+                estadoEnvio: { id: 1 },    
                 fechaCompra: new Date().toJSON(), 
                 
-                // DetalleCompra: Lista de Productos con la estructura { producto: { id: X } }
                 detalleCompras: cart.map(item => ({
                     producto: { id: item.id }, 
                     cantidad: item.quantity,
@@ -66,7 +59,6 @@ function Cart() {
             navigate('/compras'); 
             
         } catch (error) {
-            // Si esto falla, el error es que los IDs 1 no existen o hay un error de validación de JPA no mapeado.
             generarMensaje("Error al procesar la compra. Revisa que los IDs 1 (estados) existan en tu BD.", "error");
             console.error("Checkout Error:", error);
         }
@@ -90,7 +82,6 @@ function Cart() {
                     item.id, 
                     item.name, 
                     formatCurrency(item.price),
-                    // Columna de Cantidad (Editar)
                     <div key={`qty-${item.id}`} className="flex items-center space-x-2">
                         <button 
                             onClick={() => decreaseQuantity(item.id)}
@@ -108,7 +99,6 @@ function Cart() {
                         </button>
                     </div>,
                     formatCurrency(item.price * item.quantity),
-                    // Botón de eliminar
                     <button 
                         key={`del-${item.id}`} 
                         onClick={() => handleRemove(item.id)} 

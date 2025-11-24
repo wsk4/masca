@@ -32,7 +32,6 @@ function Contacto() {
             inputs: [
                 { type: "text", placeholder: "Nombre", name: "nombre", value: form.nombre, onChange: handleChange, required: true },
                 { type: "email", placeholder: "Correo", name: "correo", value: form.correo, onChange: handleChange, required: true },
-                // Cambiado a type="textarea" para campos de mensaje largos (si tu Input lo soporta)
                 { type: "textarea", placeholder: "Mensaje", name: "mensaje", value: form.mensaje, onChange: handleChange, required: true }
             ],
             className: "space-y-4"
@@ -41,15 +40,14 @@ function Contacto() {
             type: "button", 
             text: "Enviar mensaje", 
             onClick: handleSubmit,
-            // CLASES CRÍTICAS: Fondo BLANCO nativo de Tailwind y texto negro
+            
             className: "w-full mt-6 bg-white text-black font-bold rounded-lg py-3 hover:bg-theme-hover appearance-none border-none"
         }
     ];
 
     return (
-        // Contenedor principal para centrar el contenido
+        
         <main className="max-w-lg mx-auto p-8 min-h-screen flex items-center justify-center">
-            {/* Tarjeta oscura que contiene el formulario */}
             <div className="w-full bg-theme-card border border-theme-border rounded-2xl p-10 shadow-2xl">
                 <Forms content={formConfig} />
             </div>

@@ -19,7 +19,7 @@ function OrderDetail() {
             <div>Total: {compra.total}</div>
             <div>Estado: {compra.estado?.nombre}</div>
             <div>Dirección: {compra.direccion?.nombre}</div>
-            {/* Listado de productos si tu modelo lo soporta */}
+            
         </main>
     );
 }

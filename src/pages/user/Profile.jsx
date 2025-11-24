@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // 1. Importar hook de navegación
+import { useNavigate } from "react-router-dom"; 
 import { useAuth } from "../../context/AuthContext";
 import UsuarioService from "../../service/UsuarioService";
 import DireccionService from "../../service/DireccionService"; 
 import CreateModal from "../../components/organisms/CreateModal";
 import Button from "../../components/atoms/Button";
 import { generarMensaje } from "../../utils/GenerarMensaje";
-import { FaUserCircle, FaEnvelope, FaIdBadge, FaPhone, FaMapMarkerAlt, FaSignOutAlt } from "react-icons/fa"; // Agregado icono de salida
+import { FaUserCircle, FaEnvelope, FaIdBadge, FaPhone, FaMapMarkerAlt, FaSignOutAlt } from "react-icons/fa"; 
 
 function Profile() {
-    const { user, login, logout } = useAuth(); // 2. Extraemos logout
-    const navigate = useNavigate(); // Hook para redirigir
+    const { user, login, logout } = useAuth(); 
+    const navigate = useNavigate(); 
     
     const [datos, setDatos] = useState({});
     const [direcciones, setDirecciones] = useState([]);
@@ -24,7 +24,6 @@ function Profile() {
                 try {
                     const userData = await UsuarioService.getById(user.id);
                     setDatos(userData);
-                    
                     const dirs = await DireccionService.getAll();
                     setDirecciones(dirs);
                 } catch (err) {
@@ -46,10 +45,10 @@ function Profile() {
         }))
     ];
 
-    // 3. Función para manejar el cierre de sesión
+    
     const handleLogout = () => {
         logout();
-        navigate("/login"); // Redirige al login o al home ("/")
+        navigate("/login"); 
     };
 
     const handleSubmit = async (formData) => {
@@ -101,7 +100,7 @@ function Profile() {
         <main className="min-h-screen p-4 md:p-8 bg-theme-main flex justify-center items-start pt-12">
             <div className="w-full max-w-3xl bg-theme-card border border-theme-border rounded-2xl shadow-2xl overflow-hidden">
                 
-                {/* Encabezado Visual */}
+                
                 <div className="bg-gradient-to-r from-zinc-900 to-black p-8 border-b border-theme-border flex flex-col md:flex-row items-center gap-6">
                     <div className="relative">
                         <div className="w-24 h-24 rounded-full bg-theme-border flex items-center justify-center text-theme-muted border-4 border-theme-main shadow-xl">
@@ -117,7 +116,7 @@ function Profile() {
                     </div>
                 </div>
 
-                {/* Grid de Datos */}
+                
                 <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-6">
                         <div className="flex items-center gap-4 p-4 rounded-lg bg-theme-main/50 border border-theme-border/50 hover:border-theme-border transition-colors">
@@ -168,16 +167,16 @@ function Profile() {
                     </div>
                 </div>
 
-                {/* Footer con acciones */}
+                
                 <div className="p-8 border-t border-theme-border bg-theme-main/30 flex justify-between items-center">
-                    {/* Botón Cerrar Sesión */}
+                    
                     <Button 
                         text="Cerrar Sesión" 
                         onClick={handleLogout}
                         className="bg-red-600/20 text-red-500 font-bold hover:bg-red-600 hover:text-white border border-red-900/50 transition-all active:scale-95"
                     />
 
-                    {/* Botón Editar */}
+                    
                     <Button 
                         text="Editar Información" 
                         onClick={() => setOpenModal(true)}
@@ -186,7 +185,7 @@ function Profile() {
                 </div>
             </div>
 
-            {/* Modal Dinámico */}
+            
             <CreateModal
                 isOpen={openModal}
                 onClose={() => setOpenModal(false)}

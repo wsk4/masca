@@ -12,15 +12,15 @@ import { FaMapMarkerAlt, FaExchangeAlt, FaCheckCircle, FaEdit } from "react-icon
 function AdderssBook() {
     const { user, login } = useAuth();
     
-    // Estados
+    
     const [miDireccion, setMiDireccion] = useState(null);
     const [regiones, setRegiones] = useState([]);
     const [comunas, setComunas] = useState([]);
     
-    // Estados de UI
+    
     const [loading, setLoading] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
-    const [modalMode, setModalMode] = useState("create"); // 'create' | 'edit'
+    const [modalMode, setModalMode] = useState("create"); 
     const [currentData, setCurrentData] = useState(null);
     const [saving, setSaving] = useState(false);
 
@@ -33,7 +33,6 @@ function AdderssBook() {
     const cargarDatos = async () => {
         setLoading(true);
         try {
-            // 1. Cargamos auxiliares y el usuario actualizado
             const [regionesRes, comunasRes, userRes] = await Promise.all([
                 RegionService.getAll(),
                 ComunaService.getAll(),
@@ -43,8 +42,6 @@ function AdderssBook() {
             setRegiones(regionesRes || []);
             setComunas(comunasRes || []);
             
-            // 2. SOLUCIÓN: En lugar de buscar en todas las direcciones, 
-            // solo mostramos la que el usuario tiene asignada actualmente en su perfil.
             if (userRes && userRes.direccion) {
                 setMiDireccion(userRes.direccion);
             } else {
@@ -81,8 +78,7 @@ function AdderssBook() {
     const handleModalSubmit = async (formData) => {
         setSaving(true);
         try {
-            // 3. CORRECCIÓN ERROR 500:
-            // No enviamos el campo 'usuario' porque el backend no lo tiene mapeado.
+            
             const payloadDireccion = {
                 calle: formData.calle,
                 numero: formData.numero,
@@ -90,31 +86,22 @@ function AdderssBook() {
             };
 
             if (modalMode === "create") {
-                // PASO A: Crear la dirección "huérfana" en el backend
                 const nuevaDireccion = await DireccionService.create(payloadDireccion);
                 
-                // PASO B: Asignarla inmediatamente al usuario (Vincular)
                 const payloadUsuario = {
                     id: user.id,
                     direccion: { id: nuevaDireccion.id }
                 };
                 const usuarioActualizado = await UsuarioService.patch(user.id, payloadUsuario);
 
-                // Actualizar estado y contexto
                 setMiDireccion(usuarioActualizado.direccion);
                 login({ ...user, ...usuarioActualizado });
                 generarMensaje("Nueva dirección asignada correctamente", "success");
 
             } else {
-                // Editar la dirección existente
                 const dirActualizada = await DireccionService.update(miDireccion.id, payloadDireccion);
-                
-                // Como es la misma ID, solo actualizamos los datos visuales
-                // (Nota: Si el backend devuelve la comuna completa, genial. Si no, recargamos)
                 setMiDireccion(prev => ({ ...prev, ...dirActualizada }));
                 generarMensaje("Dirección actualizada", "success");
-                
-                // Refrescamos datos completos por seguridad para traer nombres de comunas
                 cargarDatos();
             }
             setModalOpen(false);
@@ -126,7 +113,7 @@ function AdderssBook() {
         }
     };
 
-    // Mapeo para selectores
+    
     const regionOptions = regiones.map(r => ({ value: r.id, label: r.nombre }));
     const comunaOptions = comunas.map(c => ({ 
         value: c.id, 
@@ -146,7 +133,7 @@ function AdderssBook() {
 
     return (
         <main className="min-h-screen p-6 md:p-12 bg-theme-main pt-20">
-            {/* Header */}
+            
             <div className="max-w-4xl mx-auto mb-10 text-center md:text-left">
                 <h1 className="text-3xl font-black text-white tracking-tight flex items-center gap-3 justify-center md:justify-start">
                     <FaMapMarkerAlt className="text-theme-accent" />
@@ -159,7 +146,7 @@ function AdderssBook() {
 
             <div className="max-w-4xl mx-auto">
                 {miDireccion ? (
-                    // VISTA: USUARIO TIENE DIRECCIÓN
+                    
                     <div className="bg-theme-card border border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.1)] rounded-2xl p-8 relative overflow-hidden">
                         <div className="absolute top-0 right-0 bg-green-500 text-black text-xs font-bold px-4 py-1 rounded-bl-xl flex items-center gap-1">
                             <FaCheckCircle /> Activa
@@ -192,7 +179,7 @@ function AdderssBook() {
                         </div>
                     </div>
                 ) : (
-                    // VISTA: USUARIO NO TIENE DIRECCIÓN
+                    
                     <div className="text-center py-20 border-2 border-dashed border-theme-border rounded-2xl bg-theme-card/30">
                         <div className="w-20 h-20 bg-theme-main rounded-full flex items-center justify-center mx-auto mb-4 text-theme-muted">
                             <FaMapMarkerAlt size={30} />
@@ -210,7 +197,7 @@ function AdderssBook() {
                 )}
             </div>
 
-            {/* Modal Reutilizable */}
+            
             <CreateModal
                 isOpen={modalOpen}
                 onClose={() => setModalOpen(false)}
