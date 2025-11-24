@@ -4,35 +4,39 @@ import DireccionService from "../../../service/DireccionService";
 import { generarMensaje } from "../../../utils/GenerarMensaje";
 
 function CrearEditarUsuario({ isOpen, onClose, onSubmit, initialData, loading }) {
+    // Estado para cargar direcciones dinámicamente
     const [direcciones, setDirecciones] = useState([]);
     const [loadingDirecciones, setLoadingDirecciones] = useState(false);
-    useEffect(() => {
-        const fetchDirecciones = async () => {
-            setLoadingDirecciones(true);
-            try {
-                const data = await DireccionService.getAll();
-                setDirecciones(data);
-            } catch (err) {
-                console.error("Error al cargar direcciones:", err);
-                generarMensaje("Error al cargar direcciones para el select", "error");
-            } finally {
-                setLoadingDirecciones(false);
-            }
-        };
 
+    // Cargar direcciones al abrir el modal
+    useEffect(() => {
         if (isOpen) {
+            const fetchDirecciones = async () => {
+                setLoadingDirecciones(true);
+                try {
+                    const data = await DireccionService.getAll();
+                    setDirecciones(data || []);
+                } catch (error) {
+                    console.error("Error cargando direcciones:", error);
+                    generarMensaje("Error al obtener direcciones", "error");
+                } finally {
+                    setLoadingDirecciones(false);
+                }
+            };
             fetchDirecciones();
         }
     }, [isOpen]);
 
+    // Opciones para el Select de Dirección
     const direccionOptions = [
         { id: "", label: loadingDirecciones ? "Cargando..." : "Sin dirección asignada" },
         ...direcciones.map(d => ({
             id: d.id,
-            label: `${d.calle} #${d.numero} (${d.comuna?.nombre || "Sin comuna"})`
+            label: `${d.calle} #${d.numero} (${d.comuna?.nombre || 'Sin comuna'})`
         }))
     ];
-    
+
+    // Opciones para el Select de Rol
     const rolOptions = [
         { id: 1, label: "Administrador" },
         { id: 2, label: "Cliente" }
@@ -43,54 +47,48 @@ function CrearEditarUsuario({ isOpen, onClose, onSubmit, initialData, loading })
             isOpen={isOpen}
             onClose={onClose}
             onSubmit={onSubmit}
-            title={initialData?.id ? "Editar Usuario" : "Crear Nuevo Usuario"}
-            submitText={initialData?.id ? "Actualizar" : "Guardar Usuario"}
+            title={initialData?.id ? "Editar usuario" : "Crear usuario"}
+            submitText="Guardar"
             loading={loading || loadingDirecciones}
             initialData={initialData}
             inputsConfig={[
                 { 
                     name: "nombre", 
-                    label: "Nombre Completo",
-                    placeholder: "Ej: Juan Pérez", 
+                    placeholder: "Nombre", 
                     value: initialData?.nombre || "",
                     required: true 
                 },
                 { 
                     name: "correo", 
-                    label: "Correo Electrónico",
-                    placeholder: "ejemplo@correo.com", 
+                    placeholder: "Correo", 
                     value: initialData?.correo || "",
                     type: "email",
                     required: true 
                 },
                 { 
+                    name: "telefono", 
+                    placeholder: "Teléfono", 
+                    value: initialData?.telefono || "" 
+                },
+                { 
                     name: "contra", 
-                    label: "Contraseña",
-                    placeholder: initialData?.id ? "Dejar en blanco para mantener la actual" : "Mínimo 6 caracteres", 
+                    placeholder: initialData?.id ? "Contraseña (dejar vacío para mantener)" : "Contraseña", 
                     type: "password", 
                     value: "",
-                    required: !initialData?.id 
-                }, 
-                { 
-                    name: "telefono", 
-                    label: "Teléfono (Opcional)",
-                    placeholder: "+56 9 1234 5678", 
-                    value: initialData?.telefono || "" 
+                    required: !initialData?.id // Obligatorio solo al crear
                 },
                 {
                     name: "rol",
-                    label: "Rol de Usuario",
                     type: "select",
-                    placeholder: "Seleccione un rol...",
+                    placeholder: "Rol",
                     options: rolOptions,
                     value: initialData?.rol?.id || "",
-                    required: true 
+                    required: true
                 },
                 {
                     name: "direccion",
-                    label: "Dirección Principal (Opcional)",
                     type: "select",
-                    placeholder: "Seleccione una dirección...",
+                    placeholder: "Dirección",
                     options: direccionOptions,
                     value: initialData?.direccion?.id || ""
                 }
