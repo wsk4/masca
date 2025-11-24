@@ -6,13 +6,11 @@ import { generarMensaje } from "../../../utils/GenerarMensaje";
 function CrearEditarUsuario({ isOpen, onClose, onSubmit, initialData, loading }) {
     const [direcciones, setDirecciones] = useState([]);
     const [loadingDirecciones, setLoadingDirecciones] = useState(false);
-
     useEffect(() => {
         const fetchDirecciones = async () => {
             setLoadingDirecciones(true);
             try {
-                // Asegurar que el servicio use la URL de Render correcta
-                const data = await DireccionService.getAll(); 
+                const data = await DireccionService.getAll();
                 setDirecciones(data);
             } catch (err) {
                 console.error("Error al cargar direcciones:", err);
@@ -21,62 +19,82 @@ function CrearEditarUsuario({ isOpen, onClose, onSubmit, initialData, loading })
                 setLoadingDirecciones(false);
             }
         };
-        // Cargar direcciones solo cuando el modal se abre
+
         if (isOpen) {
             fetchDirecciones();
         }
     }, [isOpen]);
 
-    // Opciones dinámicas para el select de Dirección
     const direccionOptions = [
-        { id: "", label: loadingDirecciones ? "Cargando direcciones..." : "Seleccione una dirección" },
-        // Mapear al formato { id: X, label: Y }
+        { id: "", label: loadingDirecciones ? "Cargando..." : "Sin dirección asignada" },
         ...direcciones.map(d => ({
             id: d.id,
-            label: `${d.calle} ${d.numero} (${d.comuna?.nombre ?? ""})`
+            label: `${d.calle} #${d.numero} (${d.comuna?.nombre || "Sin comuna"})`
         }))
     ];
     
-    // Opciones para el Rol (IDs 1 y 3, según el flujo típico)
     const rolOptions = [
-        { id: 3, label: "Usuario" }, 
-        { id: 1, label: "Administrador" }
+        { id: 1, label: "Administrador" },
+        { id: 2, label: "Cliente" }
     ];
-
-    // NOTA: Los campos de select envían solo el 'value' (ID), que se mapea a un objeto { id: X } en el submit.
 
     return (
         <CreateModal
             isOpen={isOpen}
             onClose={onClose}
             onSubmit={onSubmit}
+            title={initialData?.id ? "Editar Usuario" : "Crear Nuevo Usuario"}
+            submitText={initialData?.id ? "Actualizar" : "Guardar Usuario"}
+            loading={loading || loadingDirecciones}
+            initialData={initialData}
             inputsConfig={[
-                { name: "nombre", placeholder: "Nombre", value: initialData?.nombre || "" },
-                { name: "correo", placeholder: "Correo", value: initialData?.correo || "" },
-                { name: "telefono", placeholder: "Teléfono", value: initialData?.telefono || "" },
-                // Campo de contraseña usando 'contra' (según el modelo de backend)
-                { name: "contra", placeholder: "Contraseña (dejar vacío para no cambiar)", type: "password", value: "" }, 
+                { 
+                    name: "nombre", 
+                    label: "Nombre Completo",
+                    placeholder: "Ej: Juan Pérez", 
+                    value: initialData?.nombre || "",
+                    required: true 
+                },
+                { 
+                    name: "correo", 
+                    label: "Correo Electrónico",
+                    placeholder: "ejemplo@correo.com", 
+                    value: initialData?.correo || "",
+                    type: "email",
+                    required: true 
+                },
+                { 
+                    name: "contra", 
+                    label: "Contraseña",
+                    placeholder: initialData?.id ? "Dejar en blanco para mantener la actual" : "Mínimo 6 caracteres", 
+                    type: "password", 
+                    value: "",
+                    required: !initialData?.id 
+                }, 
+                { 
+                    name: "telefono", 
+                    label: "Teléfono (Opcional)",
+                    placeholder: "+56 9 1234 5678", 
+                    value: initialData?.telefono || "" 
+                },
                 {
                     name: "rol",
+                    label: "Rol de Usuario",
                     type: "select",
-                    placeholder: "Rol",
+                    placeholder: "Seleccione un rol...",
                     options: rolOptions,
-                    // Valor inicial: usa el ID del rol anidado
-                    value: initialData?.rol?.id || "" 
+                    value: initialData?.rol?.id || "",
+                    required: true 
                 },
                 {
                     name: "direccion",
+                    label: "Dirección Principal (Opcional)",
                     type: "select",
-                    placeholder: "Dirección",
+                    placeholder: "Seleccione una dirección...",
                     options: direccionOptions,
-                    // Valor inicial: usa el ID de la dirección anidada
                     value: initialData?.direccion?.id || ""
                 }
             ]}
-            title={initialData?.id ? "Editar usuario" : "Crear usuario"}
-            submitText="Guardar"
-            loading={loading || loadingDirecciones}
-            initialData={initialData}
         />
     );
 }

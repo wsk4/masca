@@ -1,6 +1,5 @@
 import { lazy } from 'react';
 
-// Lazy loading para páginas del usuario
 const Home = lazy(() => import('../pages/user/Home.jsx'));
 const Contacto = lazy(() => import('../pages/user/Contacto.jsx'));
 const CatalogoPerfumes = lazy(() => import('../pages/user/CatalogoPerfumes.jsx'));
@@ -13,7 +12,6 @@ const AddressBook = lazy(() => import('../../src/pages/user/AdderssBook.jsx'));
 const Login = lazy(() => import('../pages/auth/login.jsx'));
 const CreateUser = lazy(() => import('../pages/auth/create-user.jsx'));
 
-// Lazy loading para páginas de admin (rutas corregidas con "admin" en minúscula)
 const HomeAdmin = lazy(() => import('../pages/Admin/HomeAdmin.jsx'));
 const ListarUsuarios = lazy(() => import('../pages/Admin/usuarios/ListarUsuarios.jsx'));
 const CrearEditarUsuario = lazy(() => import('../pages/Admin/usuarios/CrearEditarUsuario.jsx'));
@@ -31,7 +29,6 @@ const ListarEstados = lazy(() => import('../pages/Admin/estados/ListarEstados.js
 const CrearEditarEstado = lazy(() => import('../pages/Admin/estados/CrearEditarEstado.jsx'));
 
 
-// Rutas públicas (usuario final)
 const publicRoutes = [
   { path: '/', element: <Home />, showNavbar: true },
   { path: '/contacto', element: <Contacto />, showNavbar: true },
@@ -46,7 +43,6 @@ const publicRoutes = [
   { path: '/registro', element: <CreateUser />, showNavbar: true },
 ];
 
-// Rutas de administración
 const adminRoutes = [
   { path: '/admin', element: <HomeAdmin />, isAdmin: true, showNavbar: true },
   { path: '/admin/usuarios', element: <ListarUsuarios />, isAdmin: true, showNavbar: true },
@@ -77,12 +73,10 @@ const adminRoutes = [
   { path: '/admin/estados/:id', element: <CrearEditarEstado />, isAdmin: true, showNavbar: true },
 ];
 
-// Ruta 404
 const notFoundRoute = {
   path: '*',
   element: <div className="text-center py-10 text-2xl">404 - Página no encontrada</div>,
   showNavbar: true,
 };
 
-// Exporta todas juntas
 export const appRoutes = [...publicRoutes, ...adminRoutes, notFoundRoute];
