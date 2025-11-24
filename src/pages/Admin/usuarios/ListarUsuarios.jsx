@@ -16,7 +16,6 @@ function ListarUsuarios() {
     useEffect(() => {
         const fetchUsuarios = async () => {
             try {
-                // Control de permisos
                 if (!user || (user.rol?.id !== 1 && user.rol?.id !== 2)) return;
                 
                 const data = await UsuarioService.getAll();
@@ -30,10 +29,8 @@ function ListarUsuarios() {
     }, [user]);
 
     const handleCreate = () => { setModalData({}); setOpenModal(true); };
-    
-    // FIX CLAVE PARA EL BOTÓN EDITAR: Forzar reseteo del estado
     const handleEdit = (u) => { 
-        setModalData({}); // 1. Limpiar datos previos
+        setModalData({}); 
         setOpenModal(false); // 2. Cerrar el modal para desrenderizar
         setModalData(u);     // 3. Establecer los nuevos datos
         // 4. Reabrir inmediatamente (asegura que initialData se actualice)

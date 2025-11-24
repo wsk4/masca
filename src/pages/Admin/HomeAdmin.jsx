@@ -1,10 +1,8 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Button from "../../components/atoms/Button"; 
-// Importamos los íconos necesarios para la estética
 import { FaUsers, FaSprayCan, FaTags, FaShoppingBag, FaMapMarkerAlt, FaListOl, FaShippingFast } from "react-icons/fa"; 
 
-// Definimos los módulos funcionales y sus rutas de navegación
 const adminModules = [
     { title: "Usuarios", desc: "Gestión de clientes y roles", icon: <FaUsers size={28} />, to: "/admin/usuarios" },
     { title: "Perfumes", desc: "Inventario y productos", icon: <FaSprayCan size={28} />, to: "/admin/perfumes" },
@@ -26,13 +24,13 @@ function HomeAdmin() {
         <main className="min-h-screen bg-theme-main p-8">
             <div className="max-w-7xl mx-auto">
                 
-                {/* Encabezado Estético */}
+                
                 <div className="text-center mb-12 pt-6">
                     <h1 className="text-5xl font-black text-white tracking-wider mb-2">DASHBOARD</h1>
                     <p className="text-xl text-theme-muted border-b border-theme-border inline-block pb-2">Panel de Administración de Mascapitos</p>
                 </div>
 
-                {/* Botón de Navegación de Usuario */}
+                
                 <div className="flex justify-end mb-8">
                     <Button 
                         onClick={handleGoToUser} 
@@ -41,19 +39,17 @@ function HomeAdmin() {
                     />
                 </div>
                 
-                {/* Dashboard Grid - Diseño de Tarjetas Funcionales */}
-                {/* Usamos lg:grid-cols-4 para un diseño más denso y profesional */}
+                
+                
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {adminModules.map((mod, index) => (
                         <Link 
                             key={index} 
-                            to={mod.to} // Ruta de navegación
-                            // Estética: Tarjeta oscura, transición suave y sombra en hover
+                            to={mod.to} 
                             className="group block bg-theme-card border border-theme-border p-6 rounded-xl transition-all duration-300 shadow-md 
                                        hover:border-blue-500/50 hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(66,133,244,0.3)]"
                         >
                             <div className="flex items-start justify-between mb-4">
-                                {/* Icono grande y colorido */}
                                 <div className="text-blue-400 p-2 rounded-full bg-theme-main group-hover:bg-blue-500/10 transition-colors">
                                     {mod.icon}
                                 </div>
