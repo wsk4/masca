@@ -22,7 +22,6 @@ function Navbar({ links, title }) {
 		}
 	};
     
-    // Estilos basados en el tema
     const linkBase = "flex items-center space-x-2 px-3 py-2 text-sm font-bold uppercase tracking-wide transition-all duration-300 rounded-md";
     const activeClass = "text-black bg-white shadow-[0_0_10px_rgba(255,255,255,0.3)]";
     const inactiveClass = "text-theme-muted hover:text-white hover:bg-white/10";
