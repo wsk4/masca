@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import { publicLinks } from './data/navbarPublicLinks';
 import { adminLinks } from './data/navbarAdminLinks.js';
 import Navbar from './components/organisms/Navbar.jsx';
+import UserFooter from './components/organisms/UserFooter.jsx'; // 👈 1. Importación del footer
 import { appRoutes } from './routes/config.jsx';
 
 function Layout() {
@@ -24,9 +25,12 @@ function Layout() {
   const navbarTitle = isAdminRoute ? 'Admin Mascapitos' : 'Usuario Mascapitos';
 
   return (
-    <>
+    // 👈 2. Se reemplaza el fragmento <> por un div para el layout "sticky footer"
+    <div className="flex flex-col min-h-screen"> 
       {showNavbar && <Navbar links={navbarLinks} title={navbarTitle} />}
-      <main>
+      
+      {/* 👈 3. Se añade la clase flex-grow para empujar el footer */}
+      <main className="flex-grow"> 
         <Suspense
           fallback={
             <div className="flex items-center justify-center min-h-screen">
@@ -41,7 +45,10 @@ function Layout() {
           </Routes>
         </Suspense>
       </main>
-    </>
+      
+      {/* 👈 4. Renderizado condicional del footer fuera del main */}
+      {!isAdminRoute && <UserFooter />} 
+    </div>
   );
 }
 
@@ -49,4 +56,4 @@ function App() {
   return <Layout />;
 }
 
-export default App;
+export default App; 
