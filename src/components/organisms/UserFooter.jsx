@@ -36,7 +36,7 @@ function UserFooter() {
                     {/* Columna 1: Marca y Slogan */}
                     <div>
                         <h3 className="text-2xl font-black text-white mb-3">
-                            Perfume 💧
+                            Mascapito Store
                         </h3>
                         <p className="text-sm">
                             Elegancia y exclusividad en cada esencia.
