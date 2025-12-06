@@ -1,10 +1,10 @@
 import React from 'react';
 
 const Button = ({ text, onClick, className = "", type, disabled = false }) => {
-    // LÓGICA AUTOMÁTICA:
-    // 1. Si pasas un 'type' manual, usa ese.
-    // 2. Si NO pasas 'type' pero SÍ pasas 'onClick', asume que es un botón normal ("button").
-    // 3. Si NO pasas ni 'type' ni 'onClick' (como en el botón de Guardar del formulario), asume que es "submit".
+    // Lógica automática:
+    // 1. Si pasas un 'type' manual (ej: "submit"), usa ese.
+    // 2. Si NO pasas 'type' pero hay 'onClick', asume que es un botón normal.
+    // 3. Si NO hay ni 'type' ni 'onClick' (tu caso en el form), asume que es "submit" para guardar.
     const buttonType = type ? type : (onClick ? "button" : "submit");
 
     return (
