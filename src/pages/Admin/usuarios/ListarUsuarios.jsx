@@ -13,18 +13,19 @@ function ListarUsuarios() {
     const [modalData, setModalData] = useState({});
     const [loading, setLoading] = useState(false);
 
+    const fetchUsuarios = async () => {
+        try {
+            if (!user || (user.rol?.id !== 1 && user.rol?.id !== 2)) return;
+            
+            const data = await UsuarioService.getAll();
+            setUsuarios(data);
+        } catch (err) {
+            console.error("Error al cargar usuarios:", err);
+            generarMensaje("Error al cargar usuarios", "error");
+        }
+    };
+
     useEffect(() => {
-        const fetchUsuarios = async () => {
-            try {
-                if (!user || (user.rol?.id !== 1 && user.rol?.id !== 2)) return;
-                
-                const data = await UsuarioService.getAll();
-                setUsuarios(data);
-            } catch (err) {
-                console.error("Error al cargar usuarios:", err);
-                generarMensaje("Error al cargar usuarios", "error");
-            }
-        };
         fetchUsuarios();
     }, [user]);
 
@@ -43,8 +44,10 @@ function ListarUsuarios() {
         try {
             await UsuarioService.delete(id);
             generarMensaje("Usuario eliminado", "success");
-            const data = await UsuarioService.getAll();
-            setUsuarios(data);
+            // Recargamos la lista después de eliminar
+            await fetchUsuarios();
+            // Aseguramos que el modal se cierre
+            setOpenModal(false); 
         } catch {
             generarMensaje("Error al eliminar usuario", "error");
         }
@@ -61,8 +64,7 @@ function ListarUsuarios() {
                 generarMensaje("Usuario creado", "success");
             }
             
-            const updatedData = await UsuarioService.getAll();
-            setUsuarios(updatedData);
+            await fetchUsuarios();
             setOpenModal(false);
         } catch (error) {
             console.error(error);
@@ -121,6 +123,7 @@ function ListarUsuarios() {
                 onSubmit={handleSubmit}
                 initialData={modalData}
                 loading={loading}
+                onDelete={handleDelete} 
             />
         </main>
     );
