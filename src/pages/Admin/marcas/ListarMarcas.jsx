@@ -4,7 +4,7 @@ import { useAuth } from "../../../context/AuthContext";
 import MarcaService from "../../../service/MarcaService";
 import CrearEditarMarca from "./CrearEditarMarca";
 import { generarMensaje } from "../../../utils/GenerarMensaje";
-import Button from "../../../components/atoms/Button"; // Se asume que este componente está disponible
+import Button from "../../../components/atoms/Button"; 
 
 function ListarMarcas() {
     const { user } = useAuth();
@@ -13,7 +13,7 @@ function ListarMarcas() {
     const [modalData, setModalData] = useState({});
     const [loading, setLoading] = useState(false);
 
-    // Función unificada para obtener marcas
+    
     const fetchMarcas = async () => {
         try {
             const data = await MarcaService.getAll();
@@ -31,18 +31,16 @@ function ListarMarcas() {
     const handleCreate = () => { setModalData({}); setOpenModal(true); };
     const handleEdit = (marca) => { setModalData(marca); setOpenModal(true); };
 
-    // ===================================
-    // FUNCIÓN: Maneja la eliminación de marca
-    // ===================================
+
     const handleDelete = async (id) => {
         if (!window.confirm("¿Estás seguro de que deseas eliminar esta marca? Esta acción es irreversible.")) return;
 
         setLoading(true);
         try {
-            await MarcaService.delete(id); // Llama al servicio de eliminación
+            await MarcaService.delete(id); 
             generarMensaje("Marca eliminada correctamente", "success");
-            setOpenModal(false); // Cierra el modal si estaba abierto
-            await fetchMarcas();      // Recarga la lista
+            setOpenModal(false); 
+            await fetchMarcas();      
         } catch (error) {
             console.error("Error al eliminar marca:", error);
             generarMensaje("Error al eliminar la marca", "error");
@@ -50,7 +48,7 @@ function ListarMarcas() {
             setLoading(false);
         }
     };
-    // ===================================
+   
 
     const handleSubmit = async data => {
         setLoading(true);
@@ -62,7 +60,7 @@ function ListarMarcas() {
                 await MarcaService.create(data);
                 generarMensaje("Marca creada", "success");
             }
-            await fetchMarcas(); // Usa la función de recarga
+            await fetchMarcas(); 
             setOpenModal(false);
         } catch { 
             generarMensaje("Error en la operación", "error"); 
@@ -80,14 +78,14 @@ function ListarMarcas() {
                     m.id, 
                     m.nombre,
                     <div key={m.id} className="flex gap-2">
-                        {/* Botón Editar */}
+                        
                         <button 
                             onClick={() => handleEdit(m)} 
                             className="px-2 py-1 bg-indigo-500 text-white rounded"
                         >
                             Editar
                         </button>
-                        {/* Botón Eliminar para acción directa en la tabla */}
+                        
                         <Button 
                             onClick={() => handleDelete(m.id)} 
                             text="Eliminar"
@@ -96,12 +94,12 @@ function ListarMarcas() {
                     </div>
                 ])} 
             />
-            {/* Se pasa la prop onDelete a CrearEditarMarca */}
+            
             <CrearEditarMarca 
                 isOpen={openModal} 
                 onClose={() => setOpenModal(false)} 
                 onSubmit={handleSubmit} 
-                onDelete={handleDelete} // <--- FUNCIÓN DE ELIMINAR ASIGNADA
+                onDelete={handleDelete} 
                 initialData={modalData} 
                 loading={loading} 
             />

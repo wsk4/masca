@@ -12,10 +12,39 @@ function ListarPerfumes() {
     const [modalData, setModalData] = useState({});
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => { PerfumeService.getAll().then(setPerfumes); }, []);
+    const fetchPerfumes = async () => {
+        try {
+            const data = await PerfumeService.getAll();
+            setPerfumes(data || []);
+        } catch (error) {
+            console.error("Error al cargar perfumes:", error);
+            generarMensaje("Error al cargar perfumes", "error");
+        }
+    };
+
+    useEffect(() => {
+        fetchPerfumes();
+    }, []);
 
     const handleCreate = () => { setModalData({}); setOpenModal(true); };
     const handleEdit = (perfume) => { setModalData(perfume); setOpenModal(true); };
+
+    const handleDelete = async (id) => {
+        if (!window.confirm("¿Estás seguro de que deseas eliminar este perfume?")) return;
+
+        setLoading(true);
+        try {
+            await PerfumeService.delete(id);
+            generarMensaje("Perfume eliminado correctamente", "success");
+            setOpenModal(false);
+            await fetchPerfumes();
+        } catch (error) {
+            console.error("Error al eliminar perfume:", error);
+            generarMensaje("Error al eliminar el perfume", "error");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleSubmit = async (data) => {
         setLoading(true);
@@ -27,7 +56,7 @@ function ListarPerfumes() {
                 await PerfumeService.create(data);
                 generarMensaje("Perfume creado", "success");
             }
-            setPerfumes(await PerfumeService.getAll());
+            await fetchPerfumes();
             setOpenModal(false);
         } catch {
             generarMensaje("Error en la operación", "error");
@@ -47,13 +76,27 @@ function ListarPerfumes() {
                 columns={["ID", "Nombre", "Descripción", "Precio", "Stock", "URL", "Marca", "Acciones"]}
                 data={perfumes.map(p => [
                     p.id, p.nombre, p.descripcion, p.precio, p.stock, p.url, p.marca?.nombre,
-                    <button onClick={() => handleEdit(p)} className="px-2 py-1 bg-indigo-500 text-white rounded">Editar</button>
+                    <div key={p.id} className="flex gap-2">
+                        <button
+                            onClick={() => handleEdit(p)}
+                            className="px-2 py-1 bg-indigo-500 text-white rounded"
+                        >
+                            Editar
+                        </button>
+                        <button
+                            onClick={() => handleDelete(p.id)}
+                            className="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                        >
+                            Eliminar
+                        </button>
+                    </div>
                 ])}
             />
             <CrearEditarPerfume
                 isOpen={openModal}
                 onClose={() => setOpenModal(false)}
                 onSubmit={handleSubmit}
+                onDelete={handleDelete}
                 initialData={modalData}
                 loading={loading}
             />
