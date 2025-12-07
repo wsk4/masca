@@ -8,7 +8,7 @@ const CrearEditarUsuario = ({
     onSubmit, 
     initialData, 
     loading, 
-    onDelete // <-- NUEVA PROP
+    onDelete 
 }) => {
     // Estado inicial del formulario
     const [formData, setFormData] = useState({
@@ -16,9 +16,9 @@ const CrearEditarUsuario = ({
         nombre: "",
         correo: "",
         telefono: "",
-        password: "", // Campo contraseña (solo visible al crear, usualmente)
-        rol: "",      // Aquí guardarás el ID o el objeto del rol
-        direccion: "" // Aquí guardarás el ID o objeto de dirección
+        password: "", // Campo contraseña
+        rol: "",      
+        direccion: "" 
     });
 
     // Cargar datos cuando se edita
@@ -29,7 +29,7 @@ const CrearEditarUsuario = ({
                 nombre: initialData.nombre || "",
                 correo: initialData.correo || "",
                 telefono: initialData.telefono || "",
-                password: "", // Usualmente no se rellena la password al editar por seguridad
+                password: "", // No se rellena la password al editar
                 rol: initialData.rol?.id || "", 
                 direccion: initialData.direccion?.id || ""
             });
@@ -56,7 +56,7 @@ const CrearEditarUsuario = ({
     };
 
     const handleSubmit = (e) => {
-        e.preventDefault(); // Evita que la página se recargue
+        e.preventDefault(); 
         onSubmit(formData); // Envía los datos al padre (ListarUsuarios)
     };
 
@@ -172,7 +172,7 @@ const CrearEditarUsuario = ({
 
                     {/* BOTONES DE ACCIÓN */}
                     <div className="flex justify-between mt-6">
-                         {/* Botón Eliminar (Solo visible en edición) */}
+                        {/* Botón Eliminar (Solo visible en edición) */}
                         {isEditing && (
                             <Button 
                                 text="Eliminar"

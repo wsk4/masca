@@ -46,8 +46,7 @@ function ListarUsuarios() {
             generarMensaje("Usuario eliminado", "success");
             // Recargamos la lista después de eliminar
             await fetchUsuarios();
-            // Aseguramos que el modal se cierre
-            setOpenModal(false); 
+            setOpenModal(false);
         } catch {
             generarMensaje("Error al eliminar usuario", "error");
         }
@@ -56,15 +55,31 @@ function ListarUsuarios() {
     const handleSubmit = async data => {
         setLoading(true);
         try {
+            // 1. CREAR EL PAYLOAD Y FORMATEAR DATOS
+            const payload = {
+                ...data, 
+                // Conversión de IDs de string a objeto { id: número }
+                rol: data.rol ? { id: parseInt(data.rol, 10) } : null,
+                direccion: data.direccion ? { id: parseInt(data.direccion, 10) } : null
+            };
+
+            // 2. MANEJO CONDICIONAL DE LA CONTRASEÑA
+            if (data.id && !data.password) {
+                // Si es edición y la contraseña está vacía, la eliminamos para no enviarla.
+                delete payload.password;
+            }
+            
+            // 3. LLAMADA AL SERVICIO
             if (data.id) {
-                await UsuarioService.update(data.id, data);
+                await UsuarioService.update(data.id, payload);
                 generarMensaje("Usuario actualizado", "success");
             } else {
-                await UsuarioService.createUser(data);
+                await UsuarioService.createUser(payload);
                 generarMensaje("Usuario creado", "success");
             }
             
-            await fetchUsuarios();
+            const updatedData = await UsuarioService.getAll();
+            setUsuarios(updatedData);
             setOpenModal(false);
         } catch (error) {
             console.error(error);
@@ -123,7 +138,7 @@ function ListarUsuarios() {
                 onSubmit={handleSubmit}
                 initialData={modalData}
                 loading={loading}
-                onDelete={handleDelete} 
+                onDelete={handleDelete}
             />
         </main>
     );
