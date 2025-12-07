@@ -8,8 +8,6 @@ function CreateModal({
     isOpen,
     onClose,
     onSubmit,
-    onDelete, // <--- NUEVA PROP: Función para manejar la eliminación
-    showDeleteButton = false, // <--- NUEVA PROP: Booleano para mostrar el botón
     inputsConfig = [],
     title = "Crear nuevo",
     submitText = "Guardar",
@@ -65,9 +63,6 @@ function CreateModal({
 
     if (!isOpen) return null;
 
-    // Estado combinado de carga para deshabilitar botones
-    const isDisabled = loading || uploadingImage;
-
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-all">
             <div className="bg-theme-card border border-theme-border rounded-xl shadow-2xl w-full max-w-md p-8 max-h-screen overflow-y-auto">
@@ -76,7 +71,7 @@ function CreateModal({
                     <button
                         onClick={onClose}
                         className="text-theme-muted hover:text-white transition-colors"
-                        disabled={isDisabled}
+                        disabled={loading || uploadingImage}
                     >
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -92,7 +87,7 @@ function CreateModal({
                                     <label className="text-xs font-bold text-theme-muted uppercase block mb-1">Logo</label>
                                     <InputFile
                                         onChange={handleImageChange}
-                                        disabled={isDisabled}
+                                        disabled={uploadingImage || loading}
                                         preview={imagePreview}
                                     />
                                     {uploadingImage && (
@@ -125,38 +120,20 @@ function CreateModal({
                         );
                     })}
 
-                    {/* GRUPO DE BOTONES DE ACCIÓN */}
-                    <div className="flex justify-between pt-6">
-                        {/* Botón de Eliminar (Aparece solo en edición) */}
-                        {showDeleteButton && (
-                            <Button
-                                text="Eliminar"
-                                onClick={onDelete}
-                                type="button"
-                                className={`py-3 px-4 bg-red-600 hover:bg-red-700 active:scale-95 transition-all text-white font-bold rounded-lg 
-                                    ${isDisabled ? 'opacity-60 cursor-not-allowed' : ''}`}
-                                disabled={isDisabled}
-                            />
-                        )}
-                        
-                        {/* Botones de Cancelar y Guardar/Actualizar */}
-                        <div className={`flex gap-4 ${showDeleteButton ? '' : 'w-full'}`}>
-                            <button
-                                onClick={onClose}
-                                type="button"
-                                className="flex-1 py-3 px-4 rounded-lg font-bold bg-transparent text-theme-muted border border-theme-border hover:bg-theme-main active:scale-95 transition-all"
-                                disabled={isDisabled}
-                            >
-                                Cancelar
-                            </button>
-
-                            <Button
-                                text={loading ? "Guardando..." : submitText}
-                                type="submit"
-                                className={`flex-1 py-3 px-4 ${isDisabled ? 'opacity-60 cursor-not-allowed' : ''}`}
-                                disabled={isDisabled}
-                            />
-                        </div>
+                    <div className="flex gap-4 pt-6">
+                        <Button
+                            text={loading ? "Guardando..." : submitText}
+                            className={`flex-1 py-3 px-4 ${loading || uploadingImage ? 'opacity-60 cursor-not-allowed' : ''}`}
+                            disabled={loading || uploadingImage}
+                        />
+                        <button
+                            onClick={onClose}
+                            type="button"
+                            className="flex-1 py-3 px-4 rounded-lg font-bold bg-transparent text-theme-muted border border-theme-border hover:bg-theme-main active:scale-95 transition-all"
+                            disabled={loading || uploadingImage}
+                        >
+                            Cancelar
+                        </button>
                     </div>
                 </form>
             </div>
