@@ -15,7 +15,7 @@ function CrearEditarMarca({ isOpen, onClose, onSubmit, initialData, loading, onD
             loading={loading}
             initialData={initialData}
             showDeleteButton={!!initialData?.id} 
-            onDelete={() => onDelete(initialData.id)} // Llama a la función del padre con el ID
+            onDelete={() => onDelete(initialData.id)} 
         />
     );
 }

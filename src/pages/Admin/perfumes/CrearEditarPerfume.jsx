@@ -3,7 +3,18 @@ import CreateModal from "../../../components/organisms/CreateModal";
 import MarcaService from "../../../service/MarcaService";
 import { generarMensaje } from "../../../utils/GenerarMensaje";
 
-function CrearEditarPerfume({ isOpen, onClose, onSubmit, initialData, loading }) {
+// ** IMPORTANTE: Asumiendo que CreateModal ahora acepta una prop `onDelete`
+// y un prop `showDeleteButton` o una configuración de botones avanzada.
+// Si no es el caso, deberías importar 'Button' y agregar la lógica aquí.
+
+function CrearEditarPerfume({ 
+    isOpen, 
+    onClose, 
+    onSubmit, 
+    onDelete, // Nueva prop para manejar la eliminación
+    initialData, 
+    loading 
+}) {
     const [marcas, setMarcas] = useState([]);
     const [loadingMarcas, setLoadingMarcas] = useState(false);
 
@@ -38,18 +49,24 @@ function CrearEditarPerfume({ isOpen, onClose, onSubmit, initialData, loading })
             ...formData,
             precio: formData.precio ? parseFloat(formData.precio) : 0,
             stock: formData.stock ? parseInt(formData.stock) : 0,
+            // Asegúrate de que marca tenga la estructura { id: 1 }
             marca: formData.marca ? { id: parseInt(formData.marca) } : null
         };
         onSubmit(payload);
     };
+
+    // Determinar si se está editando (y por lo tanto, si se puede eliminar)
+    const isEditing = !!initialData?.id;
 
     return (
         <CreateModal
             isOpen={isOpen}
             onClose={onClose}
             onSubmit={handleSubmit}
-            title={initialData?.id ? "Editar Perfume" : "Crear Perfume"}
-            submitText={initialData?.id ? "Actualizar" : "Guardar"}
+            onDelete={onDelete} // Pasar la prop onDelete al modal
+            showDeleteButton={isEditing} // Mostrar el botón solo si estamos editando
+            title={isEditing ? "Editar Perfume" : "Crear Perfume"}
+            submitText={isEditing ? "Actualizar" : "Guardar"}
             loading={loading || loadingMarcas}
             initialData={initialData}
             inputsConfig={[
