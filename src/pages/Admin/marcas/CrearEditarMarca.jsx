@@ -1,7 +1,7 @@
 import React from "react";
 import CreateModal from "../../../components/organisms/CreateModal";
 
-function CrearEditarMarca({ isOpen, onClose, onSubmit, initialData, loading }) {
+function CrearEditarMarca({ isOpen, onClose, onSubmit, initialData, loading, onDelete }) {
     return (
         <CreateModal
             isOpen={isOpen}
@@ -14,6 +14,8 @@ function CrearEditarMarca({ isOpen, onClose, onSubmit, initialData, loading }) {
             submitText="Guardar"
             loading={loading}
             initialData={initialData}
+            showDeleteButton={!!initialData?.id} 
+            onDelete={() => onDelete(initialData.id)} // Llama a la función del padre con el ID
         />
     );
 }
