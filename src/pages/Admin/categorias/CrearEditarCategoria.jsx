@@ -1,7 +1,7 @@
 import React from "react";
 import CreateModal from "../../../components/organisms/CreateModal";
 
-function CrearEditarCategoria({ isOpen, onClose, onSubmit, initialData, loading }) {
+function CrearEditarCategoria({ isOpen, onClose, onSubmit, initialData, loading, onDelete }) {
     return (
         <CreateModal
             isOpen={isOpen}
@@ -14,6 +14,8 @@ function CrearEditarCategoria({ isOpen, onClose, onSubmit, initialData, loading 
             submitText="Guardar"
             loading={loading}
             initialData={initialData}
+            showDeleteButton={!!initialData?.id} 
+            onDelete={() => onDelete(initialData.id)} 
         />
     );
 }
