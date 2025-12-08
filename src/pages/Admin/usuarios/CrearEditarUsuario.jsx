@@ -2,23 +2,16 @@ import React, { useState, useEffect } from "react";
 import Button from "../../../components/atoms/Button"; 
 // Ajusta la ruta de importación de Button según tu estructura de carpetas
 
-const CrearEditarUsuario = ({ 
-    isOpen, 
-    onClose, 
-    onSubmit, 
-    initialData, 
-    loading, 
-    onDelete 
-}) => {
+const CrearEditarUsuario = ({ isOpen, onClose, onSubmit, initialData, loading }) => {
     // Estado inicial del formulario
     const [formData, setFormData] = useState({
         id: null,
         nombre: "",
         correo: "",
         telefono: "",
-        password: "", // Campo contraseña
-        rol: "",      
-        direccion: "" 
+        password: "", // Campo contraseña (solo visible al crear, usualmente)
+        rol: "",      // Aquí guardarás el ID o el objeto del rol
+        direccion: "" // Aquí guardarás el ID o objeto de dirección
     });
 
     // Cargar datos cuando se edita
@@ -29,7 +22,7 @@ const CrearEditarUsuario = ({
                 nombre: initialData.nombre || "",
                 correo: initialData.correo || "",
                 telefono: initialData.telefono || "",
-                password: "", // No se rellena la password al editar
+                password: "", // Usualmente no se rellena la password al editar por seguridad
                 rol: initialData.rol?.id || "", 
                 direccion: initialData.direccion?.id || ""
             });
@@ -56,13 +49,11 @@ const CrearEditarUsuario = ({
     };
 
     const handleSubmit = (e) => {
-        e.preventDefault(); 
+        e.preventDefault(); // Evita que la página se recargue
         onSubmit(formData); // Envía los datos al padre (ListarUsuarios)
     };
 
     if (!isOpen) return null;
-
-    const isEditing = !!formData.id; // Controla si estamos en modo edición
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 backdrop-blur-sm">
@@ -78,7 +69,7 @@ const CrearEditarUsuario = ({
                 </button>
 
                 <h2 className="text-2xl font-bold mb-6 text-white border-l-4 border-white pl-3">
-                    {isEditing ? "Editar usuario" : "Crear usuario"}
+                    {formData.id ? "Editar usuario" : "Crear usuario"}
                 </h2>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -135,7 +126,7 @@ const CrearEditarUsuario = ({
                             className="w-full bg-transparent border border-gray-500 rounded p-2 text-white focus:border-white focus:outline-none placeholder-gray-600"
                             placeholder="Contraseña"
                             // Requerido solo si estamos creando un usuario nuevo
-                            required={!isEditing}
+                            required={!formData.id}
                         />
                     </div>
 
@@ -171,37 +162,22 @@ const CrearEditarUsuario = ({
                     </div>
 
                     {/* BOTONES DE ACCIÓN */}
-                    <div className="flex justify-between mt-6">
-                        {/* Botón Eliminar (Solo visible en edición) */}
-                        {isEditing && (
-                            <Button 
-                                text="Eliminar"
-                                onClick={() => onDelete(formData.id)}
-                                type="button"
-                                className="bg-transparent border border-red-500 text-red-500 hover:bg-red-600 hover:text-white"
-                                disabled={loading}
-                            />
-                        )}
+                    <div className="flex justify-end gap-3 mt-6">
+                        {/* Botón Cancelar (Borde blanco, fondo transparente) */}
+                        <Button 
+                            text="Cancelar"
+                            onClick={onClose}
+                            type="button"
+                            className="bg-transparent border border-gray-500 text-white hover:border-white hover:text-white"
+                        />
                         
-                        {/* Contenedor de Guardar y Cancelar */}
-                        <div className={`flex gap-3 ${!isEditing && 'w-full justify-end'}`}>
-                            {/* Botón Cancelar (Borde blanco, fondo transparente) */}
-                            <Button 
-                                text="Cancelar"
-                                onClick={onClose}
-                                type="button"
-                                className="bg-transparent border border-gray-500 text-white hover:border-white hover:text-white"
-                                disabled={loading}
-                            />
-                            
-                            {/* Botón Guardar (Fondo BLANCO, texto NEGRO) */}
-                            <Button 
-                                text={loading ? "Guardando..." : "Guardar"}
-                                type="submit" // CRUCIAL: Esto activa el onSubmit del form
-                                disabled={loading}
-                                className="bg-white text-black hover:bg-gray-200 border-none"
-                            />
-                        </div>
+                        {/* Botón Guardar (Fondo BLANCO, texto NEGRO) */}
+                        <Button 
+                            text={loading ? "Guardando..." : "Guardar"}
+                            type="submit" // CRUCIAL: Esto activa el onSubmit del form
+                            disabled={loading}
+                            className="bg-white text-black hover:bg-gray-200 border-none"
+                        />
                     </div>
                 </form>
             </div>
