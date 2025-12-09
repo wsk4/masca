@@ -1,6 +1,9 @@
-import matchers from '@testing-library/jasmine-dom';
+import '@testing-library/jest-dom'; // Importa los matchers personalizados
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { cleanup } from '@testing-library/react';
+import { afterEach } from 'vitest';
 
-beforeEach(() => {
-    jasmine.getEnv().addMatchers(matchers.default.default);
+// Limpieza automática tras cada test para evitar colisiones
+afterEach(() => {
+  cleanup();
 });

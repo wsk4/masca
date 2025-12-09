@@ -1,29 +1,18 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-// ⚠️ IMPORTANTE: Ajusta esta ruta a tu componente Home.jsx si es necesario
-// Según tu estructura de carpetas, esto debería apuntar a src/pages/Home.jsx
+import { describe, it, expect } from 'vitest';
 import Home from "../../pages/Home"; 
 
 describe("Pagina Home", () => {
-
-    it("debería renderizar el título principal estático", () => {
-        // Renderizamos la página
+    it("renderiza el título y slogan", () => {
         render(<Home />); 
-
-        // Verificamos el texto principal (MASCAPITOS STORE)
-        const title = screen.getByText("MASCAPITOS STORE"); 
-        
-        expect(title).toBeTruthy();
-        expect(title.tagName).toBe('H1'); // Verificamos que se renderice como H1
-        
-        // Verificamos el subtítulo/slogan
-        expect(screen.getByText("Elegancia en cada esencia.")).toBeTruthy();
+        // Busca encabezado H1 explícitamente para asegurar semántica
+        expect(screen.getByRole('heading', { level: 1, name: "MASCAPITOS STORE" })).toBeInTheDocument();
+        expect(screen.getByText("Elegancia en cada esencia.")).toBeInTheDocument();
     });
     
-    it("debería aplicar el estilo de fondo principal", () => {
+    it("aplica el estilo de fondo principal", () => {
         const { container } = render(<Home />);
-        
-        // Verificamos que el <main> (el contenedor más externo) tenga la clase de fondo
-        expect(container.firstChild.className).toContain('bg-theme-main');
+        expect(container.firstChild).toHaveClass('bg-theme-main');
     });
 });

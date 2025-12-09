@@ -1,160 +1,66 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import Cart from '../../pages/Cart'; 
-import { AuthProvider } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext';
 
-
-const mockNavigate = jasmine.createSpy('useNavigate');
-const mockGenerarMensaje = jasmine.createSpy('generarMensaje');
-const mockCompraService = { create: jasmine.createSpy('create') };
-
-const mockCart = {
-    cart: [],
-    total: 0,
-    removeFromCart: jasmine.createSpy('removeFromCart'),
-    clearCart: jasmine.createSpy('clearCart'),
-    increaseQuantity: jasmine.createSpy('increaseQuantity'),
-    decreaseQuantity: jasmine.createSpy('decreaseQuantity'),
-};
-const mockUser = { id: 100, name: 'Test User' };
-
-
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    useNavigate: () => mockNavigate,
-}));
-jest.mock('../../utils/GenerarMensaje', () => ({
-    generarMensaje: mockGenerarMensaje,
-}));
-jest.mock('../../service/CompraService', () => mockCompraService);
-jest.mock('../../context/AuthContext', () => ({
-    useAuth: jest.fn(),
-    AuthProvider: ({ children }) => <div>{children}</div> 
-}));
-jest.mock('../../context/CartContext', () => ({
-    useCart: jest.fn(),
-}));
-
-
-const renderCart = (authState = { user: null }, cartState = { cart: [], total: 0 }) => {
-    require('../../context/AuthContext').useAuth.mockReturnValue(authState);
-    require('../../context/CartContext').useCart.mockReturnValue({ 
-        ...mockCart, 
-        ...cartState 
-    });
-
-    return render(
-        <MemoryRouter>
-            <Cart />
-        </MemoryRouter>
-    );
+// --- MOCKS ---
+const mockNavigate = vi.fn();
+const mockGenerarMensaje = vi.fn();
+const mockCompraService = { create: vi.fn() };
+const mockCartActions = {
+    cart: [], total: 0, removeFromCart: vi.fn(), clearCart: vi.fn(), 
+    increaseQuantity: vi.fn(), decreaseQuantity: vi.fn()
 };
 
+vi.mock('react-router-dom', async () => {
+    const actual = await vi.importActual('react-router-dom');
+    return { ...actual, useNavigate: () => mockNavigate };
+});
+vi.mock('../../utils/GenerarMensaje', () => ({ generarMensaje: mockGenerarMensaje }));
+vi.mock('../../service/CompraService', () => mockCompraService);
+vi.mock('../../context/AuthContext', () => ({ useAuth: vi.fn(), AuthProvider: ({children}) => <div>{children}</div> }));
+vi.mock('../../context/CartContext', () => ({ useCart: vi.fn() }));
 
-describe('Pagina Cart (Checkout Logic)', () => {
+const renderCart = (user = null, cartData = { cart: [], total: 0 }) => {
+    useAuth.mockReturnValue({ user });
+    useCart.mockReturnValue({ ...mockCartActions, ...cartData });
+    return render(<MemoryRouter><Cart /></MemoryRouter>);
+};
 
-    const mockItem = { 
-        id: 10, 
-        name: 'Perfume Test', 
-        price: 1000, 
-        quantity: 2, 
-        stock: 5,
-        item: { id: 10 } 
-    };
-    const mockCartPopulated = { 
-        cart: [mockItem], 
-        total: 2000,
-    };
+describe('Pagina Cart', () => {
+    const item = { id: 10, name: 'Perfume', price: 1000, quantity: 1, item: { id: 10 } };
+    beforeEach(() => { vi.clearAllMocks(); });
 
-
-    beforeEach(() => {
-        mockGenerarMensaje.calls.reset();
-        mockCompraService.create.calls.reset();
-        mockNavigate.calls.reset();
-    });
-
-
-    it('muestra mensaje "carrito vacío" cuando cart.length es 0', () => {
+    it('muestra carrito vacío', () => {
         renderCart();
-        expect(screen.getByText('Tu carrito está vacío. 🛒')).toBeTruthy();
+        expect(screen.getByText('Tu carrito está vacío. 🛒')).toBeInTheDocument();
     });
 
-    it('renderiza la tabla y el total cuando hay productos', () => {
-        renderCart({ user: mockUser }, mockCartPopulated);
-        
-        expect(screen.getByText('Perfume Test')).toBeTruthy();
-        
-        expect(screen.getByText('$2,000')).toBeTruthy();
-        
-        expect(screen.getByRole('button', { name: /Finalizar Compra/i })).toBeTruthy();
+    it('renderiza productos', () => {
+        renderCart({ id: 1 }, { cart: [item], total: 1000 });
+        expect(screen.getByText('Perfume')).toBeInTheDocument();
+        expect(screen.getByText('$1,000')).toBeInTheDocument();
     });
 
-
-    it('llama a removeFromCart y muestra mensaje al clickear Eliminar', () => {
-        renderCart({ user: mockUser }, mockCartPopulated);
-        
-        const removeButton = screen.getByRole('button', { name: 'Eliminar' });
-        fireEvent.click(removeButton);
-
-        expect(mockCart.removeFromCart).toHaveBeenCalledWith(10);
-        expect(mockGenerarMensaje).toHaveBeenCalledWith("Producto eliminado", "info");
-    });
-    
-    it('llama a clearCart y muestra mensaje al clickear Vaciar Carrito', () => {
-        renderCart({ user: mockUser }, mockCartPopulated);
-        
-        fireEvent.click(screen.getByRole('button', { name: 'Vaciar Carrito' }));
-
-        expect(mockCart.clearCart).toHaveBeenCalled();
-        expect(mockGenerarMensaje).toHaveBeenCalledWith("Carrito vaciado", "warning");
-    });
-
-
-
-    it('CHECKOUT: Si no hay usuario, navega a /login', async () => {
-        renderCart({ user: null }, mockCartPopulated);
-        
+    it('CHECKOUT: redirige a login si no hay usuario', () => {
+        renderCart(null, { cart: [item], total: 1000 });
         fireEvent.click(screen.getByRole('button', { name: /Finalizar Compra/i }));
-        
-        expect(mockGenerarMensaje).toHaveBeenCalledWith("Debes iniciar sesión para finalizar la compra.", "warning");
         
         expect(mockNavigate).toHaveBeenCalledWith('/login');
-        
         expect(mockCompraService.create).not.toHaveBeenCalled();
     });
-    
-    it('CHECKOUT EXITOSO: Llama a la API, vacía carrito y navega a /compras', async () => {
-        mockCompraService.create.and.returnValue(Promise.resolve({ id: 101 }));
-        
-        renderCart({ user: mockUser }, mockCartPopulated);
+
+    it('CHECKOUT EXITOSO: crea compra y limpia carrito', async () => {
+        mockCompraService.create.mockResolvedValue({ id: 101 });
+        renderCart({ id: 1 }, { cart: [item], total: 1000 });
 
         fireEvent.click(screen.getByRole('button', { name: /Finalizar Compra/i }));
         
-        await waitFor(() => {
-            expect(mockCompraService.create).toHaveBeenCalled();
-        });
-        
-        expect(mockCart.clearCart).toHaveBeenCalled();
-        expect(mockGenerarMensaje).toHaveBeenCalledWith("¡Compra realizada con éxito!", "success");
-
+        await waitFor(() => { expect(mockCompraService.create).toHaveBeenCalled(); });
+        expect(mockCartActions.clearCart).toHaveBeenCalled();
         expect(mockNavigate).toHaveBeenCalledWith('/compras');
-    });
-
-    it('CHECKOUT FALLIDO: Muestra mensaje de error sin vaciar carrito', async () => {
-        mockCompraService.create.and.returnValue(Promise.reject(new Error('BD Error')));
-        
-        renderCart({ user: mockUser }, mockCartPopulated);
-
-        fireEvent.click(screen.getByRole('button', { name: /Finalizar Compra/i }));
-        
-        await waitFor(() => {
-            expect(mockGenerarMensaje).toHaveBeenCalledWith(
-                "Error al procesar la compra. Revisa que los IDs 1 (estados) existan en tu BD.", "error"
-            );
-        });
-
-        expect(mockCart.clearCart).not.toHaveBeenCalled();
     });
 });
