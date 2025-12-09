@@ -1,89 +1,108 @@
 import React, { useState } from "react";
 import Forms from "../../components/templates/Forms";
-import { generarMensaje } from "../../utils/GenerarMensaje";
-import UsuarioService from "../../service/UsuarioService";
 import { useNavigate } from "react-router-dom";
+import UsuarioService from "../../service/UsuarioService";
+import { generarMensaje } from "../../utils/GenerarMensaje";
+import { useAuth } from "../../context/AuthContext"; // Importamos contexto
+import loginData from "./data/loginData"; // Reutilizamos o crea uno propio si tienes createUserData
 
 const CreateUser = () => {
-  const [form, setForm] = useState({ nombre: "", correo: "", contra: "" });
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+    // Ajusta el estado inicial según los campos que pidas en el registro (nombre, correo, contra, etc.)
+    const [form, setForm] = useState({ nombre: "", correo: "", contra: "", telefono: "" });
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+    const { login } = useAuth(); // Usamos la función del contexto
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+    const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!form.nombre || !form.correo || !form.contra) {
-      generarMensaje('Completa todos los campos', 'warning');
-      return;
-    }
-    setLoading(true);
-    try {
-      await UsuarioService.createUser(form);
-      generarMensaje('Usuario creado correctamente', 'success');
-      setTimeout(() => navigate('/login'), 1000);
-    } catch (error) {
-      console.error(error);
-      generarMensaje('Error al crear usuario. El correo ya podría estar registrado.', 'error');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const formConfig = [
-    {
-      type: "text",
-      text: [
-        {
-          content: "Crear Cuenta",
-          variant: "h1",
-          className: "text-center text-4xl font-bold mb-8 text-white tracking-wider",
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        // Validaciones básicas
+        if (!form.nombre || !form.correo || !form.contra) {
+            generarMensaje('Completa los campos obligatorios', 'warning');
+            return;
         }
-      ]
-    },
-    {
-      type: "inputs",
-      inputs: [
-        { type: "text", placeholder: "Nombre completo", name: "nombre", value: form.nombre, onChange: handleChange, required: true },
-        { type: "email", placeholder: "Correo electrónico", name: "correo", value: form.correo, onChange: handleChange, required: true },
-        { type: "password", placeholder: "Contraseña", name: "contra", value: form.contra, onChange: handleChange, required: true },
-      ],
-      className: "space-y-4"
-    },
-    { 
-        type: "button", 
-        text: loading ? "Creando..." : "Crear usuario", 
-        onClick: handleSubmit, 
-        disabled: loading,
-        className: "w-full mt-6 bg-white text-black font-bold rounded-lg py-3 hover:bg-theme-hover appearance-none border-none"
-    },
-    {
-        type: "text",
-        text: [
-            {
-                content: (
-                    <button
-                        type="button"
-                        onClick={() => navigate('/login')} 
-                        className="text-theme-muted hover:text-white underline transition w-full text-center block text-sm mt-4"
-                    >
-                        ¿Ya tienes cuenta? Inicia sesión
-                    </button>
-                ),
-                variant: "div",
-                className: "text-center",
-            },
-        ],
-    },
-  ];
 
-  return (
-    <main className="flex min-h-screen items-center justify-center bg-theme-main p-4">
-      <form onSubmit={handleSubmit} className="w-full max-w-md space-y-10 rounded-2xl bg-theme-card border border-theme-border p-10 shadow-2xl">
-        <Forms content={formConfig} />
-      </form>
-    </main>
-  );
+        setLoading(true);
+        try {
+            // 1. Llamada al servicio de registro (que ahora usa api.js)
+            // Tu backend en AuthController.register devuelve { token: "..." }
+            const response = await UsuarioService.register(form);
+
+            // 2. Si el backend devolvió el token, iniciamos sesión directo
+            if (response && response.token) {
+                localStorage.setItem('token', response.token);
+                
+                // Construimos el objeto usuario para el contexto
+                // Nota: A veces el endpoint de registro no devuelve el usuario completo, solo el token.
+                // Si es así, podrías decodificar el token o hacer un fetch rápido de datos.
+                // Asumiremos por ahora que guardamos lo básico que tenemos en el form.
+                const userToSave = { 
+                    nombre: form.nombre, 
+                    email: form.correo, 
+                    rol: { id: 3, nombre: "USER" } // Rol por defecto (ajusta según tu lógica)
+                };
+                
+                login(userToSave);
+                generarMensaje('¡Cuenta creada con éxito!', 'success');
+                navigate('/'); // Redirigir al home
+            } else {
+                // Si no devolvió token, lo mandamos al login
+                generarMensaje('Cuenta creada. Por favor inicia sesión.', 'success');
+                navigate('/login');
+            }
+
+        } catch (error) {
+            console.error(error);
+            generarMensaje('Hubo un error al registrar el usuario.', 'error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Reutilizamos la estructura de inputs de loginData pero podrías necesitar adaptarla
+    // para incluir 'nombre', 'telefono', etc. Lo dejo genérico para el ejemplo.
+    // Lo ideal es tener un archivo data/registerData.js con los campos correctos.
+    const inputsConfig = [
+        { 
+            type: "inputs", 
+            inputs: [
+                { label: "Nombre", name: "nombre", type: "text", placeholder: "Tu nombre" },
+                { label: "Correo", name: "correo", type: "email", placeholder: "correo@ejemplo.com" },
+                { label: "Contraseña", name: "contra", type: "password", placeholder: "****" },
+                { label: "Teléfono", name: "telefono", type: "text", placeholder: "+569..." },
+            ] 
+        },
+        { 
+            type: "button", 
+            text: loading ? "Registrando..." : "Crear Cuenta", 
+            onClick: handleSubmit,
+            disabled: loading 
+        }
+    ];
+
+    const formDataWithHandlers = inputsConfig.map((item, index) => {
+        if (item.type === "inputs") {
+            return {
+                ...item,
+                inputs: item.inputs.map(input => ({
+                    ...input,
+                    value: form[input.name] || "",
+                    onChange: handleChange,
+                }))
+            };
+        }
+        return { ...item, key: index };
+    });
+
+    return (
+        <main className="flex min-h-screen items-center justify-center bg-theme-main p-4">
+            <form onSubmit={handleSubmit} className="w-full max-w-md space-y-10 rounded-2xl bg-theme-card border border-theme-border p-10 shadow-2xl">
+                <h2 className="text-2xl font-bold text-center text-theme-text-main">Registro</h2>
+                <Forms content={formDataWithHandlers} />
+            </form>
+        </main>
+    );
 };
 
 export default CreateUser;
