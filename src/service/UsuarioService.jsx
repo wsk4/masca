@@ -1,63 +1,82 @@
-import axios from 'axios';
-
-const BASE_URL = 'https://masca-back.onrender.com/api/usuarios';
+import api from './Api'; // Importamos nuestra instancia configurada
 
 class UsuarioService {
 
-    // --- LOGIN SIMULADO (SOLUCIÓN) ---
+    // --- LOGIN REAL CONECTADO AL BACKEND ---
     async login(credenciales) {
         try {
-            // 1. Obtenemos todos los usuarios existentes del backend
-            const response = await axios.get(BASE_URL);
-            const usuarios = response.data;
+            // 1. Enviar correo y contraseña al endpoint /auth/login
+            // Mapeamos 'correo' a 'username' porque eso espera tu backend Java
+            const payload = {
+                username: credenciales.correo,
+                password: credenciales.contra
+            };
+            
+            const response = await api.post('/auth/login', payload);
+            const { token } = response.data;
 
-            // 2. Buscamos el usuario por correo (ignorando mayúsculas/minúsculas)
-            const usuarioEncontrado = usuarios.find(u => 
-                u.correo.toLowerCase() === credenciales.correo.toLowerCase()
+            // 2. Guardar el token inmediatamente para usarlo en el siguiente paso
+            localStorage.setItem('token', token);
+
+            // 3. Obtener los datos del usuario logueado
+            // Como el backend solo devuelve el token, buscamos nuestros datos
+            // (El token se envía automágicamente gracias a api.jsx)
+            const usuariosResponse = await api.get('/usuarios');
+            
+            // Buscamos coincidencia por correo
+            const usuarioEncontrado = usuariosResponse.data.find(u => 
+                u.correo.toLowerCase() === credenciales.correo.toLowerCase() ||
+                u.nombre.toLowerCase() === credenciales.correo.toLowerCase()
             );
 
-            // 3. Validación (Solo por correo)
             if (usuarioEncontrado) {
-                // Simulamos éxito devolviendo el usuario encontrado
                 return usuarioEncontrado;
             } else {
-                throw new Error("Usuario no encontrado");
+                throw new Error("Token válido, pero no se pudieron recuperar los datos del usuario.");
             }
+
         } catch (err) {
-            console.error('Error en login simulado:', err);
+            console.error('Error en login:', err);
+            // Limpiamos token si falló algo a medio camino
+            localStorage.removeItem('token');
             throw err;
         }
     }
-    // ---------------------------------
 
-    async createUser(usuario) {
-        try { return (await axios.post(BASE_URL, usuario)).data; }
-        catch (err) { console.error('Error al crear usuario:', err); throw err; }
+    async register(usuario) {
+        try {
+            const response = await api.post('/auth/register', usuario);
+            // Tu backend devuelve token al registrarse
+            if (response.data.token) {
+                localStorage.setItem('token', response.data.token);
+            }
+            return response.data;
+        } catch (err) {
+            console.error('Error al registrar:', err);
+            throw err;
+        }
     }
 
+    // --- CRUD ESTÁNDAR USANDO LA INSTANCIA 'api' ---
     async getAll() {
-        try { return (await axios.get(BASE_URL)).data; }
-        catch (err) { console.error('Error al obtener usuarios:', err); throw err; }
+        return (await api.get('/usuarios')).data;
     }
 
     async getById(id) {
-        try { return (await axios.get(`${BASE_URL}/${id}`)).data; }
-        catch (err) { console.error('Error al obtener usuario:', err); throw err; }
+        return (await api.get(`/usuarios/${id}`)).data;
     }
 
     async update(id, data) {
-        try { return (await axios.put(`${BASE_URL}/${id}`, data)).data; }
-        catch (err) { console.error('Error al actualizar usuario:', err); throw err; }
+        return (await api.put(`/usuarios/${id}`, data)).data;
     }
 
     async patch(id, data) {
-        try { return (await axios.patch(`${BASE_URL}/${id}`, data)).data; }
-        catch (err) { console.error('Error al hacer patch en usuario:', err); throw err; }
+        return (await api.patch(`/usuarios/${id}`, data)).data;
     }
 
     async delete(id) {
-        try { await axios.delete(`${BASE_URL}/${id}`); return true; }
-        catch (err) { console.error('Error al eliminar usuario:', err); throw err; }
+        await api.delete(`/usuarios/${id}`);
+        return true;
     }
 }
 
