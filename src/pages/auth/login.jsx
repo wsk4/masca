@@ -24,34 +24,34 @@ const Login = () => {
         try {
             // 1. Login Real: Envía credenciales, recibe token y datos de usuario
             const usuario = await UsuarioService.login(form);
-            
+
             // 2. Preparamos objeto de usuario para el contexto
-            const userToSave = { 
-                id: usuario.id, 
-                nombre: usuario.nombre, 
-                rol: usuario.rol, 
-                email: usuario.correo 
+            const userToSave = {
+                id: usuario.id,
+                nombre: usuario.nombre,
+                rol: usuario.rol,
+                email: usuario.correo
             };
-            
+
             // 3. Actualizamos estado global
             login(userToSave);
-            
+
             generarMensaje(`¡Bienvenido ${usuario.nombre}!`, 'success');
-            
+
             // 4. Redirección basada en rol
             // Ajusta "ADMIN" o IDs según tu base de datos (Rol 1 o 2 suelen ser admin)
-            if (usuario.rol?.id === 1 || usuario.rol?.id === 2 || usuario.rol?.nombre === 'ADMIN') {
-                navigate('/admin'); 
+            if (usuario.rol?.id === 1 || usuario.rol?.nombre === 'ADMIN') {
+                navigate('/admin');
             } else {
-                navigate('/'); 
+                navigate('/');
             }
-            
+
         } catch (error) {
             console.error(error);
             generarMensaje('Correo o contraseña incorrectos', 'error');
         } finally {
             setLoading(false);
-            setForm({ correo: "", contra: "" }); 
+            setForm({ correo: "", contra: "" });
         }
     };
 
