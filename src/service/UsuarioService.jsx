@@ -5,40 +5,27 @@ class UsuarioService {
     // --- LOGIN REAL CONECTADO AL BACKEND ---
     async login(credenciales) {
         try {
-            // 1. Enviar correo y contraseña al endpoint /auth/login
-            // Mapeamos 'correo' a 'username' porque eso espera tu backend Java
+            // 1. Enviar credenciales
             const payload = {
-                username: credenciales.correo,
+                username: credenciales.correo, // Ojo: backend espera 'username', frontend envía 'correo'
                 password: credenciales.contra
             };
-            
+
             const response = await api.post('/auth/login', payload);
             const { token } = response.data;
 
-            // 2. Guardar el token inmediatamente para usarlo en el siguiente paso
+            // 2. Guardar el token
             localStorage.setItem('token', token);
 
-            // 3. Obtener los datos del usuario logueado
-            // Como el backend solo devuelve el token, buscamos nuestros datos
-            // (El token se envía automágicamente gracias a api.jsx)
-            const usuariosResponse = await api.get('/usuarios');
-            
-            // Buscamos coincidencia por correo
-            const usuarioEncontrado = usuariosResponse.data.find(u => 
-                u.correo.toLowerCase() === credenciales.correo.toLowerCase() ||
-                u.nombre.toLowerCase() === credenciales.correo.toLowerCase()
-            );
+            // 3. Obtener "Mis Datos" usando el nuevo endpoint
+            // El token se inyecta solo gracias a Api.jsx
+            const meResponse = await api.get('/auth/me');
 
-            if (usuarioEncontrado) {
-                return usuarioEncontrado;
-            } else {
-                throw new Error("Token válido, pero no se pudieron recuperar los datos del usuario.");
-            }
+            return meResponse.data; // Retorna el objeto usuario (id, nombre, rol, etc.)
 
         } catch (err) {
             console.error('Error en login:', err);
-            // Limpiamos token si falló algo a medio camino
-            localStorage.removeItem('token');
+            localStorage.removeItem('token'); // Limpiar si falla
             throw err;
         }
     }
@@ -46,7 +33,6 @@ class UsuarioService {
     async register(usuario) {
         try {
             const response = await api.post('/auth/register', usuario);
-            // Tu backend devuelve token al registrarse
             if (response.data.token) {
                 localStorage.setItem('token', response.data.token);
             }
@@ -57,7 +43,7 @@ class UsuarioService {
         }
     }
 
-    // --- CRUD ESTÁNDAR USANDO LA INSTANCIA 'api' ---
+    // --- CRUD ESTÁNDAR ---
     async getAll() {
         return (await api.get('/usuarios')).data;
     }
