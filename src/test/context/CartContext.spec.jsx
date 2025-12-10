@@ -53,9 +53,7 @@ describe('Contexto CartContext', () => {
 
         fireEvent.click(screen.getByText('Agregar A ($100)'));
 
-        // Esperamos que los valores y el nombre se sincronicen
         await waitFor(() => {
-            // Se corrige el error /Perfume A/i
             expect(screen.getByTestId('item-name').textContent).toBe('Perfume A'); 
             expect(screen.getByTestId('cart-count').textContent).toBe('1');
             expect(screen.getByTestId('cart-total').textContent).toBe('100');
@@ -68,18 +66,14 @@ describe('Contexto CartContext', () => {
 
         const btnAddA = screen.getByText('Agregar A ($100)');
         
-        // 1. Primer click: Agrega 1
         fireEvent.click(btnAddA);
         
-        // 2. Esperamos que el estado se actualice a cantidad 1 antes del segundo click
         await waitFor(() => {
             expect(screen.getByTestId('item-qty').textContent).toBe('1');
         });
 
-        // 3. Segundo click: Debería sumar 1
         fireEvent.click(btnAddA);
 
-        // 4. Esperamos el estado final: Total 200, Cantidad 2
         await waitFor(() => {
             expect(screen.getByTestId('cart-total').textContent).toBe('200'); 
             expect(screen.getByTestId('item-qty').textContent).toBe('2'); 
@@ -96,7 +90,6 @@ describe('Contexto CartContext', () => {
              expect(screen.getByTestId('cart-total').textContent).toBe('300');
         });
 
-        // Eliminamos el producto A
         fireEvent.click(screen.getByLabelText('remove-1'));
 
         await waitFor(() => {

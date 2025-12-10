@@ -25,7 +25,6 @@ class MarcaService {
     try { await api.delete(`/marcas/${id}`); return true; }
     catch (err) { console.error('Error al eliminar marca:', err); throw err; }
   }
-  // Mantenemos este método aunque sea redundante con delete(id), por si se usa así en algún componente
   async deleteByMarcaId(MarcaId) {
     try { await api.delete(`/marcas/${MarcaId}`); return true; }
     catch (err) { console.error('Error al eliminar marca:', err); throw err; }

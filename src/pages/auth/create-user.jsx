@@ -3,21 +3,19 @@ import Forms from "../../components/templates/Forms";
 import { useNavigate } from "react-router-dom";
 import UsuarioService from "../../service/UsuarioService";
 import { generarMensaje } from "../../utils/GenerarMensaje";
-import { useAuth } from "../../context/AuthContext"; // Importamos contexto
-import loginData from "./data/loginData"; // Reutilizamos o crea uno propio si tienes createUserData
+import { useAuth } from "../../context/AuthContext";
+import loginData from "./data/loginData"; 
 
 const CreateUser = () => {
-    // Ajusta el estado inicial según los campos que pidas en el registro (nombre, correo, contra, etc.)
     const [form, setForm] = useState({ nombre: "", correo: "", contra: "", telefono: "" });
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const { login } = useAuth(); // Usamos la función del contexto
+    const { login } = useAuth(); 
 
     const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Validaciones básicas
         if (!form.nombre || !form.correo || !form.contra) {
             generarMensaje('Completa los campos obligatorios', 'warning');
             return;
@@ -25,29 +23,24 @@ const CreateUser = () => {
 
         setLoading(true);
         try {
-            // 1. Llamada al servicio de registro (que ahora usa api.js)
-            // Tu backend en AuthController.register devuelve { token: "..." }
+            
             const response = await UsuarioService.register(form);
 
-            // 2. Si el backend devolvió el token, iniciamos sesión directo
             if (response && response.token) {
                 localStorage.setItem('token', response.token);
                 
-                // Construimos el objeto usuario para el contexto
-                // Nota: A veces el endpoint de registro no devuelve el usuario completo, solo el token.
-                // Si es así, podrías decodificar el token o hacer un fetch rápido de datos.
-                // Asumiremos por ahora que guardamos lo básico que tenemos en el form.
+                
                 const userToSave = { 
                     nombre: form.nombre, 
                     email: form.correo, 
-                    rol: { id: 3, nombre: "USER" } // Rol por defecto (ajusta según tu lógica)
+                    rol: { id: 3, nombre: "USER" } 
                 };
                 
                 login(userToSave);
                 generarMensaje('¡Cuenta creada con éxito!', 'success');
-                navigate('/'); // Redirigir al home
+                navigate('/'); 
             } else {
-                // Si no devolvió token, lo mandamos al login
+                
                 generarMensaje('Cuenta creada. Por favor inicia sesión.', 'success');
                 navigate('/login');
             }
@@ -60,9 +53,7 @@ const CreateUser = () => {
         }
     };
 
-    // Reutilizamos la estructura de inputs de loginData pero podrías necesitar adaptarla
-    // para incluir 'nombre', 'telefono', etc. Lo dejo genérico para el ejemplo.
-    // Lo ideal es tener un archivo data/registerData.js con los campos correctos.
+    
     const inputsConfig = [
         { 
             type: "inputs", 

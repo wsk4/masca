@@ -12,40 +12,33 @@ function ListarCategorias() {
     const [modalData, setModalData] = useState({});
     const [loading, setLoading] = useState(false);
 
-    // Effect hook for initial data loading
     useEffect(() => {
-        // Fetch all categories on component mount
         CategoriaService.getAll().then(setCategorias).catch(error => {
             console.error("Error loading categories:", error);
             generarMensaje("Error al cargar categorías", "error");
         });
     }, []);
 
-    // Handlers for opening the modal
     const handleCreate = () => { 
-        setModalData({}); // Clear initial data for creation mode
+        setModalData({}); 
         setOpenModal(true); 
     };
     
     const handleEdit = c => { 
-        setModalData(c); // Set category data for edit mode
+        setModalData(c); 
         setOpenModal(true); 
     };
 
-    // Handler for submit (Create/Update)
     const handleSubmit = async data => {
         setLoading(true);
         try {
             if (data.id) {
-                // Update existing category
                 await CategoriaService.update(data.id, data);
                 generarMensaje("Categoría actualizada", "success");
             } else {
-                // Create new category
                 await CategoriaService.create(data);
                 generarMensaje("Categoría creada", "success");
             }
-            // Refresh the list after successful operation
             setCategorias(await CategoriaService.getAll());
             setOpenModal(false);
         } catch (error) { 
@@ -74,7 +67,6 @@ function ListarCategorias() {
                     data={categorias.map(c => [
                         c.id, 
                         c.nombre,
-                        // Action buttons column
                         <button 
                             key={`edit-${c.id}`}
                             onClick={() => handleEdit(c)} 
@@ -86,7 +78,6 @@ function ListarCategorias() {
                 />
             </div>
 
-            {/* Modal for Create/Edit operation */}
             <CrearEditarCategoria 
                 isOpen={openModal} 
                 onClose={() => setOpenModal(false)} 

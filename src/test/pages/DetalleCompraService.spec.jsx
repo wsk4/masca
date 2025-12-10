@@ -1,4 +1,3 @@
-// Importamos axios y el servicio que vamos a probar
 import axios from 'axios';
 import DetalleCompraService from '../../service/DetalleCompraService'; 
 
@@ -25,7 +24,6 @@ describe('Servicio DetalleCompraService', () => {
         mockedAxios.patch.and.returnValue(Promise.resolve({ data: {} }));
         mockedAxios.delete.and.returnValue(Promise.resolve(true));
 
-        // Reseteamos las llamadas para que el contador inicie en cero
         Object.values(mockedAxios).forEach(spy => spy.calls.reset());
     });
     

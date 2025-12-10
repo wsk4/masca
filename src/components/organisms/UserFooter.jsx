@@ -33,7 +33,6 @@ function UserFooter() {
                 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
                     
-                    {/* Columna 1: Marca y Slogan */}
                     <div>
                         <h3 className="text-2xl font-black text-white mb-3">
                             Mascapito Store
@@ -43,7 +42,6 @@ function UserFooter() {
                         </p>
                     </div>
 
-                    {/* Columna 2: Descubrir */}
                     <div>
                         <h5 className="font-semibold text-white mb-4">Descubrir</h5>
                         <ul className="space-y-2 text-sm">
@@ -57,7 +55,6 @@ function UserFooter() {
                         </ul>
                     </div>
 
-                    {/* Columna 3: Mi Cuenta */}
                     <div>
                         <h5 className="font-semibold text-white mb-4">Mi Cuenta</h5>
                         <ul className="space-y-2 text-sm">
@@ -71,7 +68,6 @@ function UserFooter() {
                         </ul>
                     </div>
 
-                    {/* Columna 4: Soporte y Contacto/Redes */}
                     <div>
                         <h5 className="font-semibold text-white mb-4">Soporte y Legal</h5>
                         <ul className="space-y-2 text-sm">
@@ -98,7 +94,6 @@ function UserFooter() {
                     </div>
                 </div>
 
-                {/* --- SECCIÓN INFERIOR: COPYRIGHT --- */}
                 <div className="border-t border-theme-border pt-6 text-center text-sm">
                     &copy; {currentYear} Mascapitos Store. Todos los derechos reservados.
                 </div>
