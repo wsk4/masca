@@ -1,68 +1,63 @@
-import api from './Api'; // Importamos nuestra instancia configurada
+import axios from 'axios';
+
+const BASE_URL = 'https://masca-back.onrender.com/api/usuarios';
 
 class UsuarioService {
 
-    // --- LOGIN REAL CONECTADO AL BACKEND ---
+    // --- LOGIN SIMULADO (SOLUCIÓN) ---
     async login(credenciales) {
         try {
-            // 1. Enviar credenciales
-            const payload = {
-                username: credenciales.correo, // Ojo: backend espera 'username', frontend envía 'correo'
-                password: credenciales.contra
-            };
+            // 1. Obtenemos todos los usuarios existentes del backend
+            const response = await axios.get(BASE_URL);
+            const usuarios = response.data;
 
-            const response = await api.post('/auth/login', payload);
-            const { token } = response.data;
+            // 2. Buscamos el usuario por correo (ignorando mayúsculas/minúsculas)
+            const usuarioEncontrado = usuarios.find(u => 
+                u.correo.toLowerCase() === credenciales.correo.toLowerCase()
+            );
 
-            // 2. Guardar el token
-            localStorage.setItem('token', token);
-
-            // 3. Obtener "Mis Datos" usando el nuevo endpoint
-            // El token se inyecta solo gracias a Api.jsx
-            const meResponse = await api.get('/auth/me');
-
-            return meResponse.data; // Retorna el objeto usuario (id, nombre, rol, etc.)
-
-        } catch (err) {
-            console.error('Error en login:', err);
-            localStorage.removeItem('token'); // Limpiar si falla
-            throw err;
-        }
-    }
-
-    async register(usuario) {
-        try {
-            const response = await api.post('/auth/register', usuario);
-            if (response.data.token) {
-                localStorage.setItem('token', response.data.token);
+            // 3. Validación (Solo por correo)
+            if (usuarioEncontrado) {
+                // Simulamos éxito devolviendo el usuario encontrado
+                return usuarioEncontrado;
+            } else {
+                throw new Error("Usuario no encontrado");
             }
-            return response.data;
         } catch (err) {
-            console.error('Error al registrar:', err);
+            console.error('Error en login simulado:', err);
             throw err;
         }
     }
+    // ---------------------------------
 
-    // --- CRUD ESTÁNDAR ---
+    async createUser(usuario) {
+        try { return (await axios.post(BASE_URL, usuario)).data; }
+        catch (err) { console.error('Error al crear usuario:', err); throw err; }
+    }
+
     async getAll() {
-        return (await api.get('/usuarios')).data;
+        try { return (await axios.get(BASE_URL)).data; }
+        catch (err) { console.error('Error al obtener usuarios:', err); throw err; }
     }
 
     async getById(id) {
-        return (await api.get(`/usuarios/${id}`)).data;
+        try { return (await axios.get(`${BASE_URL}/${id}`)).data; }
+        catch (err) { console.error('Error al obtener usuario:', err); throw err; }
     }
 
     async update(id, data) {
-        return (await api.put(`/usuarios/${id}`, data)).data;
+        try { return (await axios.put(`${BASE_URL}/${id}`, data)).data; }
+        catch (err) { console.error('Error al actualizar usuario:', err); throw err; }
     }
 
     async patch(id, data) {
-        return (await api.patch(`/usuarios/${id}`, data)).data;
+        try { return (await axios.patch(`${BASE_URL}/${id}`, data)).data; }
+        catch (err) { console.error('Error al hacer patch en usuario:', err); throw err; }
     }
 
     async delete(id) {
-        await api.delete(`/usuarios/${id}`);
-        return true;
+        try { await axios.delete(`${BASE_URL}/${id}`); return true; }
+        catch (err) { console.error('Error al eliminar usuario:', err); throw err; }
     }
 }
 

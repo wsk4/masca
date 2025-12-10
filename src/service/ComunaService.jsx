@@ -1,28 +1,29 @@
-import api from './Api';
+import axios from 'axios';
+const BASE_URL = 'https://masca-back.onrender.com/api/comunas';
 
 class ComunaService {
   async getAll() {
-    try { return (await api.get('/comunas')).data; }
+    try { return (await axios.get(BASE_URL)).data; }
     catch (err) { console.error('Error al obtener comunas:', err); throw err; }
   }
   async getById(id) {
-    try { return (await api.get(`/comunas/${id}`)).data; }
+    try { return (await axios.get(`${BASE_URL}/${id}`)).data; }
     catch (err) { console.error('Error al obtener comuna:', err); throw err; }
   }
   async create(data) {
-    try { return (await api.post('/comunas', data)).data; }
+    try { return (await axios.post(BASE_URL, data)).data; }
     catch (err) { console.error('Error al crear comuna:', err); throw err; }
   }
   async update(id, data) {
-    try { return (await api.put(`/comunas/${id}`, data)).data; }
+    try { return (await axios.put(`${BASE_URL}/${id}`, data)).data; }
     catch (err) { console.error('Error al actualizar comuna:', err); throw err; }
   }
   async patch(id, data) {
-    try { return (await api.patch(`/comunas/${id}`, data)).data; }
+    try { return (await axios.patch(`${BASE_URL}/${id}`, data)).data; }
     catch (err) { console.error('Error al hacer patch en comuna:', err); throw err; }
   }
   async delete(id) {
-    try { await api.delete(`/comunas/${id}`); return true; }
+    try { await axios.delete(`${BASE_URL}/${id}`); return true; }
     catch (err) { console.error('Error al eliminar comuna:', err); throw err; }
   }
 }

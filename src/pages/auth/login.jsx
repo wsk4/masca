@@ -22,40 +22,30 @@ const Login = () => {
         }
         setLoading(true);
         try {
-            // 1. Login Real: Envía credenciales, recibe token y datos de usuario
-            const usuario = await UsuarioService.login(form);
-
-            // 2. Preparamos objeto de usuario para el contexto
-            const userToSave = {
-                id: usuario.id,
-                nombre: usuario.nombre,
-                rol: usuario.rol,
-                email: usuario.correo
-            };
-
-            // 3. Actualizamos estado global
+            const response = await UsuarioService.login(form);
+            const usuario = response; 
+            
+            const userToSave = { id: usuario.id, nombre: usuario.nombre, rol: usuario.rol };
+            localStorage.setItem('user', JSON.stringify(userToSave));
             login(userToSave);
-
+            
             generarMensaje(`¡Bienvenido ${usuario.nombre}!`, 'success');
-
-            // 4. Redirección basada en rol
-            // Ajusta "ADMIN" o IDs según tu base de datos (Rol 1 o 2 suelen ser admin)
-            if (usuario.rol?.id === 1 || usuario.rol?.nombre === 'ADMIN') {
-                navigate('/admin');
+            
+            if (usuario.rol?.id === 1 || usuario.rol?.id === 2) {
+                navigate('/admin'); 
             } else {
-                navigate('/');
+                navigate('/'); 
             }
-
+            
         } catch (error) {
             console.error(error);
-            generarMensaje('Correo o contraseña incorrectos', 'error');
+            generarMensaje('Credenciales inválidas o error de servidor', 'error');
         } finally {
             setLoading(false);
-            setForm({ correo: "", contra: "" });
+            setForm({ correo: "", contra: "" }); 
         }
     };
 
-    // Mapeo de inputs para el componente Forms
     const formDataWithHandlers = loginData.map((item, index) => {
         if (item.type === "inputs") {
             return {
@@ -81,6 +71,7 @@ const Login = () => {
 
     return (
         <main className="flex min-h-screen items-center justify-center bg-theme-main p-4">
+            {}
             <form onSubmit={handleSubmit} className="w-full max-w-md space-y-10 rounded-2xl bg-theme-card border border-theme-border p-10 shadow-2xl">
                 <Forms content={formDataWithHandlers} />
             </form>
