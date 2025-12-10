@@ -26,7 +26,6 @@ describe('Servicio ComunaService', () => {
         mockedAxios.patch.and.returnValue(Promise.resolve({ data: {} }));
         mockedAxios.delete.and.returnValue(Promise.resolve(true));
 
-        // Reseteamos las llamadas para que el contador inicie en cero
         Object.values(mockedAxios).forEach(spy => spy.calls.reset());
     });
     

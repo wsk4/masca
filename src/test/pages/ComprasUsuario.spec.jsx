@@ -47,7 +47,6 @@ describe('Pagina ComprasUsuario', () => {
         expect(mockCompraService.getAll).not.toHaveBeenCalled();
     });
 
-    // --- B. ESTADO CON DATOS ---
     it('Llama a la API, filtra correctamente las compras por ID y renderiza la tabla', async () => {
         setupMocks(mockUser, mockAllCompras); 
         
@@ -68,13 +67,11 @@ describe('Pagina ComprasUsuario', () => {
         });
     });
     
-    // --- C. ESTADO SIN COMPRAS ---
     it('Muestra una tabla vacía si el usuario no tiene compras', async () => {
         setupMocks(mockUser, mockAllCompras.filter(c => c.id === 2)); 
         
         renderComprasUsuario(mockUser);
         
-        // Esperamos a que la tabla cargue
         await waitFor(() => {
             expect(screen.getAllByRole('row').length).toBe(1);
         });
