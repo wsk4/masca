@@ -35,7 +35,7 @@ const Login = () => {
             
             generarMensaje(`¡Bienvenido ${usuario.nombre}!`, 'success');
             
-            if (usuario.rol?.id === 1 || usuario.rol?.id === 2 || usuario.rol?.nombre === 'ADMIN') {
+            if (usuario.rol?.id === 1 ||  usuario.rol?.nombre === 'ADMIN') {
                 navigate('/admin'); 
             } else {
                 navigate('/'); 
