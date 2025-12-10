@@ -3,8 +3,8 @@ import Forms from "../../components/templates/Forms";
 import { useNavigate } from "react-router-dom";
 import UsuarioService from "../../service/UsuarioService";
 import { generarMensaje } from "../../utils/GenerarMensaje";
-import { useAuth } from "../../context/AuthContext"; // Importamos contexto
-import loginData from "./data/loginData"; // Reutilizamos o crea uno propio si tienes createUserData
+import { useAuth } from "../../context/AuthContext"; 
+// import loginData from "./data/loginData"; // Ya no se necesita si usamos el config interno
 
 const CreateUser = () => {
     // Ajusta el estado inicial según los campos que pidas en el registro (nombre, correo, contra, etc.)
@@ -13,7 +13,7 @@ const CreateUser = () => {
     const navigate = useNavigate();
     const { login } = useAuth(); // Usamos la función del contexto
 
-    const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+    const handleChange = (e) => setForm({ ...form, [e.target.name]: e.value || e.target.value });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -25,60 +25,96 @@ const CreateUser = () => {
 
         setLoading(true);
         try {
-            // 1. Llamada al servicio de registro (que ahora usa api.js)
-            // Tu backend en AuthController.register devuelve { token: "..." }
-            const response = await UsuarioService.register(form);
+            // Se asume que UsuarioService.createUser está implementado y llama a tu API
+            // Si tu backend espera 'contra' en lugar de 'password', está bien como está.
+            const response = await UsuarioService.createUser(form); 
 
-            // 2. Si el backend devolvió el token, iniciamos sesión directo
-            if (response && response.token) {
-                localStorage.setItem('token', response.token);
-                
-                // Construimos el objeto usuario para el contexto
-                // Nota: A veces el endpoint de registro no devuelve el usuario completo, solo el token.
-                // Si es así, podrías decodificar el token o hacer un fetch rápido de datos.
-                // Asumiremos por ahora que guardamos lo básico que tenemos en el form.
-                const userToSave = { 
-                    nombre: form.nombre, 
-                    email: form.correo, 
-                    rol: { id: 3, nombre: "USER" } // Rol por defecto (ajusta según tu lógica)
-                };
-                
-                login(userToSave);
-                generarMensaje('¡Cuenta creada con éxito!', 'success');
-                navigate('/'); // Redirigir al home
-            } else {
-                // Si no devolvió token, lo mandamos al login
-                generarMensaje('Cuenta creada. Por favor inicia sesión.', 'success');
-                navigate('/login');
-            }
+            // Nota: En un flujo de registro común, después de crear el usuario,
+            // se le pide iniciar sesión o se le loguea automáticamente.
+            generarMensaje('Cuenta creada. Por favor inicia sesión.', 'success');
+            navigate('/login');
 
         } catch (error) {
             console.error(error);
-            generarMensaje('Hubo un error al registrar el usuario.', 'error');
+            generarMensaje('Hubo un error al registrar el usuario. El correo ya podría estar registrado.', 'error');
         } finally {
             setLoading(false);
         }
     };
 
-    // Reutilizamos la estructura de inputs de loginData pero podrías necesitar adaptarla
-    // para incluir 'nombre', 'telefono', etc. Lo dejo genérico para el ejemplo.
-    // Lo ideal es tener un archivo data/registerData.js con los campos correctos.
+    // Nueva y mejorada configuración visual del formulario
     const inputsConfig = [
+        {
+            type: "text",
+            text: [
+                {
+                    content: "Crear Cuenta",
+                    variant: "h1",
+                    className: "text-center text-4xl font-bold mb-8 text-white tracking-wider",
+                }
+            ]
+        },
         { 
             type: "inputs", 
             inputs: [
-                { label: "Nombre", name: "nombre", type: "text", placeholder: "Tu nombre" },
-                { label: "Correo", name: "correo", type: "email", placeholder: "correo@ejemplo.com" },
-                { label: "Contraseña", name: "contra", type: "password", placeholder: "****" },
-                { label: "Teléfono", name: "telefono", type: "text", placeholder: "+569..." },
-            ] 
+                { 
+                    type: "text", 
+                    name: "nombre", 
+                    placeholder: "Nombre completo",
+                    required: true,
+                    // Estilos oscuros consistentes
+                    className: "w-full border-b-2 border-gray-600 bg-transparent text-white placeholder-gray-500 text-lg duration-300 focus-within:border-white",
+                },
+                { 
+                    type: "email", 
+                    name: "correo", 
+                    placeholder: "Correo electrónico",
+                    required: true,
+                    autoComplete: "email",
+                    className: "w-full border-b-2 border-gray-600 bg-transparent text-white placeholder-gray-500 text-lg duration-300 focus-within:border-white",
+                },
+                { 
+                    type: "text", 
+                    name: "telefono", 
+                    placeholder: "Teléfono (Opcional)",
+                    className: "w-full border-b-2 border-gray-600 bg-transparent text-white placeholder-gray-500 text-lg duration-300 focus-within:border-white",
+                },
+                { 
+                    type: "password", 
+                    name: "contra", 
+                    placeholder: "Contraseña",
+                    required: true,
+                    autoComplete: "new-password",
+                    className: "w-full border-b-2 border-gray-600 bg-transparent text-white placeholder-gray-500 text-lg duration-300 focus-within:border-white",
+                },
+            ],
+            className: "space-y-8" // Espaciado entre inputs
         },
         { 
             type: "button", 
             text: loading ? "Registrando..." : "Crear Cuenta", 
-            onClick: handleSubmit,
-            disabled: loading 
-        }
+            onClick: handleSubmit, // Se asigna aquí, luego se sobreescribe el onClick del form
+            disabled: loading,
+            // Estilos de botón para tema oscuro: blanco sobre negro
+            className: "transform w-full mt-8 mb-4 py-2.5 font-bold bg-white text-black rounded-lg hover:bg-gray-200 active:scale-95 transition-all border-none appearance-none",
+        },
+        {
+            type: "text",
+            text: [
+                {
+                    content: (
+                        <button
+                            type="button"
+                            onClick={() => navigate('/login')} // Usamos navigate aquí
+                            className="text-gray-500 hover:text-white underline transition block w-full text-center text-sm"
+                        >
+                            ¿Ya tienes cuenta? Inicia sesión
+                        </button>
+                    ),
+                    variant: "p",
+                },
+            ],
+        },
     ];
 
     const formDataWithHandlers = inputsConfig.map((item, index) => {
@@ -92,13 +128,14 @@ const CreateUser = () => {
                 }))
             };
         }
+        // El botón usa el texto de loading y el handler de submit definido arriba
         return { ...item, key: index };
     });
 
     return (
         <main className="flex min-h-screen items-center justify-center bg-theme-main p-4">
             <form onSubmit={handleSubmit} className="w-full max-w-md space-y-10 rounded-2xl bg-theme-card border border-theme-border p-10 shadow-2xl">
-                <h2 className="text-2xl font-bold text-center text-theme-text-main">Registro</h2>
+                {/* Eliminamos el h2 estático ya que el título ahora es parte de Forms */}
                 <Forms content={formDataWithHandlers} />
             </form>
         </main>
